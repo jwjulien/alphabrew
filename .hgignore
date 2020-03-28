@@ -1,0 +1,7 @@
+__pycache__/
+.vscode/
+
+Brewhouse.toml
+
+credentials.json
+token.pickle
