@@ -67,6 +67,7 @@ class TabRecipe(QtWidgets.QWidget):
         self.ui.size.setValue(self.recipe.size.as_('gal'))
         self.ui.time_boil.setValue(self.recipe.boilTime.as_('min'))
         self.ui.ambient.setValue(self.recipe.ambient.as_('F'))
+        self.ui.notes.setPlainText(self.recipe.notes)
 
         # Connect events.
         self.ui.name.textChanged.connect(self.on_name_change)
@@ -77,6 +78,7 @@ class TabRecipe(QtWidgets.QWidget):
         self.ui.size.valueChanged.connect(self.on_size_changed)
         self.ui.time_boil.valueChanged.connect(self.on_boilTime_changed)
         self.ui.ambient.valueChanged.connect(self.on_ambient_changed)
+        self.ui.notes.textChanged.connect(self.on_notes_changed)
 
 
 
@@ -129,6 +131,12 @@ class TabRecipe(QtWidgets.QWidget):
         """Fires when the user changes the ambient temperature."""
         self.recipe.ambient.value = value
         self.recipe.ambient.unit = 'F'
+
+
+# ----------------------------------------------------------------------------------------------------------------------
+    def on_notes_changed(self):
+        """Fires when the user changes the notes."""
+        self.recipe.notes = self.ui.notes.toPlainText()
 
 
 

@@ -114,6 +114,16 @@ class Ui_TabRecipe(object):
 
         self.formLayout.setWidget(7, QFormLayout.FieldRole, self.ambient)
 
+        self.lbl_notes = QLabel(TabRecipe)
+        self.lbl_notes.setObjectName(u"lbl_notes")
+
+        self.formLayout.setWidget(8, QFormLayout.LabelRole, self.lbl_notes)
+
+        self.notes = QPlainTextEdit(TabRecipe)
+        self.notes.setObjectName(u"notes")
+
+        self.formLayout.setWidget(8, QFormLayout.FieldRole, self.notes)
+
 
         self.retranslateUi(TabRecipe)
 
@@ -139,5 +149,6 @@ class Ui_TabRecipe(object):
         self.ambient.setToolTip(QCoreApplication.translate("TabRecipe", u"Starting temperature of the grains and mash tun.", None))
 #endif // QT_CONFIG(tooltip)
         self.ambient.setSuffix(QCoreApplication.translate("TabRecipe", u" \u00b0F", None))
+        self.lbl_notes.setText(QCoreApplication.translate("TabRecipe", u"Notes:", None))
     # retranslateUi
 

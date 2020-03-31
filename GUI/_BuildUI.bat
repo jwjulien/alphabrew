@@ -8,3 +8,4 @@ START "TabMash" pipenv run pyside2-uic GUI/Design/TabMash.ui -o GUI/Base/TabMash
 START "TabFermentation" pipenv run pyside2-uic GUI/Design/TabFermentation.ui -o GUI/Base/TabFermentation.py
 START "DialogFermentable" pipenv run pyside2-uic GUI/Design/DialogFermentable.ui -o GUI/Base/DialogFermentable.py
 START "DialogHop" pipenv run pyside2-uic GUI/Design/DialogHop.ui -o GUI/Base/DialogHop.py
+START "DialogCulture" pipenv run pyside2-uic GUI/Design/DialogCulture.ui -o GUI/Base/DialogCulture.py

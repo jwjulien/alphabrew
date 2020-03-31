@@ -1,7 +1,7 @@
 # ======================================================================================================================
-#        File:  Model/Fermentables.py
+#        File:  Model/Cultures.py
 #     Project:  Brewing Recipe Planner
-# Description:  A definition for a beer Fermentables in list form.
+# Description:  A definition for a beer Cultures in list form.
 #      Author:  Jared Julien <jaredjulien@gmail.com>
 #   Copyright:  (c) 2020 Jared Julien
 # ----------------------------------------------------------------------------------------------------------------------
@@ -28,33 +28,31 @@ from PySide2 import QtCore, QtWidgets
 
 from GUI.Helpers.Column import Column
 from GUI.Helpers.Sizing import Stretch
-from Model.Fermentable import Fermentable
-from Model.MeasurableUnits import ColorType, DiastaticPowerType, PercentType
+from Model.Culture import Culture
 
 
 
 # ======================================================================================================================
-# Fermentables Class
+# Cultures Class
 # ----------------------------------------------------------------------------------------------------------------------
-class Fermentables(QtCore.QAbstractTableModel):
-    """Provides for a list of Fermentable objects, specifically created to aid in parsing Excel database files and
+class Cultures(QtCore.QAbstractTableModel):
+    """Provides for a list of Culture objects, specifically created to aid in parsing Excel database files and
     display within a QtTableView."""
 
     changed = QtCore.Signal()
 
     AllColumns = [
         Column('Amount', align=QtCore.Qt.AlignRight),
-        Column('Percent', align=QtCore.Qt.AlignHCenter),
-        Column('Grain/Fermentable', size=Stretch, align=QtCore.Qt.AlignLeft),
+        Column('Name', size=Stretch, align=QtCore.Qt.AlignLeft),
         Column('Type', align=QtCore.Qt.AlignRight),
-        Column('Group', align=QtCore.Qt.AlignRight),
-        Column('Yield', align=QtCore.Qt.AlignRight),
-        Column('Color', align=QtCore.Qt.AlignRight),
+        Column('Form', align=QtCore.Qt.AlignRight),
+        Column('Producer', align=QtCore.Qt.AlignRight),
+        Column('Product', align=QtCore.Qt.AlignRight),
     ]
 
     # These column indexes should be hidden when the class is instantiated with the limited flag set.
     # Intended to hide columns specific to inclusion in a recipe, such as amount, proportion, time, etc.
-    HideWhenLimited = [0, 1]
+    HideWhenLimited = [0]
 
 
 # ----------------------------------------------------------------------------------------------------------------------
@@ -74,40 +72,31 @@ class Fermentables(QtCore.QAbstractTableModel):
 # ----------------------------------------------------------------------------------------------------------------------
     @staticmethod
     def from_excel(worksheet):
-        """A constructor, of a sort, that will return a new Fermentables list containing the data parsed from the
+        """A constructor, of a sort, that will return a new Cultures list containing the data parsed from the
         provided openpyxl Worksheet object."""
-        fermentables = Fermentables(limited=True)
+        cultures = Cultures(limited=True)
         for idx, row in enumerate(worksheet):
             # Skip the header row.
             if idx == 0:
                 continue
 
-            fermentable = Fermentable(
+            culture = Culture(
                 name=str(row[0].value),
-                ftype=str(row[1].value),
-                group=str(row[2].value),
+                ctype=str(row[1].value),
+                form=str(row[2].value),
                 producer=str(row[3].value),
-                origin=str(row[4].value),
-                fyield=PercentType(row[5].value, '%'),
-                color=ColorType(row[6].value, 'SRM'),
-                moisture=PercentType(row[7].value, '%'),
-                diastaticPower=DiastaticPowerType(row[8].value, 'Lintner'),
-                protein=PercentType(row[9].value, '%'),
-                maxPerBatch=PercentType(row[10].value, '%'),
-                coarseFineDiff=PercentType(row[11].value, '%'),
-                addAfterBoil=bool(row[12].value),
-                mashed=bool(row[13].value),
-                notes=str(row[14].value)
+                productId=str(row[4].value),
+                notes=str(row[11].value)
             )
-            fermentables.append(fermentable)
-        return fermentables
+            cultures.append(culture)
+        return cultures
 
 
 # ======================================================================================================================
 # List Functions
 # ----------------------------------------------------------------------------------------------------------------------
-    def append(self, item: Fermentable):
-        """Add a new Fermentable item to the model."""
+    def append(self, item: Culture):
+        """Add a new Culture item to the model."""
         parent = QtCore.QModelIndex()
         row = len(self.items)
         self.beginInsertRows(parent, row, row)
@@ -119,8 +108,8 @@ class Fermentables(QtCore.QAbstractTableModel):
 
 
 # ----------------------------------------------------------------------------------------------------------------------
-    def extend(self, items: List[Fermentable]):
-        """Merge a list of Fermentable items into this model."""
+    def extend(self, items: List[Culture]):
+        """Merge a list of Culture items into this model."""
         parent = QtCore.QModelIndex()
         start = len(self.items)
         end = start + len(items) - 1
@@ -134,7 +123,7 @@ class Fermentables(QtCore.QAbstractTableModel):
 
 # ----------------------------------------------------------------------------------------------------------------------
     def pop(self, index: int=None):
-        """Remove and return a Fermentable item from the model at the provided index."""
+        """Remove and return a Culture item from the model at the provided index."""
         if index is None:
             index = len(self.items) - 1
         parent = QtCore.QModelIndex()
@@ -152,7 +141,7 @@ class Fermentables(QtCore.QAbstractTableModel):
 
 
 # ----------------------------------------------------------------------------------------------------------------------
-    def __setitem__(self, key: int, value: Fermentable):
+    def __setitem__(self, key: int, value: Culture):
         """A convenience function to allow modification of array like access of items in this model."""
         self.items[key] = value
         self.changed.emit()
@@ -200,36 +189,34 @@ class Fermentables(QtCore.QAbstractTableModel):
         """Fetch data for a cell, either for display of for editing."""
         # Display role is read-only textual display for data in the table.
         if role == QtCore.Qt.DisplayRole:
-            fermentable = self[index.row()]
+            culture = self[index.row()]
             column = index.column()
 
             if self.limited:
                 column += len(self.HideWhenLimited)
 
             if column == 0:
-                return str(fermentable.amount)
+                return str(culture.amount)
             elif column == 1:
-                return f'{fermentable.proportion:.0f}%'
+                return culture.name
             elif column == 2:
-                return fermentable.name
+                return culture.ctype
             elif column == 3:
-                return fermentable.ftype
+                return culture.form
             elif column == 4:
-                return fermentable.group if fermentable.group is not None else ''
+                return culture.producer
             elif column == 5:
-                return f"{fermentable.fyield.as_('%'):.1f}%"
-            elif column == 6:
-                return f"{fermentable.color.as_('SRM'):.1f} srm"
+                return culture.productId
 
         # Edit role is when the user double clicks a cell to trigger editing, return the non-formatted value.
         elif role == QtCore.Qt.EditRole:
-            fermentable = self[index.row()]
+            culture = self[index.row()]
 
             if self.control is not None:
                 self.control.horizontalHeader().setSectionResizeMode(index.column(), QtWidgets.QHeaderView.Stretch)
 
             if index.column() == 0:
-                return (fermentable.amount.value, fermentable.amount.unit)
+                return (culture.amount.value, culture.amount.unit)
 
         # Text alignment role is for setting the right/center/left text alignment within a given cell.
         elif role == QtCore.Qt.TextAlignmentRole:
@@ -243,11 +230,11 @@ class Fermentables(QtCore.QAbstractTableModel):
     def setData(self, index, value, role):
         """Store changed data once editing has completed."""
         if not self.limited and role == QtCore.Qt.EditRole:
-            fermentable = self[index.row()]
+            culture = self[index.row()]
 
             if index.column() == 0:
-                fermentable.amount.value = value[0]
-                fermentable.amount.unit = value[1]
+                culture.amount.value = value[0]
+                culture.amount.unit = value[1]
 
             if self.control is not None:
                 size = self.columns[index.column()].size
@@ -266,49 +253,6 @@ class Fermentables(QtCore.QAbstractTableModel):
 # ======================================================================================================================
 # Properties
 # ----------------------------------------------------------------------------------------------------------------------
-    @property
-    def mashedSugar(self):
-        """Return the sucrose equivalent of all of the mashed ingredients."""
-        return sum([item.sucrose for item in self.items if item.isMashed and not item.addAfterBoil])
-
-
-# ----------------------------------------------------------------------------------------------------------------------
-    @property
-    def nonMashedSugar(self):
-        """Returns the total sucrose equivalent of all the non-mashed ingredients."""
-        return sum([item.sucrose for item in self.items if not item.isMashed])
-
-
-# ----------------------------------------------------------------------------------------------------------------------
-    @property
-    def fermentableSugar(self):
-        """Returns to equivalent amount of sucrose, in pounds, that is fermentable.  Excludes ingredients like lactose
-        and Splenda."""
-        return sum([item.sucrose for item in self.items if item.isFermentable])
-
-
-# ----------------------------------------------------------------------------------------------------------------------
-    @property
-    def nonFermentableSugar(self):
-        """Returns to equivalent amount of sucrose, in pounds, that is NOT fermentable.  This includes ingredients like
-        lactose or Splenda."""
-        return sum([item.sucrose for item in self.items if not item.isFermentable])
-
-
-# ----------------------------------------------------------------------------------------------------------------------
-    @property
-    def steepedSugar(self):
-        """Returns the equivalent amount of sucrose that is steeped post boil, but where it is still "mashed" so
-        Brewhouse efficiency still plays a factor."""
-        return sum([item.sucrose for item in self.items if item.isMashed and item.addAfterBoil])
-
-
-# ----------------------------------------------------------------------------------------------------------------------
-    @property
-    def lateAdditionSugar(self):
-        """Returns the equivalent amount of sucrose that is added post boil, but where the efficiency isn't a factor."""
-        return sum([item.sucrose for item in self.items if not item.isMashed and item.addAfterBoil])
-
 
 
 # ======================================================================================================================
@@ -324,22 +268,24 @@ class Fermentables(QtCore.QAbstractTableModel):
 
 # ----------------------------------------------------------------------------------------------------------------------
     def sort(self):
-        """A void sort function that consistently sorts the fermentable in decreasing order of amount in the recipe."""
-        self.items.sort(key=lambda fermentable: (-fermentable.amount.as_('lb'), fermentable.name))
+        """A void sort function that consistently sorts the culture in decreasing order of amount in the recipe."""
+        self.items.sort(key=lambda culture: culture.name)
 
 
 # ----------------------------------------------------------------------------------------------------------------------
     def to_dict(self):
         """Convert self into a dictionary for BeerJSON storage."""
-        return [fermentable.to_dict() for fermentable in self]
+        return [culture.to_dict() for culture in self]
 
 
 # ----------------------------------------------------------------------------------------------------------------------
     def from_dict(self, recipe, data):
-        """Parse list of fermentables from the provided BeerJSON dict."""
+        """Parse list of cultures from the provided BeerJSON dict."""
         for item in data:
-            fermentable = Fermentable(recipe)
-            fermentable.from_dict(item)
-            self.append(fermentable)
+            culture = Culture(recipe)
+            culture.from_dict(item)
+            self.append(culture)
+
+
 
 # End of File

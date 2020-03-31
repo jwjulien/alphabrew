@@ -30,6 +30,8 @@ from Model.Style import Style
 from Model.Fermentables import Fermentables
 from Model.Miscellanea import Miscellanea
 from Model.Hops import Hops
+from Model.Cultures import Cultures
+from Model.Fermentation import Fermentation
 from Model.MeasurableUnits import TemperatureType, TimeType, VolumeType
 from Brewhouse import Equipment, Calibrations
 from Math import Gravity, Color
@@ -65,10 +67,13 @@ class Recipe(QtCore.QObject):
         self._size = VolumeType(5, 'gal')
         self._boilTime = TimeType(60, 'min')
         self._ambient = TemperatureType(70, 'F')
+        self.notes = None
 
         self.fermentables = Fermentables()
         self.misc = Miscellanea()
         self.hops = Hops()
+        self.cultures = Cultures()
+        self.fermentation = Fermentation()
 
         # Connect events in children to top level change event.
         self.fermentables.changed.connect(self.changed.emit)
@@ -177,8 +182,7 @@ class Recipe(QtCore.QObject):
         """Calculates and returns to total wort volume to be collected in the boil kettle during the lautering process.
         """
         # Determine how much water is needed to account for loss to the hops.
-        # TODO: Once hops are implemented put some maths here using scale factors from Brewhouse.
-        hopWaterLoss = 0
+        hopWaterLoss = self.hops.trubLoss
 
         # Determine how many gallons we expect to boil off over the time of the boil.
         boilOff = self.equipment.boilOffRate * self.boilTime.as_('hr')
@@ -306,7 +310,7 @@ class Recipe(QtCore.QObject):
 # ----------------------------------------------------------------------------------------------------------------------
     @property
     def calories(self):
-        """Compute the number of calories per 12 oz serving."""
+        """Compute the number of calories per 16 oz serving."""
         startPlato = Gravity.sg_to_plato(self.originalGravity)
         finishPlato = Gravity.sg_to_plato(self.finalGravity)
 
@@ -314,7 +318,9 @@ class Recipe(QtCore.QObject):
 
         abw = (startPlato - realExtract) / (2.0665 - (0.010665 * startPlato))
 
-        return((6.9 * abw) + 4 * (realExtract - 0.1)) * self.finalGravity * 3.55
+        caloriesPer12Oz = ((6.9 * abw) + 4 * (realExtract - 0.1)) * self.finalGravity * 3.55
+
+        return caloriesPer12Oz / 12 * 16
 
 
 
@@ -337,8 +343,42 @@ class Recipe(QtCore.QObject):
             'ingredients': {
                 'fermentable_additions': self.fermentables.to_dict(),
                 'hop_additions': self.hops.to_dict(),
-                'miscellaneous_additions': self.misc.to_dict()
-            }
+                'miscellaneous_additions': self.misc.to_dict(),
+                'culture_additions': self.cultures.to_dict()
+            },
+            'fermentation': self.fermentation.to_dict(),
+            'notes': self.notes.replace('\n', '\\n'),
+            'boil': {
+                'pre_boil_size': {
+                    'value': self.boilSize,
+                    'unit': 'gal'
+                },
+                'boil_time': {
+                    'value': self.boilTime.as_('min'),
+                    'unit': 'min'
+                }
+            },
+            'original_gravity': {
+                'value': self.originalGravity,
+                'unit': 'sg'
+            },
+            'final_gravity': {
+                'value': self.finalGravity,
+                'unit': 'sg'
+            },
+            'alcohol_by_volume': {
+                'value': self.abv,
+                'unit': '%'
+            },
+            'ibu_estimate': {
+                'value': self.bitterness,
+                'unit': 'IBUs'
+            },
+            'color_estimate': {
+                'value': self.color,
+                'unit': 'SRM'
+            },
+            'calories_per_pint': self.calories,
         }
         if self.style:
             recipeJson['style'] = self.style.to_dict()
@@ -374,6 +414,7 @@ class Recipe(QtCore.QObject):
         self.fermentables.from_dict(self, ingredients['fermentable_additions'])
         self.hops.from_dict(self, ingredients['hop_additions'])
         self.misc.from_dict(self, ingredients['miscellaneous_additions'])
+        self.notes = recipe.get('notes', '').replace('\\n', '\n')
 
 
 # ----------------------------------------------------------------------------------------------------------------------

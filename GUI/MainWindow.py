@@ -37,6 +37,7 @@ from GUI.TabMiscellaneous import TabMiscellaneous
 from GUI.TabWater import TabWater
 from GUI.TabMash import TabMash
 from GUI.TabHops import TabHops
+from GUI.TabCultures import TabCultures
 from GUI.TabFermentation import TabFermentation
 
 from Brewhouse import Brewhouse
@@ -116,6 +117,9 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.tab_hops = TabHops(self, self.recipe, workbook)
         self.ui.tabs.addTab(self.ui.tab_hops, "Hops")
 
+        self.ui.tab_cultures = TabCultures(self, self.recipe, workbook)
+        self.ui.tabs.addTab(self.ui.tab_cultures, "Cultures")
+
         self.ui.tab_fermentation = TabFermentation(self, self.recipe, workbook)
         self.ui.tabs.addTab(self.ui.tab_fermentation, "Fermentation")
 
@@ -134,26 +138,31 @@ class MainWindow(QtWidgets.QMainWindow):
 
 
 
-
 # ======================================================================================================================
 # Event Handlers
 # ----------------------------------------------------------------------------------------------------------------------
     def on_file_new(self):
         """Fires when the user requests to start a new recipe."""
 
+
 # ----------------------------------------------------------------------------------------------------------------------
     def on_file_open(self):
         """Fires when the user requests to open a recipe from local file."""
+
 
 # ----------------------------------------------------------------------------------------------------------------------
     def on_file_save(self):
         """Fires when the user requests to save the current recipe to local file."""
         with open('recipe.json', 'w') as handle:
             handle.write(self.recipe.to_beerjson())
+        # TODO: Handle merging BeerJSON with existing files.  The goal would be to update applicable values when saving
+        # but not nuke the existing values that may already be in the file.
+
 
 # ----------------------------------------------------------------------------------------------------------------------
     def on_file_save_as(self):
         """Fires when the user specifically requests to save as a different file."""
+
 
 # ----------------------------------------------------------------------------------------------------------------------
     def on_help_about(self):
@@ -166,6 +175,7 @@ class MainWindow(QtWidgets.QMainWindow):
         description += f'Version: {self.version}\n'
         description += 'Author: Jared Julien <jaredjulien@gmail.com>'
         QtWidgets.QMessageBox.about(self, 'Beer Recipe Planner', description)
+
 
 # ----------------------------------------------------------------------------------------------------------------------
     def on_help_contents(self):
@@ -215,7 +225,7 @@ class MainWindow(QtWidgets.QMainWindow):
         # Output numbers for the calculated values.
         self.ui.calcBoilSize.setText(f'{self.recipe.boilSize:.1f} gal')
         self.ui.calcBoilSg.setText(f'{self.recipe.boilGravity:.3f}')
-        self.ui.calcCalories.setText(f'{self.recipe.calories:.0f} / 12oz')
+        self.ui.calcCalories.setText(f'{self.recipe.calories:.0f} / 16oz')
 
 
 
