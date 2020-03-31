@@ -1,10 +1,10 @@
 # ======================================================================================================================
-#        File:  GUI/Helpers/Column.py
+#        File:  Brewhouse/Calibrations.py
 #     Project:  Brewing Recipe Planner
-# Description:  Provides a base class for working with
-#      Author:  Jared Julien <jaredjulien@exsystems.net>
-#   Copyright:  (c) 2020 Jared Julien, eX Systems
-# ---------------------------------------------------------------------------------------------------------------------
+# Description:  Provides the definition for calibrations, configurable items.
+#      Author:  Jared Julien <jaredjulien@gmail.com>
+#   Copyright:  (c) 2020 Jared Julien
+# ----------------------------------------------------------------------------------------------------------------------
 # Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
 # documentation files (the "Software"), to deal in the Software without restriction, including without limitation the
 # rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to
@@ -20,24 +20,42 @@
 # ----------------------------------------------------------------------------------------------------------------------
 
 # ======================================================================================================================
-# Imports
+# Calibrations Class
 # ----------------------------------------------------------------------------------------------------------------------
-from PySide2 import QtWidgets, QtCore
+class Calibrations:
+    """
+    Provides the definition for calibrations, configurable items.
 
-from GUI.Helpers.Alignment import CenterCenter
-from GUI.Helpers.Sizing import Fit
+    The intent of this class is to contain parameters, such as boil off rate, which remain pretty much fixed across
+    all of the equipment in a Brewhouse but may need to be tweaked and adjusted from Brewhouse to Brewhouse.
+    """
+    def __init__(self,
+                 brewhouseEfficiency=70, # Percent
+                 leafHopTrubLoss=0.0625, # Gallons per ounce
+                 pelletHopTrubLoss=0.025, # Gallons per ounce
+                 ca=0, # PPM
+                 mg=0, # PPM
+                 na=0, # PPM
+                 cl=0, # PPM
+                 so4=0, # PPM
+                 hco3=0, # PPM
+                 ph=7): # Unitless
 
+        # Overall Conversion Efficiency
+        self.brewhouseEfficiency = brewhouseEfficiency
 
+        # System Losses
+        self.leafHopTrubLoss = leafHopTrubLoss
+        self.pelletHopTrubLoss = pelletHopTrubLoss
 
-# ======================================================================================================================
-# Column Class
-# ----------------------------------------------------------------------------------------------------------------------
-class Column(object):
-    """Provides mapping between a column in a Qt table and properties such as title and text alignment."""
-    def __init__(self, heading, size=Fit, align=QtCore.Qt.AlignCenter):
-        self.heading = heading
-        self.size = size
-        self.align = align
+        # Water Profile
+        self.ca = ca
+        self.mg = mg
+        self.na = na
+        self.cl = cl
+        self.so4 = so4
+        self.hco3 = hco3
+        self.ph = ph
 
 
 

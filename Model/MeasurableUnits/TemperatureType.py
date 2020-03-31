@@ -1,10 +1,10 @@
 # ======================================================================================================================
-#        File:  GUI/Helpers/Column.py
+#        File:  Model/MeasureableUnits/TemperatureType.py
 #     Project:  Brewing Recipe Planner
-# Description:  Provides a base class for working with
-#      Author:  Jared Julien <jaredjulien@exsystems.net>
-#   Copyright:  (c) 2020 Jared Julien, eX Systems
-# ---------------------------------------------------------------------------------------------------------------------
+# Description:  Provides a base class for working with time types in recipes which can have differing units.
+#      Author:  Jared Julien <jaredjulien@gmail.com>
+#   Copyright:  (c) 2020 Jared Julien
+# ----------------------------------------------------------------------------------------------------------------------
 # Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
 # documentation files (the "Software"), to deal in the Software without restriction, including without limitation the
 # rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to
@@ -22,22 +22,41 @@
 # ======================================================================================================================
 # Imports
 # ----------------------------------------------------------------------------------------------------------------------
-from PySide2 import QtWidgets, QtCore
-
-from GUI.Helpers.Alignment import CenterCenter
-from GUI.Helpers.Sizing import Fit
+from Model.MeasurableUnits.SimpleType import SimpleType
 
 
 
 # ======================================================================================================================
-# Column Class
+# TemperatureType Class
 # ----------------------------------------------------------------------------------------------------------------------
-class Column(object):
-    """Provides mapping between a column in a Qt table and properties such as title and text alignment."""
-    def __init__(self, heading, size=Fit, align=QtCore.Qt.AlignCenter):
-        self.heading = heading
-        self.size = size
-        self.align = align
+class TemperatureType(SimpleType):
+    """Extends the SimpleType class to provide a class for working with TemperatureType as defined in the BeerJson
+    standard 2.0 draft."""
+
+    Types = {
+        'F': None,
+        'C': None
+    }
+
+
+
+# ======================================================================================================================
+# Methods
+# ----------------------------------------------------------------------------------------------------------------------
+    def as_(self, desired):
+        """Override the simple conversion to provide a conversion with offset."""
+        if desired not in self.Types.keys():
+            return KeyError(f'The specified unit "{desired}" does not exist on class "TemperatureType"')
+
+        if self.unit == desired:
+            return self.value
+
+        if self.unit == 'F' and desired == 'C':
+            return (self.value - 32) / 1.8
+
+        # With only two options for units, this means that we are in C but want F.
+        return (1.8 * self.value) + 32
+
 
 
 

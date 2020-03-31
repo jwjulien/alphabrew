@@ -26,14 +26,17 @@ from PySide2 import QtCore, QtWidgets
 import qtawesome
 
 from GUI.Base.TabMiscellaneous import Ui_TabMiscellaneous
-from GUI.Helpers.DoubleSpinBoxDelegate import DoubleSpinBoxDelegate
 from GUI.Helpers.ComboBoxDelegate import ComboBoxDelegate
-from Recipe.Miscellaneous import Miscellaneous
+from GUI.Helpers.ComboSpinBoxDelegate import ComboSpinBoxDelegate
+from Model.Miscellaneous import Miscellaneous
+from Model.MeasurableUnits import MassType, TimeType, UnitType, VolumeType
+from Model.Timing import TimingType
+from Model import Selections
 
 
 
 # ======================================================================================================================
-# Main Window GUI Class
+# Miscellaneous Tab Class
 # ----------------------------------------------------------------------------------------------------------------------
 class TabMiscellaneous(QtWidgets.QWidget):
     """Extends the MainWindow Miscellaneous tab widget containing a subset of controls specific to miscellaneous in the
@@ -56,17 +59,16 @@ class TabMiscellaneous(QtWidgets.QWidget):
         delegate = ComboBoxDelegate(self, ['Spice', 'Fining', 'Water Agent', 'Herb', 'Flavor', 'Wood', 'Other'])
         self.ui.ingredients.setItemDelegateForColumn(1, delegate)
 
-        delegate = DoubleSpinBoxDelegate(self, minimum=0, maximum=1000, decimals=2, singleStep=1)
+        units = Selections.all_units(MassType, VolumeType, UnitType)
+        delegate = ComboSpinBoxDelegate(self, units)
         self.ui.ingredients.setItemDelegateForColumn(3, delegate)
 
-        delegate = ComboBoxDelegate(self, ['tsp', 'tbsp', 'floz', 'cup', 'pt', 'qt', 'gal', 'oz', 'lb', 'each', 'pkg'])
+        delegate = ComboBoxDelegate(self, ['Mash', 'Boil', 'Fermentation', 'Package'])
         self.ui.ingredients.setItemDelegateForColumn(4, delegate)
 
-        delegate = ComboBoxDelegate(self, ['Mash', 'Boil', 'Fermentation', 'Package'])
+        timeChoices = ['min', 'hr', 'day']
+        delegate = ComboSpinBoxDelegate(self, timeChoices, minimum=0, maximum=240, singleStep=5)
         self.ui.ingredients.setItemDelegateForColumn(5, delegate)
-
-        delegate = DoubleSpinBoxDelegate(self, minimum=0, maximum=50400, suffix=' min', singleStep=5)
-        self.ui.ingredients.setItemDelegateForColumn(6, delegate)
 
         # Setup add button with icon and connect an event handler.
         icon = qtawesome.icon('fa5s.plus')
@@ -91,6 +93,8 @@ class TabMiscellaneous(QtWidgets.QWidget):
     def on_add(self):
         """Fires when the user clicks the add button."""
         misc = Miscellaneous(self.recipe)
+        misc.amount = MassType(0, 'lb')
+        misc.timing = TimingType(duration=TimeType('0', 'min'))
         self.recipe.misc.append(misc)
 
 

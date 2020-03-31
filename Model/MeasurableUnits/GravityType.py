@@ -1,7 +1,7 @@
 # ======================================================================================================================
-#        File:  GUI/TabFermentation.py
+#        File:  Model/MeasureableUnits/GravityType.py
 #     Project:  Brewing Recipe Planner
-# Description:  Extensions and functionality for the main GUI window.
+# Description:  Provides a base class for working with acidity in recipes which can have differing units.
 #      Author:  Jared Julien <jaredjulien@gmail.com>
 #   Copyright:  (c) 2020 Jared Julien
 # ----------------------------------------------------------------------------------------------------------------------
@@ -20,25 +20,54 @@
 # ----------------------------------------------------------------------------------------------------------------------
 
 # ======================================================================================================================
-# Import Statements
+# Imports
 # ----------------------------------------------------------------------------------------------------------------------
-from PySide2 import QtCore, QtGui, QtWidgets
-import qtawesome
+from Model.MeasurableUnits.SimpleType import SimpleType
 
-from GUI.Base.TabFermentation import Ui_TabFermentation
+from Math import Gravity
 
 
 
 # ======================================================================================================================
-# Fermentation Tab Class
+# GravityType Class
 # ----------------------------------------------------------------------------------------------------------------------
-class TabFermentation(QtWidgets.QWidget):
-    def __init__(self, parent, recipe, workbook):
-        super().__init__(parent)
-        self.ui = Ui_TabFermentation()
-        self.ui.setupUi(self)
+class GravityType(SimpleType):
+    """Extends the SimpleType class to provide a class for working with GravityType as defined in the BeerJson standard
+    2.0 draft."""
 
-        self.recipe = recipe
+    # In this special case the scale factors are not linear so they aren't used.  The keys, however, are when writing to
+    # "unit" so they are all set to None but the "as_" method is overwritten below and does not use them.
+    Types = {
+        'sg': None,
+        'plato': None,
+        'brix': None
+    }
+
+
+
+# ======================================================================================================================
+# Methods
+# ----------------------------------------------------------------------------------------------------------------------
+    def as_(self, desired):
+        """Specifically override the as_ class to make use of the conversions in the Math module for these types."""
+        if desired not in self.Types.keys():
+            return KeyError(f'The specified unit "{desired}" does not exist on class "GravityType"')
+
+        # Get value into specific gravity as a common base.
+        if self.unit == 'sg':
+            sg = self.value
+        elif self.unit == 'plato':
+            sg = Gravity.plato_to_sg(self.value)
+        else: # Brix
+            sg = Gravity.brix_to_sg(self.value)
+
+        # Convert and/or return the value in the desired units.
+        if desired == 'sg':
+            return sg
+        elif desired == 'plato':
+            return Gravity.sg_to_plato(sg)
+        else: # Brix
+            return Gravity.sg_to_brix(sg)
 
 
 

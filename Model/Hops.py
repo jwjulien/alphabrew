@@ -1,5 +1,5 @@
 # ======================================================================================================================
-#        File:  Recipe/Hops.py
+#        File:  Model/Hops.py
 #     Project:  Brewing Recipe Planner
 # Description:  A definition for a beer hops in list form.
 #      Author:  Jared Julien <jaredjulien@gmail.com>
@@ -27,7 +27,8 @@ from typing import List
 
 from GUI.Helpers.Column import Column
 from GUI.Helpers.Sizing import Stretch
-from Recipe.Hop import Hop
+from Model.Hop import Hop
+from Model.MeasurableUnits import PercentType
 
 
 
@@ -41,15 +42,15 @@ class Hops(QtCore.QAbstractTableModel):
     changed = QtCore.Signal()
 
     AllColumns = [
-        Column('amount', template='{0:.1f} oz', align=QtCore.Qt.AlignRight),
-        Column('use', 'Use In', align=QtCore.Qt.AlignLeft),
-        Column('duration', template='{0} {unit}', align=QtCore.Qt.AlignHCenter),
-        Column('_ibus', 'IBUs', template='{0:.1f}', align=QtCore.Qt.AlignRight),
-        Column('name', size=Stretch, align=QtCore.Qt.AlignLeft),
-        Column('htype', 'Type', align=QtCore.Qt.AlignLeft),
-        Column('form', align=QtCore.Qt.AlignRight),
-        Column('origin', align=QtCore.Qt.AlignHCenter),
-        Column('alpha', template='{0:.1f}%', align=QtCore.Qt.AlignRight)
+        Column('Amount', align=QtCore.Qt.AlignRight),
+        Column('Use In', align=QtCore.Qt.AlignLeft),
+        Column('Duration', align=QtCore.Qt.AlignHCenter),
+        Column('IBUs', align=QtCore.Qt.AlignRight),
+        Column('Name', size=Stretch, align=QtCore.Qt.AlignLeft),
+        Column('Type', align=QtCore.Qt.AlignLeft),
+        Column('Form', align=QtCore.Qt.AlignRight),
+        Column('Origin', align=QtCore.Qt.AlignHCenter),
+        Column('Alpha', align=QtCore.Qt.AlignRight)
     ]
 
     # These column indexes should be hidden when the class is instantiated with the limited flag set.
@@ -83,19 +84,19 @@ class Hops(QtCore.QAbstractTableModel):
                 continue
 
             hop = Hop(
-                name=row[0].value,
-                htype=row[1].value,
-                form=row[2].value,
-                alpha=row[3].value,
-                beta=row[4].value,
-                hsi=row[5].value,
-                origin=row[6].value,
-                substitutes=row[7].value,
-                humulene=row[8].value,
-                caryophyllene=row[9].value,
-                cohumulone=row[10].value,
-                myrcene=row[11].value,
-                notes=row[12].value
+                name=str(row[0].value),
+                htype=str(row[1].value),
+                form=str(row[2].value),
+                alpha=PercentType(row[3].value, '%'),
+                beta=PercentType(row[4].value, '%'),
+                hsi=PercentType(row[5].value, '%'),
+                origin=str(row[6].value),
+                substitutes=str(row[7].value),
+                humulene=PercentType(row[8].value, '%'),
+                caryophyllene=PercentType(row[9].value, '%'),
+                cohumulone=PercentType(row[10].value, '%'),
+                myrcene=PercentType(row[11].value, '%'),
+                notes=str(row[12].value)
             )
             hops.append(hop)
         return hops
@@ -198,15 +199,30 @@ class Hops(QtCore.QAbstractTableModel):
         """Fetch data for a cell, either for display of for editing."""
         # Display role is read-only textual display for data in the table.
         if role == QtCore.Qt.DisplayRole:
-            column = self.columns[index.column()]
             hop = self[index.row()]
-            value = getattr(hop, column.attribute)
-            if hop.use == 'Fermentation' and index.column() == 2:
-                unit = 'day'
-                value = int(value) / 1440
-            else:
-                unit = 'min'
-            return column.format(value, unit=unit)
+            column = index.column()
+
+            if self.limited:
+                column += len(self.HideWhenLimited)
+
+            if column == 0:
+                return str(hop.amount)
+            elif column == 1:
+                return hop.timing.use
+            elif column == 2:
+                return str(hop.timing.duration)
+            elif column == 3:
+                return f'{hop._ibus:.1f} IBU' if hop._ibus else '--'
+            elif column == 4:
+                return hop.name
+            elif column == 5:
+                return hop.htype
+            elif column == 6:
+                return hop.form
+            elif column == 7:
+                return hop.origin
+            elif column == 8:
+                return f"{hop.alpha.as_('%'):.1f}%"
 
         # Edit role is when the user double clicks a cell to trigger editing, return the non-formatted value.
         elif role == QtCore.Qt.EditRole:
@@ -216,16 +232,13 @@ class Hops(QtCore.QAbstractTableModel):
                 self.control.horizontalHeader().setSectionResizeMode(index.column(), QtWidgets.QHeaderView.Stretch)
 
             if index.column() == 0:
-                return hop.amount
+                return (hop.amount.value, hop.amount.unit)
 
             elif index.column() == 1:
-                return hop.use
+                return hop.timing.use
 
             elif index.column() == 2:
-                if hop.use == 'Fermentation':
-                    return hop.duration / 1440
-                else:
-                    return hop.duration
+                return (hop.timing.duration.value, hop.timing.duration.unit)
 
         # Text alignment role is for setting the right/center/left text alignment within a given cell.
         elif role == QtCore.Qt.TextAlignmentRole:
@@ -242,16 +255,15 @@ class Hops(QtCore.QAbstractTableModel):
             hop = self[index.row()]
 
             if index.column() == 0:
-                hop.amount = value
+                hop.amount.value = value[0]
+                hop.amount.unit = value[1]
 
             elif index.column() == 1:
-                hop.use = value
+                hop.timing.use = value
 
             elif index.column() == 2:
-                if hop.use == 'Fermentation':
-                    hop.duration = value * 1440
-                else:
-                    hop.duration = value
+                hop.timing.duration.value = value[0]
+                hop.timing.duration.unit = value[1]
 
             if self.control is not None:
                 self.control.horizontalHeader().setSectionResizeMode(index.column(), self.columns[index.column()].size)
@@ -271,14 +283,14 @@ class Hops(QtCore.QAbstractTableModel):
     def trubLoss(self):
         loss = 0
         for hop in self.items:
-            if 'boil' not in hop.use.lower():
+            if 'Boil' not in hop.timing.use:
                 continue
 
-            if 'leaf' in hop.form.lower():
-                loss += hop.amount * 0.0625
+            if 'Leaf' in hop.form:
+                loss += hop.amount.as_('oz') * 0.0625
 
-            elif 'pellet' in hop.form.lower():
-                loss += hop.amount * 0.025
+            elif 'Pellet' in hop.form:
+                loss += hop.amount.as_('oz') * 0.025
 
         return loss
 
@@ -298,7 +310,7 @@ class Hops(QtCore.QAbstractTableModel):
     def sort(self):
         """A void sort function that consistently sorts the hop in decreasing order of amount in the recipe."""
         uses = ['Mash', 'Boil', 'Fermentation']
-        self.items.sort(key=lambda hop: (uses.index(hop.use), -hop.duration, hop.name))
+        self.items.sort(key=lambda hop: (uses.index(hop.timing.use), -hop.timing.duration.as_('sec'), hop.name))
 
 
 # ----------------------------------------------------------------------------------------------------------------------

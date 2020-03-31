@@ -20,7 +20,7 @@ class Ui_TabRecipe(object):
     def setupUi(self, TabRecipe):
         if TabRecipe.objectName():
             TabRecipe.setObjectName(u"TabRecipe")
-        TabRecipe.resize(400, 302)
+        TabRecipe.resize(902, 500)
         self.formLayout = QFormLayout(TabRecipe)
         self.formLayout.setObjectName(u"formLayout")
         self.formLayout.setLabelAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)

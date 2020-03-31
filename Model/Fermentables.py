@@ -1,5 +1,5 @@
 # ======================================================================================================================
-#        File:  Recipe/Fermentables.py
+#        File:  Model/Fermentables.py
 #     Project:  Brewing Recipe Planner
 # Description:  A definition for a beer Fermentables in list form.
 #      Author:  Jared Julien <jaredjulien@gmail.com>
@@ -27,7 +27,8 @@ from typing import List
 
 from GUI.Helpers.Column import Column
 from GUI.Helpers.Sizing import Stretch
-from Recipe.Fermentable import Fermentable
+from Model.Fermentable import Fermentable
+from Model.MeasurableUnits import ColorType, DiastaticPowerType, PercentType
 
 
 
@@ -41,13 +42,13 @@ class Fermentables(QtCore.QAbstractTableModel):
     changed = QtCore.Signal()
 
     AllColumns = [
-        Column('amount', template='{0:.2f} lb', align=QtCore.Qt.AlignRight),
-        Column('proportion', 'Percent', template='{0:.0f}%', align=QtCore.Qt.AlignHCenter),
-        Column('name', 'Grain/Fermentable', size=Stretch, align=QtCore.Qt.AlignLeft),
-        Column('ftype', 'Type', align=QtCore.Qt.AlignRight),
-        Column('group', align=QtCore.Qt.AlignRight),
-        Column('fyield', 'Yield', template='{0:.1f}%', align=QtCore.Qt.AlignRight),
-        Column('color', template='{0:.1f} srm', align=QtCore.Qt.AlignRight),
+        Column('Amount', align=QtCore.Qt.AlignRight),
+        Column('Percent', align=QtCore.Qt.AlignHCenter),
+        Column('Grain/Fermentable', size=Stretch, align=QtCore.Qt.AlignLeft),
+        Column('Type', align=QtCore.Qt.AlignRight),
+        Column('Group', align=QtCore.Qt.AlignRight),
+        Column('Yield', align=QtCore.Qt.AlignRight),
+        Column('Color', align=QtCore.Qt.AlignRight),
     ]
 
     # These column indexes should be hidden when the class is instantiated with the limited flag set.
@@ -60,6 +61,8 @@ class Fermentables(QtCore.QAbstractTableModel):
         super().__init__()
         self.items = []
         self.limited = limited
+
+        self.control = None
 
         self.columns = []
         for index, column in enumerate(self.AllColumns):
@@ -79,21 +82,21 @@ class Fermentables(QtCore.QAbstractTableModel):
                 continue
 
             fermentable = Fermentable(
-                name=row[0].value,
-                ftype=row[1].value,
-                group=row[2].value,
-                producer=row[3].value,
-                origin=row[4].value,
-                fyield=row[5].value / 100,
-                color=row[6].value,
-                moisture=row[7].value / 100,
-                diastaticPower=row[8].value,
-                protein=row[9].value / 100,
-                maxPerBatch=row[10].value / 100,
-                coarseFineDiff=row[11].value / 100,
-                addAfterBoil=row[12].value,
-                mashed=row[13].value,
-                notes=row[14].value,
+                name=str(row[0].value),
+                ftype=str(row[1].value),
+                group=str(row[2].value),
+                producer=str(row[3].value),
+                origin=str(row[4].value),
+                fyield=PercentType(row[5].value, '%'),
+                color=ColorType(row[6].value, 'SRM'),
+                moisture=PercentType(row[7].value, '%'),
+                diastaticPower=DiastaticPowerType(row[8].value, 'Lintner'),
+                protein=PercentType(row[9].value, '%'),
+                maxPerBatch=PercentType(row[10].value, '%'),
+                coarseFineDiff=PercentType(row[11].value, '%'),
+                addAfterBoil=bool(row[12].value),
+                mashed=bool(row[13].value),
+                notes=str(row[14].value)
             )
             fermentables.append(fermentable)
         return fermentables
@@ -196,17 +199,36 @@ class Fermentables(QtCore.QAbstractTableModel):
         """Fetch data for a cell, either for display of for editing."""
         # Display role is read-only textual display for data in the table.
         if role == QtCore.Qt.DisplayRole:
-            column = self.columns[index.column()]
             fermentable = self[index.row()]
-            value = getattr(fermentable, column.attribute)
-            return column.format(value)
+            column = index.column()
+
+            if self.limited:
+                column += len(self.HideWhenLimited)
+
+            if column == 0:
+                return str(fermentable.amount)
+            elif column == 1:
+                return f'{fermentable.proportion:.0f}%'
+            elif column == 2:
+                return fermentable.name
+            elif column == 3:
+                return fermentable.ftype
+            elif column == 4:
+                return fermentable.group if fermentable.group is not None else ''
+            elif column == 5:
+                return f"{fermentable.fyield.as_('%'):.1f}%"
+            elif column == 6:
+                return f"{fermentable.color.as_('SRM'):.1f} srm"
 
         # Edit role is when the user double clicks a cell to trigger editing, return the non-formatted value.
         elif role == QtCore.Qt.EditRole:
             fermentable = self[index.row()]
 
+            if self.control is not None:
+                self.control.horizontalHeader().setSectionResizeMode(index.column(), QtWidgets.QHeaderView.Stretch)
+
             if index.column() == 0:
-                return fermentable.amount
+                return (fermentable.amount.value, fermentable.amount.unit)
 
         # Text alignment role is for setting the right/center/left text alignment within a given cell.
         elif role == QtCore.Qt.TextAlignmentRole:
@@ -223,10 +245,15 @@ class Fermentables(QtCore.QAbstractTableModel):
             fermentable = self[index.row()]
 
             if index.column() == 0:
-                fermentable.amount = value
+                fermentable.amount.value = value[0]
+                fermentable.amount.unit = value[1]
 
-                # Re-sort when the user changes the weightin the recipe.
-                self.sort()
+            if self.control is not None:
+                size = self.columns[index.column()].size
+                self.control.horizontalHeader().setSectionResizeMode(index.column(), size)
+
+            # Re-sort when the user changes the weightin the recipe.
+            self.sort()
 
             self.changed.emit()
             return True
@@ -289,6 +316,7 @@ class Fermentables(QtCore.QAbstractTableModel):
     def setWidths(self, control: QtWidgets.QTableView):
         """Called from the main window and passed the table widget, step through each column and setup the column widths
         per the Column configuration above."""
+        self.control = control
         for index, column in enumerate(self.columns):
             control.horizontalHeader().setSectionResizeMode(index, column.size)
 
@@ -296,7 +324,7 @@ class Fermentables(QtCore.QAbstractTableModel):
 # ----------------------------------------------------------------------------------------------------------------------
     def sort(self):
         """A void sort function that consistently sorts the fermentable in decreasing order of amount in the recipe."""
-        self.items.sort(key=lambda fermentable: (-fermentable.amount, fermentable.name))
+        self.items.sort(key=lambda fermentable: (-fermentable.amount.as_('lb'), fermentable.name))
 
 
 # ----------------------------------------------------------------------------------------------------------------------

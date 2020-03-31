@@ -1,5 +1,5 @@
 # ======================================================================================================================
-#        File:  Recipe/Miscellanea.py
+#        File:  Model/Miscellanea.py
 #     Project:  Brewing Recipe Planner
 # Description:  A definition for a beer Miscellanea in list form.
 #      Author:  Jared Julien <jaredjulien@gmail.com>
@@ -27,7 +27,9 @@ from typing import List
 
 from GUI.Helpers.Column import Column
 from GUI.Helpers.Sizing import Stretch
-from Recipe.Miscellaneous import Miscellaneous
+from Model.Miscellaneous import Miscellaneous
+from Model import Selections
+from Model.MeasurableUnits import MassType, TimeType, UnitType, VolumeType
 
 
 
@@ -41,13 +43,12 @@ class Miscellanea(QtCore.QAbstractTableModel):
     changed = QtCore.Signal()
 
     Columns = [
-        Column('name', size=Stretch, align=QtCore.Qt.AlignLeft),
-        Column('mtype', 'Type', align=QtCore.Qt.AlignCenter),
-        Column('useFor', 'Use For', align=QtCore.Qt.AlignRight),
-        Column('amount', template='{0:.2f}', align=QtCore.Qt.AlignRight),
-        Column('unit', align=QtCore.Qt.AlignLeft),
-        Column('use', align=QtCore.Qt.AlignRight),
-        Column('duration', template='{0:.0f} min', align=QtCore.Qt.AlignRight),
+        Column('Name', size=Stretch, align=QtCore.Qt.AlignLeft),
+        Column('Type', align=QtCore.Qt.AlignCenter),
+        Column('Use For', align=QtCore.Qt.AlignRight),
+        Column('Amount', align=QtCore.Qt.AlignRight),
+        Column('Use', align=QtCore.Qt.AlignRight),
+        Column('Duration', align=QtCore.Qt.AlignRight),
     ]
 
 
@@ -153,10 +154,20 @@ class Miscellanea(QtCore.QAbstractTableModel):
         """Fetch data for a cell, either for display of for editing."""
         # Display role is read-only textual display for data in the table.
         if role == QtCore.Qt.DisplayRole:
-            column = self.Columns[index.column()]
             misc = self[index.row()]
-            value = getattr(misc, column.attribute)
-            return column.format(value)
+
+            if index.column() == 0:
+                return misc.name
+            elif index.column() == 1:
+                return misc.mtype
+            elif index.column() == 2:
+                return misc.useFor
+            elif index.column() == 3:
+                return str(misc.amount)
+            elif index.column() == 4:
+                return misc.timing.use
+            elif index.column() == 5:
+                return str(misc.timing.duration)
 
         # Edit role is when the user double clicks a cell to trigger editing, return the non-formatted value.
         elif role == QtCore.Qt.EditRole:
@@ -172,13 +183,11 @@ class Miscellanea(QtCore.QAbstractTableModel):
             elif index.column() == 2:
                 return misc.useFor
             elif index.column() == 3:
-                return misc.amount
+                return (misc.amount.value, misc.amount.unit)
             elif index.column() == 4:
-                return misc.unit
+                return misc.timing.use
             elif index.column() == 5:
-                return misc.use
-            elif index.column() == 6:
-                return misc.duration
+                return (misc.timing.duration.value, misc.timing.duration.unit)
 
         # Text alignment role is for setting the right/center/left text alignment within a given cell.
         elif role == QtCore.Qt.TextAlignmentRole:
@@ -201,13 +210,14 @@ class Miscellanea(QtCore.QAbstractTableModel):
             elif index.column() == 2:
                 misc.useFor = value
             elif index.column() == 3:
-                misc.amount = value
+                misc.amount = Selections.one_of(value[0], value[1], MassType, VolumeType, UnitType)
             elif index.column() == 4:
-                misc.unit = value
+                misc.timing.use = value
             elif index.column() == 5:
-                misc.use = value
-            elif index.column() == 6:
-                misc.duration = value
+                if misc.timing.duration is None:
+                    misc.timing.duration = TimeType()
+                misc.timing.duration.value = value[0]
+                misc.timing.duration.unit = value[1]
 
             if self.control is not None:
                 self.control.horizontalHeader().setSectionResizeMode(index.column(), self.Columns[index.column()].size)
@@ -241,7 +251,7 @@ class Miscellanea(QtCore.QAbstractTableModel):
 # ----------------------------------------------------------------------------------------------------------------------
     def sort(self):
         """A void sort function that consistently sorts the misc in decreasing order of amount in the recipe."""
-        self.items.sort(key=lambda misc: (-misc.amount, misc.name))
+        self.items.sort(key=lambda misc: (-misc.amount.root, misc.name))
 
 
 # ----------------------------------------------------------------------------------------------------------------------

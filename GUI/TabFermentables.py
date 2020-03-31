@@ -27,13 +27,15 @@ import qtawesome
 
 from GUI.Base.TabIngredients import Ui_TabIngredients
 from GUI.DialogFermentable import DialogFermentable
-from GUI.Helpers.DoubleSpinBoxDelegate import DoubleSpinBoxDelegate
-from Recipe.Fermentables import Fermentables
+from GUI.Helpers.ComboSpinBoxDelegate import ComboSpinBoxDelegate
+from Model.Fermentables import Fermentables
+from Model.MeasurableUnits import MassType, VolumeType
+from Model import Selections
 
 
 
 # ======================================================================================================================
-# Main Window GUI Class
+# Fermentables Tab Class
 # ----------------------------------------------------------------------------------------------------------------------
 class TabFermentables(QtWidgets.QWidget):
     """Extends the MainWindow Fermentables tab widget containing a subset of controls specific to fermentables in the
@@ -56,7 +58,8 @@ class TabFermentables(QtWidgets.QWidget):
         self.ui.ingredients.selectionModel().selectionChanged.connect(self.on_ingredient_selection_change)
 
         # Setup a "delegate" to allow editing of the amount in a spinbox right inside of the table.
-        delegate = DoubleSpinBoxDelegate(self, minimum=0, maximum=1000, suffix=' lb', decimals=2, singleStep=1)
+        units = Selections.all_units(MassType, VolumeType)
+        delegate = ComboSpinBoxDelegate(self, units, maximum=1000, decimals=2, singleStep=1)
         self.ui.ingredients.setItemDelegateForColumn(0, delegate)
 
         # Setup a sorting/filter proxy to make it easier to find library ingredients.
@@ -118,6 +121,9 @@ class TabFermentables(QtWidgets.QWidget):
 
             # Make a copy of the fermentable so as to not modify the version in the library when working with recipe.
             fermentable = available.copy(self.recipe)
+
+            # Initialize the properties that are required in ingredients but missing in the library of items.
+            fermentable.amount = MassType(0, 'lb')
 
             # Add the new fermentable into the recipe.
             self.recipe.fermentables.append(fermentable)

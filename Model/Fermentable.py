@@ -1,5 +1,5 @@
 # ======================================================================================================================
-#        File:  Recipe/Fermentable.py
+#        File:  Model/Fermentable.py
 #     Project:  Brewing Recipe Planner
 # Description:  Provides the definition for a single fermentable or steepable item in a recipe.
 #      Author:  Jared Julien <jaredjulien@gmail.com>
@@ -22,7 +22,12 @@
 # ======================================================================================================================
 # Imports
 # ----------------------------------------------------------------------------------------------------------------------
+from typing import Union
+
 from PySide2 import QtCore, QtWidgets
+
+from Model.MeasurableUnits import ColorType, DiastaticPowerType, MassType, PercentType, VolumeType
+from Model import Selections
 
 
 
@@ -32,68 +37,68 @@ from PySide2 import QtCore, QtWidgets
 class Fermentable(QtCore.QObject):
     def __init__(self,
                  recipe=None,
-                 name='',
-                 amount=0,
-                 ftype='',
-                 group='',
-                 producer='',
-                 origin='',
-                 fyield=0,
-                 color=0,
-                 moisture=0,
-                 diastaticPower=0,
-                 protein=0,
-                 maxPerBatch=0,
-                 coarseFineDiff=0,
-                 addAfterBoil=False,
-                 mashed=False,
-                 notes=''):
+                 name=None,
+                 amount=None,
+                 ftype=None,
+                 group=None,
+                 producer=None,
+                 origin=None,
+                 fyield=None,
+                 color=None,
+                 moisture=None,
+                 diastaticPower=None,
+                 protein=None,
+                 maxPerBatch=None,
+                 coarseFineDiff=None,
+                 addAfterBoil=None,
+                 mashed=None,
+                 notes=None):
         super().__init__()
 
         self.recipe = recipe
-        self.name = name
-        self.amount = amount
-        self.ftype = ftype
-        self.group = group
-        self.producer = producer
-        self.origin = origin
-        self.fyield = fyield
-        self.color = color
-        self.moisture = moisture
-        self.diastaticPower = diastaticPower
-        self.protein = protein
-        self.maxPerBatch = maxPerBatch
-        self.coarseFineDiff = coarseFineDiff
-        self.addAfterBoil = addAfterBoil
-        self.mashed = mashed
-        self.notes = notes.replace('\\n', '\n') if notes else ''
+        self.name: str = name
+        self.amount: Union[MassType, VolumeType] = amount
+        self.ftype: str = ftype
+        self.group: str = group
+        self.producer: str = producer
+        self.origin: str = origin
+        self.fyield: PercentType = fyield
+        self.color: ColorType = color
+        self.moisture: PercentType = moisture
+        self.diastaticPower: DiastaticPowerType = diastaticPower
+        self.protein: PercentType = protein
+        self.maxPerBatch: PercentType = maxPerBatch
+        self.coarseFineDiff: PercentType = coarseFineDiff
+        self.addAfterBoil: bool = addAfterBoil
+        self.mashed: bool = mashed
+        self.notes: str = notes.replace('\\n', '\n') if notes else ''
 
 
 # ======================================================================================================================
 # Properties
 # ----------------------------------------------------------------------------------------------------------------------
     @property
-    def proportion(self):
+    def proportion(self) -> float:
         """Returns a float in the range [0.0, 100.0] representing this fermentables proportion within the associated
         recipe."""
         if self.recipe is None:
             return 0
-        total = sum([fermentable.amount for fermentable in self.recipe.fermentables])
+        total = sum([fermentable.amount.as_('lb') for fermentable in self.recipe.fermentables])
         if total == 0:
             return 0
-        return self.amount / total * 100
+        return self.amount.as_('lb') / total * 100
 
 
 # ----------------------------------------------------------------------------------------------------------------------
     @property
-    def isMashed(self):
+    def isMashed(self) -> bool:
         """Returns a Boolean indicating if this fermentable is mashed and therefor affected by mash efficiency."""
-        return self.ftype.lower() == 'grain'
+        return self.ftype == 'Grain'
 
 
 # ----------------------------------------------------------------------------------------------------------------------
     @property
-    def isFermentable(self):
+    def isFermentable(self) -> bool:
         """Returns a Boolean indicating if this fermentable is actually fermentable.  Certain sugars such as lactose or
         Splenda are sweet, but do not ferment.
 
@@ -102,7 +107,7 @@ class Fermentable(QtCore.QObject):
         obviously fragile as it would be as simple as editing the name of an ingredient to put it into or take it off
         of this last.
         """
-        blacklist = [
+        nonFermentable = [
             'lactose',
             'xylitol',
             'erythritol',
@@ -112,7 +117,7 @@ class Fermentable(QtCore.QObject):
         ]
 
         # Walk through the blacklist and compare it to the name of this fermentable.
-        for item in blacklist:
+        for item in nonFermentable:
             # If we find a match, then lets assume that this item is NOT fermentable.
             if item in self.name.lower():
                 return False
@@ -123,9 +128,9 @@ class Fermentable(QtCore.QObject):
 
 # ----------------------------------------------------------------------------------------------------------------------
     @property
-    def sucrose(self):
+    def sucrose(self) -> float:
         """Returns the equivalent amount of sucrose in this fermentable."""
-        sucrose = self.amount * self.fyield * (1 - self.moisture)
+        sucrose = self.amount.as_('lb') * (self.fyield.as_('%') / 100) * (1 - (self.moisture.as_('%') / 100))
 
         # If not mashed, then it must be steeped - reduce the yield by 40%.
         if not self.mashed:
@@ -143,18 +148,18 @@ class Fermentable(QtCore.QObject):
         return Fermentable(
             recipe=recipe,
             name=self.name,
-            amount=self.amount,
+            amount=self.amount.copy() if self.amount is not None else None,
             ftype=self.ftype,
             group=self.group,
             producer=self.producer,
             origin=self.origin,
-            fyield=self.fyield,
-            color=self.color,
-            moisture=self.moisture,
-            diastaticPower=self.diastaticPower,
-            protein=self.protein,
-            maxPerBatch=self.maxPerBatch,
-            coarseFineDiff=self.coarseFineDiff,
+            fyield=self.fyield.copy(),
+            color=self.color.copy(),
+            moisture=self.moisture.copy(),
+            diastaticPower=self.diastaticPower.copy(),
+            protein=self.protein.copy(),
+            maxPerBatch=self.maxPerBatch.copy(),
+            coarseFineDiff=self.coarseFineDiff.copy(),
             addAfterBoil=self.addAfterBoil,
             mashed=self.mashed,
             notes=self.notes
@@ -162,7 +167,7 @@ class Fermentable(QtCore.QObject):
 
 
 # ----------------------------------------------------------------------------------------------------------------------
-    def to_dict(self):
+    def to_dict(self) -> dict:
         """Convert this fermentable into a Python dictionary that can be used in assembling a BeerJSON format file.
 
         Returns a BeerJSON FermentableType compatible dictionary."""
@@ -172,40 +177,16 @@ class Fermentable(QtCore.QObject):
             'origin': self.origin,
             'producer': self.producer,
             'yield': {
-                'coarse_grind': {
-                    'value': self.fyield,
-                    'unit': '%'
-                },
-                'fine_coarse_difference': {
-                    'value': self.coarseFineDiff,
-                    'unit': '%'
-                }
+                'fine_grind': self.fyield.to_dict(),
+                'fine_coarse_difference': self.coarseFineDiff.to_dict(),
             },
-            'color': {
-                'value': self.color,
-                'unit': 'SRM'
-            },
-            'amount': {
-                'value': self.amount,
-                'unit': 'lb'
-            },
+            'color': self.color.to_dict(),
+            'amount': self.amount.to_dict(),
             'notes': self.notes.replace('\n', '\\n'),
-            'moisture': {
-                'value': self.moisture,
-                'unit': '%'
-            },
-            'diastatic_power': {
-                'value': self.diastaticPower,
-                'unit': 'Lintner'
-            },
-            'protein': {
-                'value': self.protein,
-                'unit': '%'
-            },
-            'max_in_batch': {
-                'value': self.maxPerBatch,
-                'unit': '%'
-            },
+            'moisture': self.moisture.to_dict(),
+            'diastatic_power': self.diastaticPower.to_dict(),
+            'protein': self.protein.to_dict(),
+            'max_in_batch': self.maxPerBatch.to_dict(),
             'recommend_mash': self.mashed
         }
         if self.group is not None:
@@ -214,22 +195,25 @@ class Fermentable(QtCore.QObject):
 
 
 # ----------------------------------------------------------------------------------------------------------------------
-    def from_dict(self, data):
+    def from_dict(self, data: dict):
         self.name = data['name']
-        self.amount = data['amount']['value'] # TODO: Deal with other units
+        amount = data['amount']
+        self.amount = Selections.one_of(amount['value'], amount['unit'], VolumeType, MassType)
         self.ftype = data['type'].title()
-        self.group = data['grain_group'].title() if 'grain_group' in data else None
+        if 'grain_group' in data:
+            self.group = data['grain_group'].title()
         self.producer = data['producer']
         self.origin = data['origin']
-        self.fyield = data['yield']['coarse_grind']['value']
-        self.color = data['color']['value'] # TODO: Other units.
-        self.moisture = data['moisture']['value']
-        self.diastaticPower = data['diastatic_power']['value'] # TODO: Other units.
-        self.protein = data['protein']['value']
-        self.maxPerBatch = data['max_in_batch']['value']
-        self.coarseFineDiff = data['yield']['fine_coarse_difference']['value']
+        self.color = ColorType(json=data['color'])
+        self.moisture = PercentType(json=data['moisture'])
+        self.diastaticPower = DiastaticPowerType(json=data['diastatic_power'])
+        self.protein = PercentType(json=data['protein'])
+        self.maxPerBatch = PercentType(json=data['max_in_batch'])
+        self.fyield = PercentType(json=data['yield']['fine_grind'])
+        self.coarseFineDiff = PercentType(json=data['yield']['fine_coarse_difference'])
         self.mashed = data['recommend_mash']
         self.notes = data['notes'].replace('\\n', '\n')
+
 
 
 # ======================================================================================================================

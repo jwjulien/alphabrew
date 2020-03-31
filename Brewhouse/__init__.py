@@ -24,7 +24,7 @@
 # ----------------------------------------------------------------------------------------------------------------------
 from .Brewhouse import Brewhouse
 from .Equipment import Equipment
-from .Constants import Constants
+from .Calibrations import Calibrations
 
 
 

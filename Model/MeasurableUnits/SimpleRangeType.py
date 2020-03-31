@@ -1,10 +1,10 @@
 # ======================================================================================================================
-#        File:  Math/Gravity.py
+#        File:  Model/MeasureableUnits/SimpleRangeType.py
 #     Project:  Brewing Recipe Planner
-# Description:  Maths for working with specific gravity, Plato, Brix, etc. conversions.
-#      Author:  Jared Julien <jaredjulien@exsystems.net>
-#   Copyright:  (c) 2020 Jared Julien, eX Systems
-# ---------------------------------------------------------------------------------------------------------------------
+# Description:  Provides a base class for simple types, extended by BeerJSON standards.
+#      Author:  Jared Julien <jaredjulien@gmail.com>
+#   Copyright:  (c) 2020 Jared Julien
+# ----------------------------------------------------------------------------------------------------------------------
 # Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
 # documentation files (the "Software"), to deal in the Software without restriction, including without limitation the
 # rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to
@@ -22,47 +22,57 @@
 # ======================================================================================================================
 # Imports
 # ----------------------------------------------------------------------------------------------------------------------
-from Math.Polynomial import Polynomial
+from Model.MeasurableUnits.SimpleType import SimpleType
 
 
 
 # ======================================================================================================================
-# Constants
+# SimpleRangeType Class
 # ----------------------------------------------------------------------------------------------------------------------
-PlatoFromSg = Polynomial(-616.868, 1111.14, -630.272, 135.997)
+class SimpleRangeType:
+    """Provides a base class for working with BeerJSON range types, extended by other classes in this directory."""
+
+    # This root class must be overridden by classes extending this base to provide the class to be instantiated when
+    # creating new min/max ranges from BeerJSON.
+    RootClass = SimpleType
+
+    def __init__(self, minimum=None, maximum=None):
+        self.minimum = minimum
+        self.maximum = maximum
 
 
 
 # ======================================================================================================================
-# Plato to SG
+# Methods
 # ----------------------------------------------------------------------------------------------------------------------
-def sg_to_plato(sg):
-    """Covert the provided specific gravity value into Plato using polynomial regression."""
-    return PlatoFromSg.eval(sg)
-
-
-# ----------------------------------------------------------------------------------------------------------------------
-def plato_to_sg(plato):
-    """Convert the provided gravity value in Plato to Specific Gravity units using polynomial regression."""
-    poly = PlatoFromSg.copy()
-    poly[0] -= plato
-    return poly.root(1.000, 1.050)
+    def to_dict(self):
+        """Convert this instance into a dictionary suitable for entry into a BeerJSON document."""
+        return {
+            'minimum': self.minimum.to_dict(),
+            'maximum': self.maximum.to_dict()
+        }
 
 
 # ----------------------------------------------------------------------------------------------------------------------
-def sg_to_brix(sg):
-    """Convert the provided specific gravity value into Brix and return it.
+    def from_dict(self, data):
+        """Parses data from the BeerJSON format dictionary and loads them into this instance."""
+        self.minimum = self.RootClass(data['minimum']['value'], data['minimum']['unit'])
+        self.maximum = self.RootClass(data['maximum']['value'], data['maximum']['unit'])
 
-    Help pulled from https://straighttothepint.com/specific-gravity-brix-plato-conversion-calculators"""
-    return ((((((182.4601 * sg) - 775.6821) * sg) + 1262.7794) * sg) - 669.5622)
+
+
+# ======================================================================================================================
+# Overridden Methods
+# ----------------------------------------------------------------------------------------------------------------------
+    def __str__(self):
+        """When represented as a string, convert this range into a values with units."""
+        return f'[{self.minimum} - {self.maximum}]'
 
 
 # ----------------------------------------------------------------------------------------------------------------------
-def brix_to_sg(brix):
-    """Convert the provided value from brix to specific gravity and return the result.
-
-    Help pulled from https://straighttothepint.com/specific-gravity-brix-plato-conversion-calculators/"""
-    return (brix / (258.6 - ((brix / 258.2) * 227.1))) + 1
+    def __repr__(self):
+        """Handle better representation of this class when printed."""
+        return f'<{self.__class__.__name__} minimum="{self.minimum}" maximum="{self.maximum}">'
 
 
 

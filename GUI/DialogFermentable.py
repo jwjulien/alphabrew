@@ -28,6 +28,7 @@ import qtawesome
 from GUI.Base.DialogFermentable import Ui_DialogFermentable
 
 
+
 # ======================================================================================================================
 # Constants
 # ----------------------------------------------------------------------------------------------------------------------
@@ -85,31 +86,36 @@ class DialogFermentable(QtWidgets.QDialog):
         self.ui.group.setCurrentText(self.fermentable.group)
         self.ui.producer.setText(self.fermentable.producer)
         self.ui.origin.setText(self.fermentable.origin)
-        self.ui.fyield.setValue(self.fermentable.fyield)
-        self.ui.color.setValue(self.fermentable.color)
-        self.ui.moisture.setValue(self.fermentable.moisture)
-        self.ui.diastaticPower.setValue(self.fermentable.diastaticPower)
-        self.ui.protein.setValue(self.fermentable.protein)
-        self.ui.maxInBatch.setValue(self.fermentable.maxPerBatch)
-        self.ui.coarseFineDiff.setValue(self.fermentable.coarseFineDiff)
-        self.ui.addAfterBoil.setChecked(self.fermentable.addAfterBoil)
-        self.ui.mashed.setChecked(self.fermentable.mashed)
+        self.ui.fyield.setValue(self.fermentable.fyield.as_('%'))
+        self.ui.color.setValue(self.fermentable.color.as_('SRM'))
+        self.ui.moisture.setValue(self.fermentable.moisture.as_('%'))
+        self.ui.diastaticPower.setValue(self.fermentable.diastaticPower.as_('Lintner'))
+        self.ui.protein.setValue(self.fermentable.protein.as_('%'))
+        self.ui.maxInBatch.setValue(self.fermentable.maxPerBatch.as_('%'))
+        self.ui.coarseFineDiff.setValue(self.fermentable.coarseFineDiff.as_('%'))
+        self.ui.addAfterBoil.setChecked(self.fermentable.addAfterBoil or False)
+        self.ui.mashed.setChecked(self.fermentable.mashed or False)
         self.ui.notes.setPlainText(self.fermentable.notes)
 
 
+# ----------------------------------------------------------------------------------------------------------------------
     def on_accept(self):
+        """Fires when the user hits to okay button, stores the data from the GUI back into the fermentable passed into
+        init."""
         self.fermentable.name = self.ui.name.text()
         self.fermentable.ftype = self.ui.type.currentText()
         self.fermentable.group = self.ui.group.currentText()
         self.fermentable.producer = self.ui.producer.text()
         self.fermentable.origin = self.ui.origin.text()
-        self.fermentable.fyield = self.ui.fyield.value()
-        self.fermentable.color = self.ui.color.value()
-        self.fermentable.moisture = self.ui.moisture.value()
-        self.fermentable.diastaticPower = self.ui.diastaticPower.value()
-        self.fermentable.protein = self.ui.protein.value()
-        self.fermentable.maxPerBatch = self.ui.maxInBatch.value()
-        self.fermentable.coarseFineDiff = self.ui.coarseFineDiff.value()
+        self.fermentable.fyield.value = self.ui.fyield.value()
+        self.fermentable.color.value = self.ui.color.value()
+        self.fermentable.color.unit = 'SRM'
+        self.fermentable.moisture.value = self.ui.moisture.value()
+        self.fermentable.diastaticPower.value = self.ui.diastaticPower.value()
+        self.fermentable.diastaticPower.unit = 'Lintner'
+        self.fermentable.protein.value = self.ui.protein.value()
+        self.fermentable.maxPerBatch.value = self.ui.maxInBatch.value()
+        self.fermentable.coarseFineDiff.value = self.ui.coarseFineDiff.value()
         self.fermentable.addAfterBoil = self.ui.addAfterBoil.isChecked()
         self.fermentable.mashed = self.ui.mashed.isChecked()
         self.fermentable.notes = self.ui.notes.toPlainText()

@@ -1,7 +1,7 @@
 # ======================================================================================================================
-#        File:  Brewhouse/Constants.py
+#        File:  Model/MeasureableUnits/CarbonationRangeType.py
 #     Project:  Brewing Recipe Planner
-# Description:  Provides the definition for constants, configurable items.
+# Description:  Provides a base class for working with acidity in recipes which can have differing units.
 #      Author:  Jared Julien <jaredjulien@gmail.com>
 #   Copyright:  (c) 2020 Jared Julien
 # ----------------------------------------------------------------------------------------------------------------------
@@ -20,23 +20,21 @@
 # ----------------------------------------------------------------------------------------------------------------------
 
 # ======================================================================================================================
-# Constants Class
+# Imports
 # ----------------------------------------------------------------------------------------------------------------------
-class Constants:
-    """
-    Provides the definition for constants, configurable items.
+from Model.MeasurableUnits.SimpleRangeType import SimpleRangeType
+from Model.MeasurableUnits.CarbonationType import CarbonationType
 
-    The intent of this class is to contain parameters, such as boil off rate, which remain pretty much fixed across
-    all of the equipment in a Brewhouse but may need to be tweaked and adjusted from Brewhouse to Brewhouse.
-    """
-    def __init__(self,
-                 brewhouseEfficiency=0.7, # Percent
-                 leafHopTrubLoss=0.0625, # Gallons per ounce
-                 pelletHopTrubLoss=0.025, # Gallons per ounce
-    ):
-        self.brewhouseEfficiency = brewhouseEfficiency
-        self.leafHopTrubLoss = leafHopTrubLoss
-        self.pelletHopTrubLoss = pelletHopTrubLoss
+
+
+# ======================================================================================================================
+# CarbonationRangeType Class
+# ----------------------------------------------------------------------------------------------------------------------
+class CarbonationRangeType(SimpleRangeType):
+    """Provides a definition of the CarbonationRangeType from the BeerJSON definition to define a min and max value for a
+    range represented as carbonation volumes."""
+
+    RootClass = CarbonationType
 
 
 

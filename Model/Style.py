@@ -1,5 +1,5 @@
 # ======================================================================================================================
-#        File:  Recipe/Style.py
+#        File:  Model/Style.py
 #     Project:  Brewing Recipe Planner
 # Description:  A definition for a beer Style.
 #      Author:  Jared Julien <jaredjulien@gmail.com>
@@ -22,6 +22,17 @@
 # ======================================================================================================================
 # Imports
 # ----------------------------------------------------------------------------------------------------------------------
+from Model.MeasurableUnits import BitternessRangeType
+from Model.MeasurableUnits import CarbonationRangeType
+from Model.MeasurableUnits import ColorRangeType
+from Model.MeasurableUnits import GravityRangeType
+from Model.MeasurableUnits import PercentRangeType
+
+
+
+# ======================================================================================================================
+# Style Class
+# ----------------------------------------------------------------------------------------------------------------------
 class Style:
     def __init__(self,
                  name='N/A',
@@ -30,18 +41,12 @@ class Style:
                  number=0,
                  letter=' ',
                  guide='',
-                 ogMin=0,
-                 ogMax=0,
-                 fgMin=0,
-                 fgMax=0,
-                 abvMin=0,
-                 abvMax=0,
-                 ibuMin=0,
-                 ibuMax=0,
-                 srmMin=0,
-                 srmMax=0,
-                 co2Min=0,
-                 co2Max=0,
+                 og=None,
+                 fg=None,
+                 abv=None,
+                 bitterness=None,
+                 color=None,
+                 carbonation=None,
                  notes='',
                  aroma='',
                  appearance='',
@@ -56,18 +61,12 @@ class Style:
         self.number = number
         self.letter = letter
         self.guide = guide
-        self.ogMin = ogMin
-        self.ogMax = ogMax
-        self.fgMin = fgMin
-        self.fgMax = fgMax
-        self.abvMin = abvMin
-        self.abvMax = abvMax
-        self.ibuMin = ibuMin
-        self.ibuMax = ibuMax
-        self.srmMin = srmMin
-        self.srmMax = srmMax
-        self.co2Min = co2Min
-        self.co2Max = co2Max
+        self.og = og
+        self.fg = fg
+        self.abv = abv
+        self.bitterness = bitterness
+        self.color = color
+        self.carbonation = carbonation
         self.notes = notes
         self.aroma = aroma
         self.appearance = appearance
@@ -91,66 +90,12 @@ class Style:
             'category_number': self.number,
             'style_letter': self.letter,
             'style_guide': self.guide,
-            'original_gravity': {
-                'minimum': {
-                    'value': self.ogMin,
-                    'unit': 'sg'
-                },
-                'maximum': {
-                    'value': self.ogMax,
-                    'unit': 'sg'
-                }
-            },
-            'final_gravity': {
-                'minimum': {
-                    'value': self.fgMin,
-                    'unit': 'sg'
-                },
-                'maximum': {
-                    'value': self.fgMax,
-                    'unit': 'sg'
-                }
-            },
-            'international_bitterness_units': {
-                'minimum': {
-                    'value': self.ibuMin,
-                    'unit': 'IBUs'
-                },
-                'maximum': {
-                    'value': self.ibuMax,
-                    'unit': 'IBUs'
-                }
-            },
-            'color': {
-                'minimum': {
-                    'value': self.srmMin,
-                    'unit': 'SRM'
-                },
-                'maximum': {
-                    'value': self.srmMax,
-                    'unit': 'SRM'
-                }
-            },
-            'carbonation': {
-                'minimum': {
-                    'value': self.co2Min,
-                    'unit': 'vols'
-                },
-                'maximum': {
-                    'value': self.co2Max,
-                    'unit': 'vols'
-                }
-            },
-            'alcohol_by_volume': {
-                'minimum': {
-                    'value': self.abvMin,
-                    'unit': '%'
-                },
-                'maximum': {
-                    'value': self.abvMax,
-                    'unit': '%'
-                }
-            },
+            'original_gravity': self.og.to_dict(),
+            'final_gravity': self.fg.to_dict(),
+            'international_bitterness_units': self.bitterness.to_dict(),
+            'color': self.color.to_dict(),
+            'carbonation': self.carbonation.to_dict(),
+            'alcohol_by_volume': self.abv.to_dict(),
             'notes': self.notes.replace('\n', '\\n') if self.notes else None,
             'aroma': self.aroma.replace('\n', '\\n') if self.aroma else None,
             'appearance': self.appearance.replace('\n', '\\n') if self.appearance else None,
@@ -172,23 +117,23 @@ class Style:
         self.letter = data.get('style_letter')
         self.guide = data['style_guide']
         if 'original_gravity' in data:
-            self.ogMin = data['original_gravity']['minimum']['value'] # TODO: Handle other units.
-            self.ogMax = data['original_gravity']['maximum']['value'] # TODO: Handle other units.
+            self.og = GravityRangeType()
+            self.og.from_dict(data['original_gravity'])
         if 'final_gravity' in data:
-            self.fgMin= data['final_gravity']['minimum']['value'] # TODO: Handle other units.
-            self.fgMax = data['final_gravity']['maximum']['value'] # TODO: Handle other units.
+            self.fg = GravityRangeType()
+            self.fg.from_dict(data['final_gravity'])
         if 'alcohol_by_volume' in data:
-            self.abvMin = data['alcohol_by_volume']['minimum']['value']
-            self.abvMax = data['alcohol_by_volume']['maximum']['value']
+            self.abv = PercentRangeType()
+            self.abv.from_dict(data['alcohol_by_volume'])
         if 'international_bitterness_units' in data:
-            self.ibuMin = data['international_bitterness_units']['minimum']['value']
-            self.ibuMax = data['international_bitterness_units']['maximum']['value']
+            self.bitterness = BitternessRangeType()
+            self.bitterness.from_dict(data['international_bitterness_units'])
         if 'color' in data:
-            self.srmMin = data['color']['minimum']['value'] # TODO: Handle other units.
-            self.srmMax = data['color']['maximum']['value'] # TODO: Handle other units.
+            self.color = ColorRangeType()
+            self.color.from_dict(data['color'])
         if 'carbonation' in data:
-            self.co2Min = data['carbonation']['minimum']['value']
-            self.co2Max = data['carbonation']['maximum']['value']
+            self.carbonation = CarbonationRangeType()
+            self.carbonation.from_dict(data['carbonation'])
 
         def paragraph(key):
             try:

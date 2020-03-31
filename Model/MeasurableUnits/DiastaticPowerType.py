@@ -1,7 +1,7 @@
 # ======================================================================================================================
-#        File:  Recipe/Styles.py
+#        File:  Model/MeasureableUnits/DiastaticPowerType.py
 #     Project:  Brewing Recipe Planner
-# Description:  A definition for a beer Style in list form.
+# Description:  Provides a base class for working with time types in recipes which can have differing units.
 #      Author:  Jared Julien <jaredjulien@gmail.com>
 #   Copyright:  (c) 2020 Jared Julien
 # ----------------------------------------------------------------------------------------------------------------------
@@ -22,56 +22,41 @@
 # ======================================================================================================================
 # Imports
 # ----------------------------------------------------------------------------------------------------------------------
-from Recipe.Style import Style
+from Model.MeasurableUnits.SimpleType import SimpleType
 
 
 
 # ======================================================================================================================
-# Styles Class
+# DiastaticPowerType Class
 # ----------------------------------------------------------------------------------------------------------------------
-class Styles(list):
-    """Provides for a list of Style objects, specifically created to aid in parsing Excel database files."""
+class DiastaticPowerType(SimpleType):
+    """Extends the SimpleType class to provide a class for working with DiastaticPowerType as defined in the BeerJson
+    standard 2.0 draft."""
 
-    @staticmethod
-    def from_excel(worksheet):
-        styles = Styles()
-        for idx, row in enumerate(worksheet):
-            # Skip the header row.
-            if idx <= 1:
-                continue
+    Types = {
+        'Lintner': None,
+        'WK': None
+    }
 
-            def attemptParagraph(cell):
-                value = cell.value
-                if value is None:
-                    return None
-                return value.replace('\\n', '\n')
 
-            style = Style(
-                name=row[0].value,
-                stype=row[1].value,
-                category=row[2].value,
-                number=row[3].value,
-                letter=row[4].value,
-                guide=row[5].value,
-                ogMin=row[6].value,
-                ogMax=row[7].value,
-                fgMin=row[8].value,
-                fgMax=row[9].value,
-                ibuMin=row[10].value,
-                ibuMax=row[11].value,
-                srmMin=row[12].value,
-                srmMax=row[13].value,
-                abvMin=row[14].value,
-                abvMax=row[15].value,
-                co2Min=row[16].value,
-                co2Max=row[17].value,
-                notes=attemptParagraph(row[18]),
-                overall=attemptParagraph(row[19]),
-                ingredients=attemptParagraph(row[20]),
-                examples=attemptParagraph(row[21])
-            )
-            styles.append(style)
-        return styles
+
+# ======================================================================================================================
+# Methods
+# ----------------------------------------------------------------------------------------------------------------------
+    def as_(self, desired):
+        """Override the conversion method to provide conversion specific to DiastaticPower."""
+        if desired not in self.Types.keys():
+            return KeyError(f'The specified unit "{desired}" does not exist on class "DiastaticPowerType"')
+
+        if self.unit == desired:
+            return self.value
+
+        if self.unit == 'Lintner':
+            return (3.5 * self.value) - 16
+
+        # WK -> Lintner
+        return (self.value + 16) / 3.5
+
 
 
 

@@ -1,10 +1,10 @@
 # ======================================================================================================================
-#        File:  GUI/Helpers/Column.py
+#        File:  Model/MeasureableUnits/PercentRangeType.py
 #     Project:  Brewing Recipe Planner
-# Description:  Provides a base class for working with
-#      Author:  Jared Julien <jaredjulien@exsystems.net>
-#   Copyright:  (c) 2020 Jared Julien, eX Systems
-# ---------------------------------------------------------------------------------------------------------------------
+# Description:  Provides a base class for working with acidity in recipes which can have differing units.
+#      Author:  Jared Julien <jaredjulien@gmail.com>
+#   Copyright:  (c) 2020 Jared Julien
+# ----------------------------------------------------------------------------------------------------------------------
 # Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
 # documentation files (the "Software"), to deal in the Software without restriction, including without limitation the
 # rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to
@@ -22,22 +22,19 @@
 # ======================================================================================================================
 # Imports
 # ----------------------------------------------------------------------------------------------------------------------
-from PySide2 import QtWidgets, QtCore
-
-from GUI.Helpers.Alignment import CenterCenter
-from GUI.Helpers.Sizing import Fit
+from Model.MeasurableUnits.SimpleRangeType import SimpleRangeType
+from Model.MeasurableUnits.PercentType import PercentType
 
 
 
 # ======================================================================================================================
-# Column Class
+# PercentRangeType Class
 # ----------------------------------------------------------------------------------------------------------------------
-class Column(object):
-    """Provides mapping between a column in a Qt table and properties such as title and text alignment."""
-    def __init__(self, heading, size=Fit, align=QtCore.Qt.AlignCenter):
-        self.heading = heading
-        self.size = size
-        self.align = align
+class PercentRangeType(SimpleRangeType):
+    """Provides a definition of the PercentRangeType from the BeerJSON definition to define a min and max value for a
+    range represented as percentages."""
+
+    RootClass = PercentType
 
 
 

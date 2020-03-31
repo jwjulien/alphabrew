@@ -25,15 +25,19 @@
 from PySide2 import QtCore, QtWidgets
 import qtawesome
 
+from GUI.DialogHop import DialogHop
 from GUI.Base.TabIngredients import Ui_TabIngredients
-from GUI.Helpers.DoubleSpinBoxDelegate import DoubleSpinBoxDelegate
+from GUI.Helpers.ComboSpinBoxDelegate import ComboSpinBoxDelegate
 from GUI.Helpers.ComboBoxDelegate import ComboBoxDelegate
-from Recipe.Hops import Hops
+from Model.Hops import Hops
+from Model import Selections
+from Model.MeasurableUnits import MassType, TimeType, VolumeType
+from Model.Timing import TimingType
 
 
 
 # ======================================================================================================================
-# Main Window GUI Class
+# Hops Tab Class
 # ----------------------------------------------------------------------------------------------------------------------
 class TabHops(QtWidgets.QWidget):
     """Extends the MainWindow Hops tab widget containing a subset of controls specific to hops in the
@@ -56,7 +60,8 @@ class TabHops(QtWidgets.QWidget):
         self.ui.ingredients.selectionModel().selectionChanged.connect(self.on_ingredient_selection_change)
 
         # Setup a "delegate" to allow editing of the amount in a spinbox right inside of the table.
-        delegate = DoubleSpinBoxDelegate(self, minimum=0, maximum=32, suffix=' oz', decimals=1, singleStep=0.5)
+        units = Selections.all_units(MassType, VolumeType)
+        delegate = ComboSpinBoxDelegate(self, units, minimum=0, maximum=32, decimals=1, singleStep=0.5)
         self.ui.ingredients.setItemDelegateForColumn(0, delegate)
 
         # Setup a "delegate" to allow editing of the use in a combo box right inside of the table.
@@ -64,7 +69,8 @@ class TabHops(QtWidgets.QWidget):
         self.ui.ingredients.setItemDelegateForColumn(1, delegate)
 
         # Setup a "delegate" to allow editing of the duration in a spinbox right inside of the table.
-        delegate = DoubleSpinBoxDelegate(self, minimum=0, maximum=240, decimals=0, singleStep=5)
+        units = Selections.all_units(TimeType)
+        delegate = ComboSpinBoxDelegate(self, units, maximum=240, decimals=0, singleStep=5)
         self.ui.ingredients.setItemDelegateForColumn(2, delegate)
 
         # Setup a sorting/filter proxy to make it easier to find library ingredients.
@@ -127,6 +133,9 @@ class TabHops(QtWidgets.QWidget):
             # Make a copy of the hop so as to not modify the version in the library when working with recipe.
             hop = available.copy(self.recipe)
 
+            hop.timing = TimingType(use='Boil', duration=TimeType(0, 'min'))
+            hop.amount = MassType(0, 'oz')
+
             # Add the new hop into the recipe.
             self.recipe.hops.append(hop)
 
@@ -134,13 +143,13 @@ class TabHops(QtWidgets.QWidget):
 # ----------------------------------------------------------------------------------------------------------------------
     def on_edit(self):
         """Fires when the user clicks the edit button."""
-        # selections = self.ui.ingredients.selectedIndexes()
-        # selections = [selection for selection in selections if selection.column() == 0]
-        # if len(selections) != 1:
-        #     return
-        # hop = self.recipe.hops[selections[0].row()]
-        # dialog = DialogHop(self, hop)
-        # dialog.exec_()
+        selections = self.ui.ingredients.selectedIndexes()
+        selections = [selection for selection in selections if selection.column() == 0]
+        if len(selections) != 1:
+            return
+        hop = self.recipe.hops[selections[0].row()]
+        dialog = DialogHop(self, hop)
+        dialog.exec_()
 
 
 # ----------------------------------------------------------------------------------------------------------------------

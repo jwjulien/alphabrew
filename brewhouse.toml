@@ -2,3 +2,13 @@
 [[equipment]]
 name = 'Full System'
 mashTunVolume = 10
+
+
+[water]
+Ca = 74
+Mg = 28
+Na = 6
+Cl = 10
+SO4 = 12
+HCO3 = 79
+pH = 7.6

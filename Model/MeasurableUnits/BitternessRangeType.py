@@ -1,7 +1,7 @@
 # ======================================================================================================================
-#        File:  Recipe/__init__.py
+#        File:  Model/MeasureableUnits/BitternessRangeType.py
 #     Project:  Brewing Recipe Planner
-# Description:  Top level include for recipe model.  Sub modules include things like Style, Fermentable, Hop, etc.
+# Description:  Provides a base class for working with acidity in recipes which can have differing units.
 #      Author:  Jared Julien <jaredjulien@gmail.com>
 #   Copyright:  (c) 2020 Jared Julien
 # ----------------------------------------------------------------------------------------------------------------------
@@ -22,9 +22,20 @@
 # ======================================================================================================================
 # Imports
 # ----------------------------------------------------------------------------------------------------------------------
-from .Recipe import Recipe
-from .Styles import Styles
-from .Fermentables import Fermentables
+from Model.MeasurableUnits.SimpleRangeType import SimpleRangeType
+from Model.MeasurableUnits.BitternessType import BitternessType
+
+
+
+# ======================================================================================================================
+# BitternessRangeType Class
+# ----------------------------------------------------------------------------------------------------------------------
+class BitternessRangeType(SimpleRangeType):
+    """Provides a definition of the BitternessRangeType from the BeerJSON definition to define a min and max value for a
+    range represented as IBUs."""
+
+    RootClass = BitternessType
+
 
 
 # End of File

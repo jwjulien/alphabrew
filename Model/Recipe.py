@@ -1,7 +1,7 @@
 # ======================================================================================================================
-#        File:  Recipe/Recipe.py
+#        File:  Model/Recipe.py
 #     Project:  Brewing Recipe Planner
-# Description:  Provides the definition for constants, configurable items.
+# Description:  Provides a base for beer Recipes sopporing BeerJSON conversion.
 #      Author:  Jared Julien <jaredjulien@gmail.com>
 #   Copyright:  (c) 2020 Jared Julien
 # ----------------------------------------------------------------------------------------------------------------------
@@ -26,11 +26,12 @@ import json
 
 from PySide2 import QtCore
 
-from Recipe.Style import Style
-from Recipe.Fermentables import Fermentables
-from Recipe.Miscellanea import Miscellanea
-from Recipe.Hops import Hops
-from Brewhouse import Equipment, Constants
+from Model.Style import Style
+from Model.Fermentables import Fermentables
+from Model.Miscellanea import Miscellanea
+from Model.Hops import Hops
+from Model.MeasurableUnits import TemperatureType, TimeType, VolumeType
+from Brewhouse import Equipment, Calibrations
 from Math import Gravity, Color
 
 
@@ -51,19 +52,19 @@ class Recipe(QtCore.QObject):
 
     changed = QtCore.Signal()
 
-    def __init__(self, constants):
+    def __init__(self, calibrations):
         super().__init__()
 
-        self.constants: Constants = constants
+        self.calibrations: Calibrations = calibrations
 
         self._name: str = ''
-        self._author: str = 'Jared Julien'
-        self._style: Style = Style()
+        self._author: str = ''
+        self._style: Style = None
         self._rtype: str = 'all grain'
-        self._equipment: Equipment = Equipment()
-        self._size: float = 5 # Gallons
-        self._boilTime: int = 60 # Minutes
-        self._ambient: float = 70 # Degrees Fahrenheit
+        self._equipment = Equipment()
+        self._size = VolumeType(5, 'gal')
+        self._boilTime = TimeType(60, 'min')
+        self._ambient = TemperatureType(70, 'F')
 
         self.fermentables = Fermentables()
         self.misc = Miscellanea()
@@ -180,7 +181,7 @@ class Recipe(QtCore.QObject):
         hopWaterLoss = 0
 
         # Determine how many gallons we expect to boil off over the time of the boil.
-        boilOff = self.equipment.boilOffRate * (self.boilTime / 60)
+        boilOff = self.equipment.boilOffRate * self.boilTime.as_('hr')
 
         # TODO: Review and add in other water losses between the start and end of the boil.
 
@@ -193,15 +194,18 @@ class Recipe(QtCore.QObject):
         """Calculates and returns to total wort volume to be placed into the fermentor, taking into account the various
         losses to the boil kettle, MLT, and siphoning processes - as defined in the Brewhouse configuration."""
         # TODO: Review the losses to cover for places in the system where sugar could get lost.
-        return self.size + self.equipment.spargeHltDeadspace + self.equipment.siphonLoss
+        return self.size.as_('gal') + self.equipment.spargeHltDeadspace + self.equipment.siphonLoss
 
 
 # ----------------------------------------------------------------------------------------------------------------------
     @property
     def originalGravity(self):
         """Recalculate the original gravity for this recipe."""
-        # Count sugar contributions from mashed ingredients, taking brewhouse efficiency into account.
-        sugar = (self.fermentables.mashedSugar + self.fermentables.steepedSugar) * self.constants.brewhouseEfficiency
+        # Count sugar contributions from mashed ingredients.
+        sugar = self.fermentables.mashedSugar + self.fermentables.steepedSugar
+
+        # Scale mashed ingredients by the brewhouse efficiency.
+        sugar *= self.calibrations.brewhouseEfficiency / 100
 
         # Add the sugar contributions from non-mashed ingredients.  Efficiency doesn't count because these are sugar,
         # juice, fruit, etc. that is just plain added to the batch.
@@ -244,7 +248,7 @@ class Recipe(QtCore.QObject):
     @property
     def boilGravity(self):
         """Calculates the specific gravity value to be expected pre-boil."""
-        sugar = self.constants.brewhouseEfficiency * self.fermentables.mashedSugar
+        sugar = self.calibrations.brewhouseEfficiency / 100 * self.fermentables.mashedSugar
 
         sugar += self.fermentables.nonMashedSugar
 
@@ -257,25 +261,25 @@ class Recipe(QtCore.QObject):
     @property
     def abv(self):
         """Calculates the ABV or alcohol by volume for this beer based upon the OG and FG values."""
-        return (self.originalGravity - self.finalGravity) * 1.3125
+        return (self.originalGravity - self.finalGravity) * 131.25
 
 
 # ----------------------------------------------------------------------------------------------------------------------
     @property
-    def ibu(self):
+    def bitterness(self):
         """Calculate the IBUs or international bittering units for this recipe."""
         ibus = 0
 
-        volume = self.size + self.hops.trubLoss
+        volume = self.size.as_('gal') + self.hops.trubLoss
 
         gravity = self.originalGravity
 
         for hop in self.hops:
-            if hop.use not in ['Mash', 'Boil']:
+            if hop.timing.use not in ['Mash', 'Boil']:
                 # Dry hopping doesn't contribute to bitterness so ignore those hop additions.
                 continue
 
-            minutes = 60 if hop.use == 'Mash' else hop.duration
+            minutes = 60 if hop.timing.use == 'Mash' else hop.timing.duration.as_('min')
             ibus += hop.ibus(volume, gravity, minutes)
 
         return ibus
@@ -284,9 +288,9 @@ class Recipe(QtCore.QObject):
 
 # ----------------------------------------------------------------------------------------------------------------------
     @property
-    def srm(self):
+    def color(self):
         """Estimate the color of this beer based upon the color contributions of each of the fermentable ingredients."""
-        total = sum([fermentable.color * fermentable.amount for fermentable in self.fermentables])
+        total = sum([fermentable.color.as_('SRM') * fermentable.amount.as_('lb') for fermentable in self.fermentables])
         mcu = total / self.totalWort
         return Color.mcu_to_srm(mcu)
 
@@ -296,7 +300,7 @@ class Recipe(QtCore.QObject):
     def ibuGu(self):
         """Calculate the IBU vs. Gravity for an idea of the overall sweetness of the product."""
         points = (self.originalGravity - 1) * 1000
-        return self.ibu / points
+        return self.bitterness / points
 
 
 # ----------------------------------------------------------------------------------------------------------------------
@@ -322,15 +326,11 @@ class Recipe(QtCore.QObject):
         recipeJson = {
             'name': self.name,
             'type': self.rtype,
-            'style': self.style.to_dict(),
-            'batch_size': {
-                'value': self.size,
-                'unit': 'gal'
-            },
+            'batch_size': self.size.to_dict(),
             'author': self.author,
             'efficiency': {
                 'brewhouse': {
-                    'value': self.constants.brewhouseEfficiency * 100,
+                    'value': self.calibrations.brewhouseEfficiency,
                     'unit': '%'
                 }
             },
@@ -340,6 +340,8 @@ class Recipe(QtCore.QObject):
                 'miscellaneous_additions': self.misc.to_dict()
             }
         }
+        if self.style:
+            recipeJson['style'] = self.style.to_dict()
         return json.dumps({
             'beerjson': {
                 'version': 2,
@@ -347,7 +349,7 @@ class Recipe(QtCore.QObject):
                     recipeJson
                 ]
             }
-        })
+        }, indent=2, separators=(',', ': '))
 
 
 # ----------------------------------------------------------------------------------------------------------------------
@@ -362,9 +364,11 @@ class Recipe(QtCore.QObject):
             raise ValueError(f'This tool only supports one recipe per file, file contains {len(recipes)}')
         recipe = recipes[0]
         self.name = recipe['name']
-        self.style.from_dict(recipe['style'])
+        if 'style' in recipe:
+            self.style = Style()
+            self.style.from_dict(recipe['style'])
         self.rtype = recipe['type']
-        self.size = recipe['batch_size']['value']
+        self.size = VolumeType(json=recipe['batch_size'])
         self.author = recipe['author']
         ingredients = recipe['ingredients']
         self.fermentables.from_dict(self, ingredients['fermentable_additions'])

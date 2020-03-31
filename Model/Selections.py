@@ -1,10 +1,10 @@
 # ======================================================================================================================
-#        File:  GUI/Helpers/Column.py
+#        File:  Model/Selections.py
 #     Project:  Brewing Recipe Planner
-# Description:  Provides a base class for working with
-#      Author:  Jared Julien <jaredjulien@exsystems.net>
-#   Copyright:  (c) 2020 Jared Julien, eX Systems
-# ---------------------------------------------------------------------------------------------------------------------
+# Description:  Aids in helping select the proper measureable unit type class to use.
+#      Author:  Jared Julien <jaredjulien@gmail.com>
+#   Copyright:  (c) 2020 Jared Julien
+# ----------------------------------------------------------------------------------------------------------------------
 # Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
 # documentation files (the "Software"), to deal in the Software without restriction, including without limitation the
 # rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to
@@ -20,24 +20,25 @@
 # ----------------------------------------------------------------------------------------------------------------------
 
 # ======================================================================================================================
-# Imports
+# Fermentable Class
 # ----------------------------------------------------------------------------------------------------------------------
-from PySide2 import QtWidgets, QtCore
+def one_of(value, unit, *options):
+    """Given a dictionary containing a `value` and `unit`, use the unit to determine an appropriate type from the
+    provided set of `options`.  If no matching type can be found a TypeError is thrown."""
+    for option in options:
+        if unit in option.Types.keys():
+            return option(value, unit)
 
-from GUI.Helpers.Alignment import CenterCenter
-from GUI.Helpers.Sizing import Fit
+    raise TypeError(f'Could not find a suitable match for {unit} in {options}')
 
 
-
-# ======================================================================================================================
-# Column Class
 # ----------------------------------------------------------------------------------------------------------------------
-class Column(object):
-    """Provides mapping between a column in a Qt table and properties such as title and text alignment."""
-    def __init__(self, heading, size=Fit, align=QtCore.Qt.AlignCenter):
-        self.heading = heading
-        self.size = size
-        self.align = align
+def all_units(*options):
+    """Combine all of the available unit types from the provided SimpleType types and return the list."""
+    types = []
+    for option in options:
+        types.extend(option.Types.keys())
+    return types
 
 
 

@@ -25,7 +25,7 @@
 import toml
 
 from Brewhouse.Equipment import Equipment
-from Brewhouse.Constants import Constants
+from Brewhouse.Calibrations import Calibrations
 
 
 # ======================================================================================================================
@@ -44,7 +44,7 @@ class Brewhouse:
         self.equipment = [Equipment(**data) for data in config.get('equipment', [])]
         # TODO: Load some kind of default equipment setup for when the input file doesn't exist or contain equipment.
 
-        self.constants = Constants(**config.get('constants', {}))
+        self.calibrations = Calibrations(**config.get('calibrations', {}))
 
 
 # End of Fil

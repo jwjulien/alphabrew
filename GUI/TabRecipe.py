@@ -26,12 +26,12 @@ from PySide2 import QtCore, QtGui, QtWidgets
 import qtawesome
 
 from GUI.Base.TabRecipe import Ui_TabRecipe
-from Recipe.Styles import Styles
+from Model.Styles import Styles
 
 
 
 # ======================================================================================================================
-# Mash Tab
+# Recipe Tab Class
 # ----------------------------------------------------------------------------------------------------------------------
 class TabRecipe(QtWidgets.QWidget):
     def __init__(self, parent, recipe, brewhouse, workbook):
@@ -48,36 +48,60 @@ class TabRecipe(QtWidgets.QWidget):
         for style in self.styles:
             self.ui.style.addItem(style.name)
 
+        # Load the list of types into dropdown.
+        self.Types = ['All Grain', 'Partial Mash', 'Extract', 'Cider', 'Wine', 'Kombucha', 'Mead', 'Soda', 'Other']
+        for rtype in self.Types:
+            self.ui.rtype.addItem(rtype)
+
         # Populate the equipment dropdown.
         for equipment in self.brewhouse.equipment:
             self.ui.equipment.addItem(equipment.name)
 
         # Load recipe data.
         self.ui.name.setText(self.recipe.name)
-        self.ui.style.setCurrentText(self.recipe.style.name)
+        self.ui.author.setText(self.recipe.author)
+        if self.recipe.style:
+            self.ui.style.setCurrentText(self.recipe.style.name)
+        self.ui.rtype.setCurrentText(self.recipe.rtype)
         self.ui.equipment.setCurrentText(self.recipe.equipment.name)
-        self.ui.size.setValue(self.recipe.size)
-        self.ui.ambient.setValue(self.recipe.ambient)
+        self.ui.size.setValue(self.recipe.size.as_('gal'))
+        self.ui.time_boil.setValue(self.recipe.boilTime.as_('min'))
+        self.ui.ambient.setValue(self.recipe.ambient.as_('F'))
 
         # Connect events.
         self.ui.name.textChanged.connect(self.on_name_change)
+        self.ui.author.textChanged.connect(self.on_author_change)
         self.ui.style.currentIndexChanged.connect(self.on_style_changed)
+        self.ui.rtype.currentIndexChanged.connect(self.on_type_changed)
         self.ui.equipment.currentIndexChanged.connect(self.on_equipment_changed)
         self.ui.size.valueChanged.connect(self.on_size_changed)
+        self.ui.time_boil.valueChanged.connect(self.on_boilTime_changed)
         self.ui.ambient.valueChanged.connect(self.on_ambient_changed)
 
 
 
 # ----------------------------------------------------------------------------------------------------------------------
-    def on_name_change(self, name):
+    def on_name_change(self, value):
         """Fires when the user changes the name of the recipe in the text box."""
-        self.recipe.name = name
+        self.recipe.name = value
+
+
+# ----------------------------------------------------------------------------------------------------------------------
+    def on_author_change(self, value):
+        """Fires when the user changes the name of the author in the text box."""
+        self.recipe.author = value
 
 
 # ----------------------------------------------------------------------------------------------------------------------
     def on_style_changed(self, index):
         """Fires when the user changes the selected style."""
         self.recipe.style = self.styles[index]
+
+
+# ----------------------------------------------------------------------------------------------------------------------
+    def on_type_changed(self, index):
+        """Fires when the user changes the selected type."""
+        self.recipe.type = self.Types[index]
 
 
 # ----------------------------------------------------------------------------------------------------------------------
@@ -89,13 +113,22 @@ class TabRecipe(QtWidgets.QWidget):
 # ----------------------------------------------------------------------------------------------------------------------
     def on_size_changed(self, value):
         """Fires when the user changes the batch size."""
-        self.recipe.size = value
+        self.recipe.size.value = value
+        self.recipe.size.unit = 'gal'  # The GUI only works with gallons. #opinionated
+
+
+# ----------------------------------------------------------------------------------------------------------------------
+    def on_boilTime_changed(self, value):
+        """Fires when the user changes the boil time."""
+        self.recipe.time_boil.value = value
+        self.recipe.time_boil.unit = 'min'  # The GUI only works with minutes. #opinionated
 
 
 # ----------------------------------------------------------------------------------------------------------------------
     def on_ambient_changed(self, value):
         """Fires when the user changes the ambient temperature."""
-        self.recipe.ambient = value
+        self.recipe.ambient.value = value
+        self.recipe.ambient.unit = 'F'
 
 
 

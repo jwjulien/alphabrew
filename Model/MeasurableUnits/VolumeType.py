@@ -1,10 +1,10 @@
 # ======================================================================================================================
-#        File:  GUI/Helpers/Column.py
+#        File:  Model/MeasureableUnits/VolumeType.py
 #     Project:  Brewing Recipe Planner
-# Description:  Provides a base class for working with
-#      Author:  Jared Julien <jaredjulien@exsystems.net>
-#   Copyright:  (c) 2020 Jared Julien, eX Systems
-# ---------------------------------------------------------------------------------------------------------------------
+# Description:  Provides a base class for working with acidity in recipes which can have differing units.
+#      Author:  Jared Julien <jaredjulien@gmail.com>
+#   Copyright:  (c) 2020 Jared Julien
+# ----------------------------------------------------------------------------------------------------------------------
 # Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
 # documentation files (the "Software"), to deal in the Software without restriction, including without limitation the
 # rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to
@@ -22,22 +22,33 @@
 # ======================================================================================================================
 # Imports
 # ----------------------------------------------------------------------------------------------------------------------
-from PySide2 import QtWidgets, QtCore
-
-from GUI.Helpers.Alignment import CenterCenter
-from GUI.Helpers.Sizing import Fit
+from Model.MeasurableUnits.SimpleType import SimpleType
 
 
 
 # ======================================================================================================================
-# Column Class
+# VolumeType Class
 # ----------------------------------------------------------------------------------------------------------------------
-class Column(object):
-    """Provides mapping between a column in a Qt table and properties such as title and text alignment."""
-    def __init__(self, heading, size=Fit, align=QtCore.Qt.AlignCenter):
-        self.heading = heading
-        self.size = size
-        self.align = align
+class VolumeType(SimpleType):
+    """Extends the SimpleType class to provide a class for working with VolumeType as defined in the BeerJson standard
+    2.0 draft."""
+
+    Types = {
+        'tsp': 1,
+        'tbsp': 3,
+        'floz': 6,
+        'cup': 48,
+        'pt': 96,
+        'qt': 192,
+        'gal': 768,
+        'bbl': 32256,
+        'ifloz': 5.76456,
+        'ipt': 115.291,
+        'iqt': 230.582,
+        'igal': 922.33,
+        'ml': 0.202884,
+        'l': 202.884
+    }
 
 
 

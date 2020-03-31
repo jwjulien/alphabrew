@@ -1,7 +1,7 @@
 # ======================================================================================================================
 #        File:  Brewhouse/Equipment.py
 #     Project:  Brewing Recipe Planner
-# Description:  Provides the definition for a system setup and the associated settings and constants.
+# Description:  Provides the definition for a system setup and the associated settings and calibrations.
 #      Author:  Jared Julien <jaredjulien@gmail.com>
 #   Copyright:  (c) 2020 Jared Julien
 # ----------------------------------------------------------------------------------------------------------------------
@@ -23,8 +23,9 @@
 # Equipment Class
 # ----------------------------------------------------------------------------------------------------------------------
 class Equipment:
-    """Provides the definition for a system setup and the associated settings and constants.  Represents one particular
-    equipment profile/setup for a brewing system.  A single Brewhouse may contain more than one Equipment profile."""
+    """Provides the definition for a system setup and the associated settings and calibrations.  Represents one
+    particular equipment profile/setup for a brewing system.  A single Brewhouse may contain more than one Equipment
+    profile."""
     def __init__(self,
                  name='N/A',
                  mashTunVolume=5, # Gallons

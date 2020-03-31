@@ -34,12 +34,13 @@ from GUI.Base.MainWindow import Ui_MainWindow
 from GUI.TabRecipe import TabRecipe
 from GUI.TabFermentables import TabFermentables
 from GUI.TabMiscellaneous import TabMiscellaneous
+from GUI.TabWater import TabWater
 from GUI.TabMash import TabMash
 from GUI.TabHops import TabHops
 from GUI.TabFermentation import TabFermentation
 
 from Brewhouse import Brewhouse
-from Recipe import Recipe
+from Model.Recipe import Recipe
 
 
 
@@ -82,15 +83,15 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.actionContents.triggered.connect(self.on_help_contents)
 
         self.brewhouse = Brewhouse()
-        self.recipe = Recipe(self.brewhouse.constants)
+        self.recipe = Recipe(self.brewhouse.calibrations)
         self.recipe.changed.connect(self.update)
 
+        # try:
         with open('recipe.json') as handle:
-            try:
-                self.recipe.from_beerxml(handle.read())
-            except:
-                print('Failed to load recipe')
-                traceback.print_exc()
+            self.recipe.from_beerxml(handle.read())
+        # except:
+        #     print('Failed to load recipe')
+        #     traceback.print_exc()
 
         # Load database items into memory.
         # Load read-only just because we never need to change the database from within this tool.
@@ -99,16 +100,26 @@ class MainWindow(QtWidgets.QMainWindow):
         # Add the tab instances into the tab container.
         self.ui.tab_recipe = TabRecipe(self, self.recipe, self.brewhouse, workbook)
         self.ui.tabs.addTab(self.ui.tab_recipe, "Recipe")
+
         self.ui.tab_fermentables = TabFermentables(self, self.recipe, workbook)
         self.ui.tabs.addTab(self.ui.tab_fermentables, "Fermentables")
+
         self.ui.tab_miscellaneous = TabMiscellaneous(self, self.recipe)
         self.ui.tabs.addTab(self.ui.tab_miscellaneous, "Miscellaneous")
+
+        self.ui.tab_water = TabWater(self, self.recipe, workbook)
+        self.ui.tabs.addTab(self.ui.tab_water, "Water")
+
         self.ui.tab_mash = TabMash(self, self.recipe, workbook)
         self.ui.tabs.addTab(self.ui.tab_mash, "Mash")
+
         self.ui.tab_hops = TabHops(self, self.recipe, workbook)
         self.ui.tabs.addTab(self.ui.tab_hops, "Hops")
+
         self.ui.tab_fermentation = TabFermentation(self, self.recipe, workbook)
         self.ui.tabs.addTab(self.ui.tab_fermentation, "Fermentation")
+
+        workbook.close()
 
         self.update()
 
@@ -166,18 +177,39 @@ class MainWindow(QtWidgets.QMainWindow):
     def update(self):
         """Handles copying of recipe information over to the GUI when the recipe gets changed."""
         # Update the bubble indicating the ideal range based upon the selected beer style.
-        self.ui.og.setPreferredRange(self.recipe.style.ogMin, self.recipe.style.ogMax)
-        self.ui.fg.setPreferredRange(self.recipe.style.fgMin, self.recipe.style.fgMax)
-        self.ui.abv.setPreferredRange(self.recipe.style.abvMin * 100, self.recipe.style.abvMax * 100)
-        self.ui.ibu.setPreferredRange(self.recipe.style.ibuMin, self.recipe.style.ibuMax)
-        self.ui.srm.setPreferredRange(self.recipe.style.srmMin, self.recipe.style.srmMax)
+        if self.recipe.style:
+            if self.recipe.style.og is not None:
+                self.ui.og.setPreferredRange(
+                    self.recipe.style.og.minimum.as_('sg'),
+                    self.recipe.style.og.maximum.as_('sg')
+                )
+            if self.recipe.style.fg is not None:
+                self.ui.fg.setPreferredRange(
+                    self.recipe.style.fg.minimum.as_('sg'),
+                    self.recipe.style.fg.maximum.as_('sg')
+                )
+            if self.recipe.style.abv is not None:
+                self.ui.abv.setPreferredRange(
+                    self.recipe.style.abv.minimum.as_('%'),
+                    self.recipe.style.abv.maximum.as_('%')
+                )
+            if self.recipe.style.bitterness is not None:
+                self.ui.ibu.setPreferredRange(
+                    self.recipe.style.bitterness.minimum.as_('IBUs'),
+                    self.recipe.style.bitterness.maximum.as_('IBUs')
+                )
+            if self.recipe.style.color is not None:
+                self.ui.srm.setPreferredRange(
+                    self.recipe.style.color.minimum.as_('SRM'),
+                    self.recipe.style.color.maximum.as_('SRM')
+                )
 
         # Set the bar for the actual, calclulated value from the recipe.
         self.ui.og.setValue(self.recipe.originalGravity)
         self.ui.fg.setValue(self.recipe.finalGravity)
-        self.ui.abv.setValue(self.recipe.abv * 100)
-        self.ui.ibu.setValue(self.recipe.ibu)
-        self.ui.srm.setValue(self.recipe.srm)
+        self.ui.abv.setValue(self.recipe.abv)
+        self.ui.ibu.setValue(self.recipe.bitterness)
+        self.ui.srm.setValue(self.recipe.color)
         self.ui.ibu_gu.setValue(self.recipe.ibuGu)
 
         # Output numbers for the calculated values.

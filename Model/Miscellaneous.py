@@ -1,5 +1,5 @@
 # ======================================================================================================================
-#        File:  Recipe/Miscellaneous.py
+#        File:  Model/Miscellaneous.py
 #     Project:  Brewing Recipe Planner
 # Description:  Provides the definition for a single misc addition.
 #      Author:  Jared Julien <jaredjulien@gmail.com>
@@ -23,6 +23,11 @@
 # Imports
 # ----------------------------------------------------------------------------------------------------------------------
 from PySide2 import QtCore
+from typing import Union
+
+from Model.Timing import TimingType
+from Model import Selections
+from Model.MeasurableUnits import MassType, UnitType, VolumeType
 
 
 
@@ -32,36 +37,26 @@ from PySide2 import QtCore
 class Miscellaneous(QtCore.QObject):
     def __init__(self,
                  recipe=None,
-                 name='',
-                 mtype='',
-                 useFor='',
-                 use='',
-                 duration=0,
-                 amount=0,
-                 unit=''):
+                 name=None,
+                 mtype=None,
+                 useFor=None,
+                 timing=None,
+                 amount=None):
         super().__init__()
 
         self.recipe = recipe
-        self.name = name
-        self.mtype = mtype
-        self.useFor = useFor
-        self.use = use
-        self.duration = duration
-        self.amount = amount
-        self.unit = unit
-
-
-
-# ======================================================================================================================
-# Properties
-# ----------------------------------------------------------------------------------------------------------------------
+        self.name: str = name
+        self.mtype: str = mtype
+        self.useFor: str = useFor
+        self.timing: TimingType = timing
+        self.amount: Union[MassType, VolumeType, UnitType] = amount
 
 
 
 # ======================================================================================================================
 # Methods
 # ----------------------------------------------------------------------------------------------------------------------
-    def to_dict(self):
+    def to_dict(self) -> dict:
         """Convert this misc into a Python dictionary that can be used in assembling a BeerJSON format file.
 
         Returns a BeerJSON MiscellaneousType compatible dictionary."""
@@ -69,29 +64,23 @@ class Miscellaneous(QtCore.QObject):
             'name': self.name,
             'type': self.mtype.lower(),
             'use_for': self.useFor,
-            'amount': {
-                'value': self.amount,
-                'unit': self.unit
-            },
-            'timing': {
-                'use': 'add_to_' + self.use.lower(),
-                'duration': {
-                    'value': self.duration,
-                    'unit': 'min'
-                }
-            }
+            'amount': self.amount.to_dict(),
+            'timing': self.timing.to_dict()
         }
 
 
 # ----------------------------------------------------------------------------------------------------------------------
-    def from_dict(self, data):
+    def from_dict(self, data: dict):
+        """Populate the data in this instance from the provided BeerJSON format dict."""
         self.name = data['name']
         self.mtype = data['type'].title()
         self.useFor = data['use_for']
-        self.amount = data['amount']['value']
-        self.unit = data['amount']['unit']
-        self.use = data['timing']['use'].replace('add_to_', '').title()
-        self.duration = data['timing']['duration']['value'] # TODO: Deal with other timing requirements.
+        amount = data['amount']
+        self.amount = Selections.one_of(amount['value'], amount['unit'], MassType, VolumeType, UnitType)
+
+        if 'timing' in data:
+            self.timing = TimingType()
+            self.timing.from_dict(data['timing'])
 
 
 

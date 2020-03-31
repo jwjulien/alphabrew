@@ -1,5 +1,5 @@
 # ======================================================================================================================
-#        File:  Recipe/Hop.py
+#        File:  Model/Hop.py
 #     Project:  Brewing Recipe Planner
 # Description:  Provides the definition for a single hop addition or library item.
 #      Author:  Jared Julien <jaredjulien@gmail.com>
@@ -23,8 +23,13 @@
 # Imports
 # ----------------------------------------------------------------------------------------------------------------------
 import math
+from typing import Union
 
-from PySide2 import QtCore, QtWidgets
+from PySide2 import QtCore
+
+from Model.Timing import TimingType
+from Model import Selections
+from Model.MeasurableUnits import MassType, PercentType, VolumeType
 
 
 
@@ -34,41 +39,39 @@ from PySide2 import QtCore, QtWidgets
 class Hop(QtCore.QObject):
     def __init__(self,
                  recipe=None,
-                 name='',
-                 amount=0,
-                 use='Boil',
-                 duration=0,
-                 htype='',
-                 form='',
-                 alpha=0,
-                 beta=0,
-                 hsi=0,
-                 origin='',
-                 substitutes='',
-                 humulene=0,
-                 caryophyllene=0,
-                 cohumulone=0,
-                 myrcene=0,
-                 notes=''):
+                 name=None,
+                 amount=None,
+                 timing=None,
+                 htype=None,
+                 form=None,
+                 alpha=None,
+                 beta=None,
+                 hsi=None,
+                 origin=None,
+                 substitutes=None,
+                 humulene=None,
+                 caryophyllene=None,
+                 cohumulone=None,
+                 myrcene=None,
+                 notes=None):
         super().__init__()
 
         self.recipe = recipe
-        self.name = name
-        self.amount = amount
-        self.use = use
-        self.duration = duration
-        self.htype = htype
-        self.form = form
-        self.alpha = alpha
-        self.beta = beta
-        self.hsi = hsi
-        self.origin = origin
-        self.substitutes = substitutes
-        self.humulene = humulene
-        self.caryophyllene = caryophyllene
-        self.cohumulone = cohumulone
-        self.myrcene = myrcene
-        self.notes = notes.replace('\\n', '\n') if notes else ''
+        self.name: str = name
+        self.amount: Union[MassType, VolumeType] = amount
+        self.timing: TimingType = timing
+        self.htype: str = htype
+        self.form: str = form
+        self.alpha: PercentType = alpha
+        self.beta: PercentType = beta
+        self.hsi: PercentType = hsi
+        self.origin: str = origin
+        self.substitutes: str = substitutes
+        self.humulene: PercentType = humulene
+        self.caryophyllene: PercentType = caryophyllene
+        self.cohumulone: PercentType = cohumulone
+        self.myrcene: PercentType = myrcene
+        self.notes: str = notes.replace('\\n', '\n') if notes else ''
 
         self._ibus = None
 
@@ -86,108 +89,78 @@ class Hop(QtCore.QObject):
         return Hop(
             recipe=recipe,
             name=self.name,
-            amount=self.amount,
-            use=self.use,
-            duration=self.duration,
+            amount=self.amount.copy() if self.amount is not None else None,
+            timing=self.timing.copy() if self.timing is not None else None,
             htype=self.htype,
             form=self.form,
-            alpha=self.alpha,
-            beta=self.beta,
-            hsi=self.hsi,
+            alpha=self.alpha.copy(),
+            beta=self.beta.copy(),
+            hsi=self.hsi.copy(),
             origin=self.origin,
             substitutes=self.substitutes,
-            humulene=self.humulene,
-            caryophyllene=self.caryophyllene,
-            cohumulone=self.cohumulone,
-            myrcene=self.myrcene
+            humulene=self.humulene.copy(),
+            caryophyllene=self.caryophyllene.copy(),
+            cohumulone=self.cohumulone.copy(),
+            myrcene=self.myrcene.copy()
         )
 
 
 # ----------------------------------------------------------------------------------------------------------------------
-    def to_dict(self):
+    def to_dict(self) -> dict:
         """Convert this hop into a Python dictionary that can be used in assembling a BeerJSON format file.
 
         Returns a BeerJSON HopType compatible dictionary."""
         return {
             'name': self.name,
-            'amount': {
-                'value': self.amount,
-                'unit': 'oz'
-            },
-            'timing': {
-                'use': 'add_to_' + self.use.lower(),
-                'duration': {
-                    'value': self.duration,
-                    'unit': 'min'
-                }
-            },
+            'amount': self.amount.to_dict(),
+            'timing': self.timing.to_dict(),
             'origin': self.origin,
             'form': self.form.lower(),
-            'alpha_acid': {
-                'value': self.alpha,
-                'unit': '%'
-            },
-            'beta_acid': {
-                'value': self.beta,
-                'unit': '%'
-            },
+            'alpha_acid': self.alpha.to_dict(),
+            'beta_acid': self.beta.to_dict(),
             'type': self.htype.lower(),
-            'percent_lost': {
-                'value': self.hsi,
-                'unit': '%'
-            },
+            'percent_lost': self.hsi.to_dict(),
             'substitutes': self.substitutes.replace('\n', '\\n'),
             'oil_content': {
-                'humulene': {
-                    'value': self.humulene,
-                    'unit': '%'
-                },
-                'caryophyllene': {
-                    'value': self.caryophyllene,
-                    'unit': '%'
-                },
-                'cohumulone': {
-                    'value': self.cohumulone,
-                    'unit': '%'
-                },
-                'myrcene': {
-                    'value': self.myrcene,
-                    'unit': '%'
-                }
+                'humulene': self.humulene.to_dict(),
+                'caryophyllene': self.caryophyllene.to_dict(),
+                'cohumulone': self.cohumulone.to_dict(),
+                'myrcene': self.myrcene.to_dict(),
             },
             'notes': self.notes.replace('\n', '\\n')
         }
 
 
 # ----------------------------------------------------------------------------------------------------------------------
-    def from_dict(self, data):
+    def from_dict(self, data: dict):
         self.name = data['name']
-        self.amount = data['amount']['value'] # TODO: Deal with other units
-        self.use = data['timing']['use'].replace('add_to_', '').title()
-        self.duration = data['timing']['duration']['value'] # TODO: Deal with other timing requirements.
+        amount = data['amount']
+        self.amount = Selections.one_of(amount['value'], amount['unit'], MassType, VolumeType)
+        self.timing = TimingType()
+        self.timing.from_dict(data['timing'])
         self.htype = data['type'].title()
         self.form = data['form'].title()
-        self.alpha = data['alpha_acid']['value']
-        self.beta = data['beta_acid']['value']
-        self.hsi = data['percent_lost']['value']
+        self.alpha = PercentType(json=data['alpha_acid'])
+        self.beta = PercentType(json=data['beta_acid'])
+        self.hsi = PercentType(json=data['percent_lost'])
         self.origin = data['origin']
         self.substitutes = data['substitutes'].replace('\\n', '\n')
-        self.humulene = data['oil_content']['humulene']['value']
-        self.caryophyllene = data['oil_content']['caryophyllene']['value']
-        self.cohumulone = data['oil_content']['cohumulone']['value']
-        self.myrcene = data['oil_content']['myrcene']['value']
+        self.humulene = PercentType(json=data['oil_content']['humulene'])
+        self.caryophyllene = PercentType(json=data['oil_content']['caryophyllene'])
+        self.cohumulone = PercentType(json=data['oil_content']['cohumulone'])
+        self.myrcene = PercentType(json=data['oil_content']['myrcene'])
         self.notes = data['notes'].replace('\\n', '\n')
 
 
 # ----------------------------------------------------------------------------------------------------------------------
-    def ibus(self, volume, gravity, minutes):
-        """Calculate this hops IBU contribution using the Tinseth method (opinionated).
+    def ibus(self, volume: float, gravity: float, minutes: float) -> float:
+        """Calculate this hops IBU contribution using the Tinseth method. #opinionated
 
         Volume is the volume of wort in which the hops are being boiled, in gallons.
         Gravity is the original gravity (expected at tend of boil) in specific gravity.
         Minutes is the amount of time that the hop will be boiled.
         """
-        concentration = self.alpha / 100 * self.amount * 7490 / volume
+        concentration = self.alpha.as_('%') / 100 * self.amount.as_('oz') * 7490 / volume
         utilization = ((1.0 - math.exp(-0.04 * minutes)) / 4.15) * (1.65 * (0.000125 ** (gravity - 1)))
 
         if 'plug' in self.form.lower():
