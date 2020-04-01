@@ -22,9 +22,8 @@
 # ======================================================================================================================
 # Imports
 # ----------------------------------------------------------------------------------------------------------------------
-from PySide2 import QtWidgets, QtCore
+from PySide2 import QtCore
 
-from GUI.Helpers.Alignment import CenterCenter
 from GUI.Helpers.Sizing import Fit
 
 
@@ -32,12 +31,52 @@ from GUI.Helpers.Sizing import Fit
 # ======================================================================================================================
 # Column Class
 # ----------------------------------------------------------------------------------------------------------------------
-class Column(object):
-    """Provides mapping between a column in a Qt table and properties such as title and text alignment."""
-    def __init__(self, heading, size=Fit, align=QtCore.Qt.AlignCenter):
-        self.heading = heading
+class Column:
+    """Provides mapping between a column in a Qt table and properties such as title and text alignment.  Provides a
+    common method of formatting the values for cells withing the table."""
+
+    def __init__(
+            self,
+            attribute,
+            heading=None,
+            template=None,
+            default='--',
+            size=Fit,
+            align=QtCore.Qt.AlignCenter
+        ):
+
+        self.attribute = attribute
+        self.heading = heading if heading is not None else attribute.title()
+        self.default = default
+        self.template = template
         self.size = size
         self.align = align
+
+
+# ----------------------------------------------------------------------------------------------------------------------
+    def format(self, item):
+        """Use the template string for this Column to format the provided data."""
+
+        def dive(thing, path):
+            """Local recursive function to handle possible recursion in the attribute path."""
+            if not path:
+                return thing
+            return dive(getattr(thing, path[0]), path[1:])
+
+        # Extract the value from the item using the provided attribute path for this column.
+        parts = self.attribute.split('.')
+        value = dive(item, parts)
+
+        # If that value is None, return the default for this column instead of "None" which is ugly.
+        if value is None:
+            return self.default
+
+        # If no template was provided for this column then just convert the value into a string.
+        if self.template is None:
+            return str(value)
+
+        # With a template, pass the value through to get it into the proper str format.
+        return self.template % value
 
 
 

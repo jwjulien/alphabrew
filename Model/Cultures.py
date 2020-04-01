@@ -43,12 +43,12 @@ class Cultures(QtCore.QAbstractTableModel):
     changed = QtCore.Signal()
 
     AllColumns = [
-        Column('Amount', align=QtCore.Qt.AlignRight),
-        Column('Name', size=Stretch, align=QtCore.Qt.AlignLeft),
-        Column('Type', align=QtCore.Qt.AlignRight),
-        Column('Form', align=QtCore.Qt.AlignRight),
-        Column('Producer', align=QtCore.Qt.AlignRight),
-        Column('Product', align=QtCore.Qt.AlignRight),
+        Column('amount', align=QtCore.Qt.AlignRight),
+        Column('name', size=Stretch, align=QtCore.Qt.AlignLeft),
+        Column('ctype', 'Type', align=QtCore.Qt.AlignRight),
+        Column('form', align=QtCore.Qt.AlignRight),
+        Column('producer', align=QtCore.Qt.AlignRight),
+        Column('productId', 'Product', align=QtCore.Qt.AlignRight),
     ]
 
     # These column indexes should be hidden when the class is instantiated with the limited flag set.
@@ -195,23 +195,8 @@ class Cultures(QtCore.QAbstractTableModel):
         # Display role is read-only textual display for data in the table.
         if role == QtCore.Qt.DisplayRole:
             culture = self[index.row()]
-            column = index.column()
-
-            if self.limited:
-                column += len(self.HideWhenLimited)
-
-            if column == 0:
-                return str(culture.amount)
-            elif column == 1:
-                return culture.name
-            elif column == 2:
-                return culture.ctype
-            elif column == 3:
-                return culture.form
-            elif column == 4:
-                return culture.producer
-            elif column == 5:
-                return culture.productId
+            column = self.columns[index.column()]
+            return column.format(culture)
 
         # Edit role is when the user double clicks a cell to trigger editing, return the non-formatted value.
         elif role == QtCore.Qt.EditRole:

@@ -42,15 +42,15 @@ class Hops(QtCore.QAbstractTableModel):
     changed = QtCore.Signal()
 
     AllColumns = [
-        Column('Amount', align=QtCore.Qt.AlignRight),
-        Column('Use In', align=QtCore.Qt.AlignLeft),
-        Column('Duration', align=QtCore.Qt.AlignHCenter),
-        Column('IBUs', align=QtCore.Qt.AlignRight),
-        Column('Name', size=Stretch, align=QtCore.Qt.AlignLeft),
-        Column('Type', align=QtCore.Qt.AlignLeft),
-        Column('Form', align=QtCore.Qt.AlignRight),
-        Column('Origin', align=QtCore.Qt.AlignHCenter),
-        Column('Alpha', align=QtCore.Qt.AlignRight)
+        Column('amount', align=QtCore.Qt.AlignRight),
+        Column('timing.use', 'Use In', align=QtCore.Qt.AlignLeft),
+        Column('timing.duration', 'Duration', align=QtCore.Qt.AlignHCenter),
+        Column('_ibus', 'IBUs', template='%.1f IBUs', align=QtCore.Qt.AlignRight),
+        Column('name', size=Stretch, align=QtCore.Qt.AlignLeft),
+        Column('htype', 'Type', align=QtCore.Qt.AlignLeft),
+        Column('form', align=QtCore.Qt.AlignRight),
+        Column('origin', align=QtCore.Qt.AlignHCenter),
+        Column('alpha', align=QtCore.Qt.AlignRight)
     ]
 
     # These column indexes should be hidden when the class is instantiated with the limited flag set.
@@ -200,29 +200,8 @@ class Hops(QtCore.QAbstractTableModel):
         # Display role is read-only textual display for data in the table.
         if role == QtCore.Qt.DisplayRole:
             hop = self[index.row()]
-            column = index.column()
-
-            if self.limited:
-                column += len(self.HideWhenLimited)
-
-            if column == 0:
-                return str(hop.amount)
-            elif column == 1:
-                return hop.timing.use
-            elif column == 2:
-                return str(hop.timing.duration)
-            elif column == 3:
-                return f'{hop._ibus:.1f} IBU' if hop._ibus else '--'
-            elif column == 4:
-                return hop.name
-            elif column == 5:
-                return hop.htype
-            elif column == 6:
-                return hop.form
-            elif column == 7:
-                return hop.origin
-            elif column == 8:
-                return f"{hop.alpha.as_('%'):.1f}%"
+            column = self.columns[index.column()]
+            return column.format(hop)
 
         # Edit role is when the user double clicks a cell to trigger editing, return the non-formatted value.
         elif role == QtCore.Qt.EditRole:

@@ -43,13 +43,13 @@ class Fermentables(QtCore.QAbstractTableModel):
     changed = QtCore.Signal()
 
     AllColumns = [
-        Column('Amount', align=QtCore.Qt.AlignRight),
-        Column('Percent', align=QtCore.Qt.AlignHCenter),
-        Column('Grain/Fermentable', size=Stretch, align=QtCore.Qt.AlignLeft),
-        Column('Type', align=QtCore.Qt.AlignRight),
-        Column('Group', align=QtCore.Qt.AlignRight),
-        Column('Yield', align=QtCore.Qt.AlignRight),
-        Column('Color', align=QtCore.Qt.AlignRight),
+        Column('amount', align=QtCore.Qt.AlignRight),
+        Column('proportion', 'Percent', template='%.0f', align=QtCore.Qt.AlignHCenter),
+        Column('name', 'Grain/Fermentable', size=Stretch, align=QtCore.Qt.AlignLeft),
+        Column('ftype', 'Type', align=QtCore.Qt.AlignRight),
+        Column('group', align=QtCore.Qt.AlignRight),
+        Column('fyield', 'Yield', align=QtCore.Qt.AlignRight),
+        Column('color', align=QtCore.Qt.AlignRight),
     ]
 
     # These column indexes should be hidden when the class is instantiated with the limited flag set.
@@ -201,25 +201,8 @@ class Fermentables(QtCore.QAbstractTableModel):
         # Display role is read-only textual display for data in the table.
         if role == QtCore.Qt.DisplayRole:
             fermentable = self[index.row()]
-            column = index.column()
-
-            if self.limited:
-                column += len(self.HideWhenLimited)
-
-            if column == 0:
-                return str(fermentable.amount)
-            elif column == 1:
-                return f'{fermentable.proportion:.0f}%'
-            elif column == 2:
-                return fermentable.name
-            elif column == 3:
-                return fermentable.ftype
-            elif column == 4:
-                return fermentable.group if fermentable.group is not None else ''
-            elif column == 5:
-                return f"{fermentable.fyield.as_('%'):.1f}%"
-            elif column == 6:
-                return f"{fermentable.color.as_('SRM'):.1f} srm"
+            column = self.columns[index.column()]
+            return column.format(fermentable)
 
         # Edit role is when the user double clicks a cell to trigger editing, return the non-formatted value.
         elif role == QtCore.Qt.EditRole:

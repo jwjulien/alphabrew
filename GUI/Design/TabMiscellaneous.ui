@@ -27,7 +27,7 @@
        </sizepolicy>
       </property>
       <property name="text">
-       <string>Add Row</string>
+       <string>Add Item</string>
       </property>
      </widget>
      <widget class="QPushButton" name="remove">
@@ -41,7 +41,7 @@
        </sizepolicy>
       </property>
       <property name="text">
-       <string>Remove Row</string>
+       <string>Remove Selected Item</string>
       </property>
      </widget>
     </widget>

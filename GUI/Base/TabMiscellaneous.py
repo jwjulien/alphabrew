@@ -66,7 +66,7 @@ class Ui_TabMiscellaneous(object):
 
     def retranslateUi(self, TabMiscellaneous):
         TabMiscellaneous.setWindowTitle(QCoreApplication.translate("TabMiscellaneous", u"Form", None))
-        self.add.setText(QCoreApplication.translate("TabMiscellaneous", u"Add Row", None))
-        self.remove.setText(QCoreApplication.translate("TabMiscellaneous", u"Remove Row", None))
+        self.add.setText(QCoreApplication.translate("TabMiscellaneous", u"Add Item", None))
+        self.remove.setText(QCoreApplication.translate("TabMiscellaneous", u"Remove Selected Item", None))
     # retranslateUi
 

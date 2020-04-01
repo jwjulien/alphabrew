@@ -43,12 +43,12 @@ class Miscellanea(QtCore.QAbstractTableModel):
     changed = QtCore.Signal()
 
     Columns = [
-        Column('Name', size=Stretch, align=QtCore.Qt.AlignLeft),
-        Column('Type', align=QtCore.Qt.AlignCenter),
-        Column('Use For', align=QtCore.Qt.AlignRight),
-        Column('Amount', align=QtCore.Qt.AlignRight),
-        Column('Use', align=QtCore.Qt.AlignRight),
-        Column('Duration', align=QtCore.Qt.AlignRight),
+        Column('name', size=Stretch, align=QtCore.Qt.AlignLeft),
+        Column('mtype', 'Type', align=QtCore.Qt.AlignCenter),
+        Column('useFor', 'Use For', align=QtCore.Qt.AlignRight),
+        Column('amount', align=QtCore.Qt.AlignRight),
+        Column('timing.use', 'Use', align=QtCore.Qt.AlignRight),
+        Column('timing.duration', 'Duration', align=QtCore.Qt.AlignRight),
     ]
 
 
@@ -155,19 +155,8 @@ class Miscellanea(QtCore.QAbstractTableModel):
         # Display role is read-only textual display for data in the table.
         if role == QtCore.Qt.DisplayRole:
             misc = self[index.row()]
-
-            if index.column() == 0:
-                return misc.name
-            elif index.column() == 1:
-                return misc.mtype
-            elif index.column() == 2:
-                return misc.useFor
-            elif index.column() == 3:
-                return str(misc.amount)
-            elif index.column() == 4:
-                return misc.timing.use
-            elif index.column() == 5:
-                return str(misc.timing.duration)
+            column = self.Columns[index.column()]
+            return column.format(misc)
 
         # Edit role is when the user double clicks a cell to trigger editing, return the non-formatted value.
         elif role == QtCore.Qt.EditRole:
