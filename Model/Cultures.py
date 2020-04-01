@@ -41,12 +41,12 @@ class Cultures(ListTableBase):
     """Provides for a list of Culture objects, specifically created to aid in parsing Excel database files and
     display within a QtTableView."""
     Columns = [
-        Column('amount', align=QtCore.Qt.AlignRight, editable=True, hideLimited=True),
+        Column('amount', editable=True, hideLimited=True),
         Column('name', size=Stretch, align=QtCore.Qt.AlignLeft),
-        Column('ctype', 'Type', align=QtCore.Qt.AlignRight),
-        Column('form', align=QtCore.Qt.AlignRight),
-        Column('producer', align=QtCore.Qt.AlignRight),
-        Column('productId', 'Product', align=QtCore.Qt.AlignRight),
+        Column('ctype', 'Type'),
+        Column('form'),
+        Column('producer'),
+        Column('productId', 'Product'),
     ]
 
 

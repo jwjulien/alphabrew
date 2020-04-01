@@ -41,13 +41,13 @@ class Fermentables(ListTableBase):
     """Provides for a list of Fermentable objects, specifically created to aid in parsing Excel database files and
     display within a QtTableView."""
     Columns = [
-        Column('amount', align=QtCore.Qt.AlignRight, editable=True, hideLimited=True),
+        Column('amount', editable=True, hideLimited=True),
         Column('proportion', 'Percent', template='%.0f', align=QtCore.Qt.AlignHCenter, hideLimited=True),
         Column('name', 'Grain/Fermentable', size=Stretch, align=QtCore.Qt.AlignLeft),
-        Column('ftype', 'Type', align=QtCore.Qt.AlignRight),
-        Column('group', align=QtCore.Qt.AlignRight),
-        Column('fyield', 'Yield', align=QtCore.Qt.AlignRight),
-        Column('color', align=QtCore.Qt.AlignRight),
+        Column('ftype', 'Type'),
+        Column('group'),
+        Column('fyield', 'Yield'),
+        Column('color'),
     ]
 
 

@@ -26,8 +26,9 @@ from PySide2 import QtCore, QtGui, QtWidgets
 import qtawesome
 
 from GUI.Base.TabFermentation import Ui_TabFermentation
-
+from GUI.Delegates.SimpleTypeDelegate import SimpleTypeDelegate
 from Model.FermentationStep import FermentationStep
+from Model.MeasurableUnits import TemperatureType, TimeType
 
 
 
@@ -45,6 +46,15 @@ class TabFermentation(QtWidgets.QWidget):
         self.ui.steps.setModel(self.recipe.fermentation)
         self.recipe.fermentation.set_control(self.ui.steps)
         self.ui.steps.selectionModel().selectionChanged.connect(self.on_selection_change)
+
+        # Setup a delegate for editing of start and end temperatures.
+        temperatureDelegate = SimpleTypeDelegate(self, [TemperatureType], maximum=212, decimals=0, singleStep=5)
+        self.ui.steps.setItemDelegateForColumn(1, temperatureDelegate)
+        self.ui.steps.setItemDelegateForColumn(2, temperatureDelegate)
+
+        # Setup another delegate for editing the step time.
+        timeDelegate = SimpleTypeDelegate(self, [TimeType], decimals=0)
+        self.ui.steps.setItemDelegateForColumn(3, timeDelegate)
 
         # Setup add button with icon and connect an event handler.
         icon = qtawesome.icon('fa5s.plus')
@@ -69,8 +79,20 @@ class TabFermentation(QtWidgets.QWidget):
     def on_add(self):
         """Fires when the user clicks the add button."""
         step = FermentationStep(self.recipe)
-        # step.amount = MassType(0, 'lb')
-        # step.timing = TimingType(duration=TimeType('0', 'min'))
+
+        # Attempt to set a reasonable default name based upon how many fermentation steps currently exist.
+        if len(self.recipe.fermentation) == 0:
+            step.name = 'Primary'
+        elif len(self.recipe.fermentation) == 1:
+            step.name = 'Secondary'
+        elif len(self.recipe.fermentation) == 2:
+            step.name = 'Tertiary'
+
+        step.startTemperature = TemperatureType(65, 'F')
+        step.endTemperature = TemperatureType(65, 'F')
+
+        step.time = TimeType(5, 'day')
+
         self.recipe.fermentation.append(step)
 
 

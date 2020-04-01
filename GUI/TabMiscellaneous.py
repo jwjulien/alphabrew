@@ -91,7 +91,7 @@ class TabMiscellaneous(QtWidgets.QWidget):
         """Fires when the user clicks the add button."""
         misc = Miscellaneous(self.recipe)
         misc.amount = MassType(0, 'lb')
-        misc.timing = TimingType(duration=TimeType('0', 'min'))
+        misc.timing = TimingType(duration=TimeType(0, 'min'))
         self.recipe.misc.append(misc)
 
 

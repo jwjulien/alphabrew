@@ -94,7 +94,7 @@ class Culture(QtCore.QObject):
             'name': self.name,
             'amount': self.amount.to_dict(),
             'type': self.ctype.lower(),
-            'form': self.form,
+            'form': self.form.lower(),
             'producer': self.producer,
             'productId': self.productId,
             'attenuation_range': self.attenuationRange.to_dict(),
@@ -108,7 +108,7 @@ class Culture(QtCore.QObject):
         amount = data['amount']
         self.amount = Selections.one_of(amount['value'], amount['unit'], VolumeType, MassType, UnitType)
         self.ctype = data['type'].title()
-        self.form = data['form']
+        self.form = data['form'].title()
         self.producer = data['producer']
         self.productId = data['productId']
         if 'attenuation_range' in data:

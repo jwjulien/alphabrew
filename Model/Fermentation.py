@@ -27,6 +27,7 @@ from PySide2 import QtCore
 from Model.ListTableBase import ListTableBase
 from Model.FermentationStep import FermentationStep
 from GUI.Table.Column import Column
+from GUI.Table.Sizing import Stretch
 
 
 
@@ -34,26 +35,24 @@ from GUI.Table.Column import Column
 # Fermentation Class
 # ----------------------------------------------------------------------------------------------------------------------
 class Fermentation(ListTableBase):
-    """Tablular definition for fermentation steps outlining the fermentation process."""
-    AllColumns = [
-        Column('name', align=QtCore.Qt.AlignRight, editable=True),
-        Column('startTemperature', 'Start Temp', align=QtCore.Qt.AlignRight, editable=True),
-        Column('endTemperature', 'End Temp', align=QtCore.Qt.AlignRight, editable=True),
-        Column('stepTime', 'Time', align=QtCore.Qt.AlignRight, editable=True),
+    """Tabular definition for fermentation steps outlining the fermentation process."""
+    Columns = [
+        Column('name', size=Stretch, align=QtCore.Qt.AlignLeft, editable=True),
+        Column('startTemperature', 'Start Temp', editable=True),
+        Column('endTemperature', 'End Temp', editable=True),
+        Column('time', editable=True),
     ]
-
-
-# ======================================================================================================================
-# Static Methods
-# ----------------------------------------------------------------------------------------------------------------------
-    @staticmethod
-    def from_excel(worksheet):
-        raise NotImplementedError('Fermentation does not support loading library items from Excel worksheets.')
 
 
 
 # ======================================================================================================================
 # Methods
+# ----------------------------------------------------------------------------------------------------------------------
+    def from_excel(self, worksheet):
+        """Not supported for fermentable types - they don't get defined in the Excel database."""
+        raise NotImplementedError('Fermentation does not support loading library items from Excel worksheets.')
+
+
 # ----------------------------------------------------------------------------------------------------------------------
     def sort(self):
         """Steps are sorted manually. Deliberately left blank - will be called but nothing will happen."""
@@ -63,17 +62,17 @@ class Fermentation(ListTableBase):
     def to_dict(self):
         """Convert this fermentation into BeerJSON."""
         return {
-            'name': 'A kick ass fermentation! (Why is the name required?)',
-            'steps': [step.to_dict() for step in self.items]
+            'name': 'A kick ass fermentation! (Why is the name required at this level?)',
+            'fermentation_steps': [step.to_dict() for step in self.items]
         }
 
 
 # ----------------------------------------------------------------------------------------------------------------------
-    def from_dict(self, data):
+    def from_dict(self, recipe, data):
         """Convert a BeerJSON dict into values for this instance."""
         self.items = []
-        for child in data['steps']:
-            step = FermentationStep()
+        for child in data['fermentation_steps']:
+            step = FermentationStep(recipe)
             step.from_dict(child)
             self.append(step)
 

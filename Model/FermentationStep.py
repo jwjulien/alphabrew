@@ -22,6 +22,8 @@
 # ======================================================================================================================
 # Imports
 # ----------------------------------------------------------------------------------------------------------------------
+from PySide2 import QtCore
+
 from Model.MeasurableUnits import TemperatureType, TimeType
 
 
@@ -29,12 +31,15 @@ from Model.MeasurableUnits import TemperatureType, TimeType
 # ======================================================================================================================
 # Fermentation Step Class
 # ----------------------------------------------------------------------------------------------------------------------
-class FermentationStep:
-    def __init__(self, name=None, startTemperature=None, endTemperature=None, stepTime=None):
+class FermentationStep(QtCore.QObject):
+    def __init__(self, recipe=None, name=None, startTemperature=None, endTemperature=None, time=None):
+        super().__init__()
+
+        self.recipe = recipe
         self.name = name
         self.startTemperature = startTemperature
         self.endTemperature = endTemperature
-        self.stepTime = stepTime
+        self.time = time
 
 
 
@@ -47,7 +52,7 @@ class FermentationStep:
             'name': self.name,
             'start_temperature': self.startTemperature.to_dict(),
             'end_temperature': self.endTemperature.to_dict(),
-            'step_time': self.stepTime.to_dict(),
+            'step_time': self.time.to_dict(),
         }
 
 
@@ -56,15 +61,23 @@ class FermentationStep:
         """Convert a BeerJSON dict into values for this instance."""
         self.name = data['name']
         if 'start_temperature' in data:
-            self.startTemperature = TemperatureType()
-            self.startTemperature.from_dict(json=data['start_temperature'])
+            self.startTemperature = TemperatureType(json=data['start_temperature'])
         if 'end_temperature' in data:
-            self.endTemperature = TemperatureType()
-            self.endTemperature.from_dict(json=data['end_temperature'])
+            self.endTemperature = TemperatureType(json=data['end_temperature'])
         if 'step_time' in data:
-            self.stepTime = TimeType()
-            self.stepTime.from_dict(json=data['step_time'])
+            self.time = TimeType(json=data['step_time'])
 
+
+
+# ======================================================================================================================
+# Overridden Methods
+# ----------------------------------------------------------------------------------------------------------------------
+    def __repr__(self):
+        text = '<FermentationStep'
+        for key, value in self.__dict__.items():
+            text += f' {key}="{value}"'
+        text += '>'
+        return text
 
 
 

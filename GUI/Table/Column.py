@@ -42,7 +42,7 @@ class Column:
             template=None,
             default='--',
             size=Fit,
-            align=QtCore.Qt.AlignCenter,
+            align=QtCore.Qt.AlignRight,
             editable=False,
             hideLimited=False
         ):

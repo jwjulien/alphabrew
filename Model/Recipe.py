@@ -412,6 +412,8 @@ class Recipe(QtCore.QObject):
         self.rtype = recipe['type']
         self.size = VolumeType(json=recipe['batch_size'])
         self.author = recipe['author']
+        if 'fermentation' in recipe:
+            self.fermentation.from_dict(self, recipe['fermentation'])
         ingredients = recipe['ingredients']
         if 'fermentable_additions' in ingredients:
             self.fermentables.from_dict(self, ingredients['fermentable_additions'])
