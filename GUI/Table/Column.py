@@ -1,5 +1,5 @@
 # ======================================================================================================================
-#        File:  GUI/Helpers/Column.py
+#        File:  GUI/Table/Column.py
 #     Project:  Brewing Recipe Planner
 # Description:  Provides a base class for working with
 #      Author:  Jared Julien <jaredjulien@exsystems.net>
@@ -24,7 +24,7 @@
 # ----------------------------------------------------------------------------------------------------------------------
 from PySide2 import QtCore
 
-from GUI.Helpers.Sizing import Fit
+from GUI.Table.Sizing import Fit
 
 
 
@@ -42,7 +42,9 @@ class Column:
             template=None,
             default='--',
             size=Fit,
-            align=QtCore.Qt.AlignCenter
+            align=QtCore.Qt.AlignCenter,
+            editable=False,
+            hideLimited=False
         ):
 
         self.attribute = attribute
@@ -51,11 +53,13 @@ class Column:
         self.template = template
         self.size = size
         self.align = align
+        self.editable = editable
+        self.hideLimited = hideLimited
 
 
 # ----------------------------------------------------------------------------------------------------------------------
-    def format(self, item):
-        """Use the template string for this Column to format the provided data."""
+    def get_value(self, item):
+        """Fetch the raw value of an attribute from the provided item.  Used to get the item for display and editing."""
 
         def dive(thing, path):
             """Local recursive function to handle possible recursion in the attribute path."""
@@ -63,9 +67,27 @@ class Column:
                 return thing
             return dive(getattr(thing, path[0]), path[1:])
 
+        return dive(item, self.attribute.split('.'))
+
+
+# ----------------------------------------------------------------------------------------------------------------------
+    def set_value(self, item, value):
+        """Update the attribute in item with the provided value."""
+
+        def dive(thing, path):
+            """Local recursive function to handle possible recursion in the attribute path."""
+            if len(path) == 1:
+                return setattr(thing, path[0], value)
+            dive(getattr(thing, path[0]), path[1:])
+
+        return dive(item, self.attribute.split('.'))
+
+
+# ----------------------------------------------------------------------------------------------------------------------
+    def format(self, item):
+        """Use the template string for this Column to format the provided data for display."""
         # Extract the value from the item using the provided attribute path for this column.
-        parts = self.attribute.split('.')
-        value = dive(item, parts)
+        value = self.get_value(item)
 
         # If that value is None, return the default for this column instead of "None" which is ugly.
         if value is None:

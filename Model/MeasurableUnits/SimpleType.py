@@ -137,25 +137,29 @@ class SimpleType:
 # ----------------------------------------------------------------------------------------------------------------------
     def __gt__(self, other):
         """Compares two values to ensure that self is greater than other."""
-        self._ensure_same_type(other)
+        # Deliberately don't care about type here because we want to be able to sort mixed data (i.e. Mass and Volume
+        # can both be used with fermentables and we want to sort them together).
         return self.root > other.root
 
 # ----------------------------------------------------------------------------------------------------------------------
     def __lt__(self, other):
         """Compares two values to ensure that self is less than other."""
-        self._ensure_same_type(other)
+        # Deliberately don't care about type here because we want to be able to sort mixed data (i.e. Mass and Volume
+        # can both be used with fermentables and we want to sort them together).
         return self.root < other.root
 
 # ----------------------------------------------------------------------------------------------------------------------
     def __ge__(self, other):
         """Compares two values to ensure that self is greater than or equal to other."""
-        self._ensure_same_type(other)
+        # Deliberately don't care about type here because we want to be able to sort mixed data (i.e. Mass and Volume
+        # can both be used with fermentables and we want to sort them together).
         return self.root >= other.root
 
 # ----------------------------------------------------------------------------------------------------------------------
     def __le__(self, other):
         """Compares two values to ensure that self is less than or equal to other."""
-        self._ensure_same_type(other)
+        # Deliberately don't care about type here because we want to be able to sort mixed data (i.e. Mass and Volume
+        # can both be used with fermentables and we want to sort them together).
         return self.root <= other.root
 
 # ----------------------------------------------------------------------------------------------------------------------

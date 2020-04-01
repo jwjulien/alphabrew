@@ -27,18 +27,61 @@ import qtawesome
 
 from GUI.Base.TabFermentation import Ui_TabFermentation
 
+from Model.FermentationStep import FermentationStep
+
 
 
 # ======================================================================================================================
 # Fermentation Tab Class
 # ----------------------------------------------------------------------------------------------------------------------
 class TabFermentation(QtWidgets.QWidget):
-    def __init__(self, parent, recipe, workbook):
+    def __init__(self, parent, recipe):
         super().__init__(parent)
         self.ui = Ui_TabFermentation()
         self.ui.setupUi(self)
 
         self.recipe = recipe
+
+        self.ui.steps.setModel(self.recipe.fermentation)
+        self.recipe.fermentation.set_control(self.ui.steps)
+        self.ui.steps.selectionModel().selectionChanged.connect(self.on_selection_change)
+
+        # Setup add button with icon and connect an event handler.
+        icon = qtawesome.icon('fa5s.plus')
+        self.ui.add.setIcon(icon)
+        self.ui.add.clicked.connect(self.on_add)
+
+        # Setup remove button with icon and connect an event handler.
+        icon = qtawesome.icon('fa5s.trash-alt')
+        self.ui.remove.setIcon(icon)
+        self.ui.remove.clicked.connect(self.on_remove)
+
+
+# ----------------------------------------------------------------------------------------------------------------------
+    def on_selection_change(self):
+        """Fires when the user makes a selection in the table."""
+        selection = self.ui.steps.selectionModel().selectedIndexes()
+        selected = len(selection) > 0
+        self.ui.remove.setEnabled(selected)
+
+
+# ----------------------------------------------------------------------------------------------------------------------
+    def on_add(self):
+        """Fires when the user clicks the add button."""
+        step = FermentationStep(self.recipe)
+        # step.amount = MassType(0, 'lb')
+        # step.timing = TimingType(duration=TimeType('0', 'min'))
+        self.recipe.fermentation.append(step)
+
+
+# ----------------------------------------------------------------------------------------------------------------------
+    def on_remove(self):
+        """Fires when the user clicks the remove button."""
+        for index in self.ui.steps.selectedIndexes():
+            if index.column() != 0:
+                continue
+            self.recipe.fermentation.pop(index.row())
+            break
 
 
 

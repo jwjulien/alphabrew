@@ -27,7 +27,7 @@ import qtawesome
 
 from GUI.Base.TabIngredients import Ui_TabIngredients
 from GUI.DialogCulture import DialogCulture
-from GUI.Helpers.ComboSpinBoxDelegate import ComboSpinBoxDelegate
+from GUI.Delegates.SimpleTypeDelegate import SimpleTypeDelegate
 from Model.Cultures import Cultures
 from Model.MeasurableUnits import MassType, UnitType, VolumeType
 from Model import Selections
@@ -50,16 +50,16 @@ class TabCultures(QtWidgets.QWidget):
         self.recipe = recipe
 
         # Load a list of available cultures from the Excel database.
-        self.database = Cultures.from_excel(workbook['Cultures'])
+        self.database = Cultures(limited=True)
+        self.database.from_excel(workbook['Cultures'])
 
         # Setup the culture ingredient table at the top of the tab.
         self.ui.ingredients.setModel(self.recipe.cultures)
-        self.recipe.cultures.setWidths(self.ui.ingredients)
+        self.recipe.cultures.set_control(self.ui.ingredients)
         self.ui.ingredients.selectionModel().selectionChanged.connect(self.on_ingredient_selection_change)
 
         # Setup a "delegate" to allow editing of the amount in a spinbox right inside of the table.
-        units = Selections.all_units(MassType, VolumeType, UnitType)
-        delegate = ComboSpinBoxDelegate(self, units, maximum=1000, decimals=2, singleStep=1)
+        delegate = SimpleTypeDelegate(self, [MassType, VolumeType, UnitType], maximum=1000, decimals=2, singleStep=1)
         self.ui.ingredients.setItemDelegateForColumn(0, delegate)
 
         # Setup a sorting/filter proxy to make it easier to find library ingredients.
@@ -71,7 +71,7 @@ class TabCultures(QtWidgets.QWidget):
         self.ui.library.setModel(self.proxy)
 
         # Setup the library table at the bottom of the tab listing available culture ingredients.
-        self.database.setWidths(self.ui.library)
+        self.database.set_control(self.ui.library)
         self.ui.library.selectionModel().selectionChanged.connect(self.on_library_selection_changed)
 
         # Setup add button with icon and connect an event handler.

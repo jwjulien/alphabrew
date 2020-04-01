@@ -1,7 +1,7 @@
 # ======================================================================================================================
-#        File:  GUI/Helpers/ComboBoxDelegate.py
+#        File:  GUI/Delegates/SpinBoxDelegate.py
 #     Project:  Brewing Recipe Planner
-# Description:  Provides a QComboBox for use with editing directly in QTableViews.
+# Description:  Provides a QDoubleSpinBox
 #      Author:  Jared Julien <jaredjulien@exsystems.net>
 #   Copyright:  (c) 2020 Jared Julien, eX Systems
 # ---------------------------------------------------------------------------------------------------------------------
@@ -27,43 +27,51 @@ from PySide2 import QtCore, QtWidgets
 
 
 # ======================================================================================================================
-# Combo Box Delegate Class
+# Double Spin Box Delegate Class
 # ----------------------------------------------------------------------------------------------------------------------
-class ComboBoxDelegate(QtWidgets.QItemDelegate):
-    """Provides an implementation of the QItemDelegate class to provide a QComboBox delegate for editing cells
-    within QTableView tables using a dropdown."""
+class DoubleSpinBoxDelegate(QtWidgets.QItemDelegate):
+    """Provides an implementation of the QItemDelegate class to provide a QDoubleSpinBox delegate for editing cells
+    within QTableView tables inside of a range limited spin box."""
 
-    def __init__(self, parent, choices):
+    def __init__(self, parent=None, minimum=0, maximum=99, suffix='', decimals=3, singleStep=1):
         super().__init__(parent)
-        self.choices = choices
+        self.minimum = minimum
+        self.maximum = maximum
+        self.suffix = suffix
+        self.decimals = decimals
+        self.singleStep = singleStep
 
 
 # ----------------------------------------------------------------------------------------------------------------------
     def createEditor(self, parent, option, index):
-        """Overridden method to generate the editor combo box and return it."""
-        editor = QtWidgets.QComboBox(parent)
-        for choice in self.choices:
-            editor.addItem(choice)
+        """Overridden method to generate the editor spin box and return it."""
+        editor = QtWidgets.QDoubleSpinBox(parent)
+        editor.setMinimum(self.minimum)
+        editor.setMaximum(self.maximum)
+        editor.setSuffix(self.suffix)
+        editor.setDecimals(self.decimals)
+        editor.setSingleStep(self.singleStep)
         return editor
 
 
 # ----------------------------------------------------------------------------------------------------------------------
-    def setEditorData(self, editor: QtWidgets.QComboBox, index):
+    def setEditorData(self, editor, index):
         """Called to set the current value in the editor."""
         value = index.model().data(index, QtCore.Qt.EditRole)
-        editor.setCurrentText(value)
+        editor.setValue(value)
 
 
 # ----------------------------------------------------------------------------------------------------------------------
-    def setModelData(self, editor: QtWidgets.QComboBox, model, index):
+    def setModelData(self, editor, model, index):
         """Called to get the final value from the editor."""
-        value = editor.currentText()
+        editor.interpretText()
+        value = editor.value()
         model.setData(index, value, QtCore.Qt.EditRole)
 
 
 # ----------------------------------------------------------------------------------------------------------------------
     def updateEditorGeometry(self, editor, option, index):
-        """Called when the geometry of the cell changes to update the geometry of the combo box."""
+        """Called when the geometry of the cell changes to update the geometry of the spin box."""
         editor.setGeometry(option.rect)
 
 

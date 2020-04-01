@@ -26,12 +26,11 @@ from PySide2 import QtCore, QtWidgets
 import qtawesome
 
 from GUI.Base.TabMiscellaneous import Ui_TabMiscellaneous
-from GUI.Helpers.ComboBoxDelegate import ComboBoxDelegate
-from GUI.Helpers.ComboSpinBoxDelegate import ComboSpinBoxDelegate
+from GUI.Delegates.ComboBoxDelegate import ComboBoxDelegate
+from GUI.Delegates.SimpleTypeDelegate import SimpleTypeDelegate
 from Model.Miscellaneous import Miscellaneous
 from Model.MeasurableUnits import MassType, TimeType, UnitType, VolumeType
 from Model.Timing import TimingType
-from Model import Selections
 
 
 
@@ -52,22 +51,20 @@ class TabMiscellaneous(QtWidgets.QWidget):
 
         # Setup the miscellaneous ingredient table at the top of the tab.
         self.ui.ingredients.setModel(self.recipe.misc)
-        self.recipe.misc.setWidths(self.ui.ingredients)
+        self.recipe.misc.set_control(self.ui.ingredients)
         self.ui.ingredients.selectionModel().selectionChanged.connect(self.on_selection_change)
 
         # Setup a delegates to allow editing of fields inside of the table.
         delegate = ComboBoxDelegate(self, ['Spice', 'Fining', 'Water Agent', 'Herb', 'Flavor', 'Wood', 'Other'])
         self.ui.ingredients.setItemDelegateForColumn(1, delegate)
 
-        units = Selections.all_units(MassType, VolumeType, UnitType)
-        delegate = ComboSpinBoxDelegate(self, units)
+        delegate = SimpleTypeDelegate(self, [MassType, VolumeType, UnitType])
         self.ui.ingredients.setItemDelegateForColumn(3, delegate)
 
         delegate = ComboBoxDelegate(self, ['Mash', 'Boil', 'Fermentation', 'Package'])
         self.ui.ingredients.setItemDelegateForColumn(4, delegate)
 
-        timeChoices = ['min', 'hr', 'day']
-        delegate = ComboSpinBoxDelegate(self, timeChoices, minimum=0, maximum=240, singleStep=5)
+        delegate = SimpleTypeDelegate(self, [TimeType], minimum=0, maximum=240, singleStep=5)
         self.ui.ingredients.setItemDelegateForColumn(5, delegate)
 
         # Setup add button with icon and connect an event handler.

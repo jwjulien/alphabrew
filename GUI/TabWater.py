@@ -23,12 +23,8 @@
 # Import Statements
 # ----------------------------------------------------------------------------------------------------------------------
 from PySide2 import QtCore, QtWidgets
-import qtawesome
 
 from GUI.Base.TabWater import Ui_TabWater
-from GUI.Helpers.DoubleSpinBoxDelegate import DoubleSpinBoxDelegate
-from GUI.Helpers.ComboBoxDelegate import ComboBoxDelegate
-from Model.Miscellaneous import Miscellaneous
 
 
 
@@ -36,7 +32,7 @@ from Model.Miscellaneous import Miscellaneous
 # Water Tab Class
 # ----------------------------------------------------------------------------------------------------------------------
 class TabWater(QtWidgets.QWidget):
-    """Extends the MainWindow Miscellaneous tab widget containing a subset of controls specific to miscellaneous in the
+    """Extends the MainWindow Water tab widget containing a subset of controls specific to miscellaneous in the
     recipe."""
 
     def __init__(self, parent, recipe, workbook):

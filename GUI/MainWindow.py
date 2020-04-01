@@ -102,14 +102,11 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.tab_recipe = TabRecipe(self, self.recipe, self.brewhouse, workbook)
         self.ui.tabs.addTab(self.ui.tab_recipe, "Recipe")
 
-        self.ui.tab_fermentables = TabFermentables(self, self.recipe, workbook)
-        self.ui.tabs.addTab(self.ui.tab_fermentables, "Fermentables")
-
-        self.ui.tab_miscellaneous = TabMiscellaneous(self, self.recipe)
-        self.ui.tabs.addTab(self.ui.tab_miscellaneous, "Miscellaneous")
-
         self.ui.tab_water = TabWater(self, self.recipe, workbook)
         self.ui.tabs.addTab(self.ui.tab_water, "Water")
+
+        self.ui.tab_fermentables = TabFermentables(self, self.recipe, workbook)
+        self.ui.tabs.addTab(self.ui.tab_fermentables, "Fermentables")
 
         self.ui.tab_mash = TabMash(self, self.recipe, workbook)
         self.ui.tabs.addTab(self.ui.tab_mash, "Mash")
@@ -117,10 +114,13 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.tab_hops = TabHops(self, self.recipe, workbook)
         self.ui.tabs.addTab(self.ui.tab_hops, "Hops")
 
+        self.ui.tab_miscellaneous = TabMiscellaneous(self, self.recipe)
+        self.ui.tabs.addTab(self.ui.tab_miscellaneous, "Miscellaneous")
+
         self.ui.tab_cultures = TabCultures(self, self.recipe, workbook)
         self.ui.tabs.addTab(self.ui.tab_cultures, "Cultures")
 
-        self.ui.tab_fermentation = TabFermentation(self, self.recipe, workbook)
+        self.ui.tab_fermentation = TabFermentation(self, self.recipe)
         self.ui.tabs.addTab(self.ui.tab_fermentation, "Fermentation")
 
         workbook.close()

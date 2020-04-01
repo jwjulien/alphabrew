@@ -1,5 +1,5 @@
 # ======================================================================================================================
-#        File:  GUI/Helpers/Sizing.py
+#        File:  GUI/Table/Sizing.py
 #     Project:  Brewing Recipe Planner
 # Description:  Provides constants with handy names for Qt column sizing.
 #      Author:  Jared Julien <jaredjulien@exsystems.net>

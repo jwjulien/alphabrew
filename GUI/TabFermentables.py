@@ -27,10 +27,9 @@ import qtawesome
 
 from GUI.Base.TabIngredients import Ui_TabIngredients
 from GUI.DialogFermentable import DialogFermentable
-from GUI.Helpers.ComboSpinBoxDelegate import ComboSpinBoxDelegate
+from GUI.Delegates.SimpleTypeDelegate import SimpleTypeDelegate
 from Model.Fermentables import Fermentables
 from Model.MeasurableUnits import MassType, VolumeType
-from Model import Selections
 
 
 
@@ -50,16 +49,16 @@ class TabFermentables(QtWidgets.QWidget):
         self.recipe = recipe
 
         # Load a list of available fermentables from the Excel database.
-        self.database = Fermentables.from_excel(workbook['Fermentables'])
+        self.database = Fermentables(limited=True)
+        self.database.from_excel(workbook['Fermentables'])
 
         # Setup the fermentable ingredient table at the top of the tab.
         self.ui.ingredients.setModel(self.recipe.fermentables)
-        self.recipe.fermentables.setWidths(self.ui.ingredients)
+        self.recipe.fermentables.set_control(self.ui.ingredients)
         self.ui.ingredients.selectionModel().selectionChanged.connect(self.on_ingredient_selection_change)
 
         # Setup a "delegate" to allow editing of the amount in a spinbox right inside of the table.
-        units = Selections.all_units(MassType, VolumeType)
-        delegate = ComboSpinBoxDelegate(self, units, maximum=1000, decimals=2, singleStep=1)
+        delegate = SimpleTypeDelegate(self, [MassType], maximum=1000, decimals=2, singleStep=1)
         self.ui.ingredients.setItemDelegateForColumn(0, delegate)
 
         # Setup a sorting/filter proxy to make it easier to find library ingredients.
@@ -71,7 +70,7 @@ class TabFermentables(QtWidgets.QWidget):
         self.ui.library.setModel(self.proxy)
 
         # Setup the library table at the bottom of the tab listing available fermentable ingredients.
-        self.database.setWidths(self.ui.library)
+        self.database.set_control(self.ui.library)
         self.ui.library.selectionModel().selectionChanged.connect(self.on_library_selection_changed)
 
         # Setup add button with icon and connect an event handler.

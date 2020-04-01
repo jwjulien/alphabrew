@@ -413,10 +413,14 @@ class Recipe(QtCore.QObject):
         self.size = VolumeType(json=recipe['batch_size'])
         self.author = recipe['author']
         ingredients = recipe['ingredients']
-        self.fermentables.from_dict(self, ingredients['fermentable_additions'])
-        self.hops.from_dict(self, ingredients['hop_additions'])
-        self.misc.from_dict(self, ingredients['miscellaneous_additions'])
-        self.cultures.from_dict(self, ingredients['culture_additions'])
+        if 'fermentable_additions' in ingredients:
+            self.fermentables.from_dict(self, ingredients['fermentable_additions'])
+        if 'hop_additions' in ingredients:
+            self.hops.from_dict(self, ingredients['hop_additions'])
+        if 'miscellaneous_additions' in ingredients:
+            self.misc.from_dict(self, ingredients['miscellaneous_additions'])
+        if 'culture_additions' in ingredients:
+            self.cultures.from_dict(self, ingredients['culture_additions'])
         self.notes = recipe.get('notes', '').replace('\\n', '\n')
 
 

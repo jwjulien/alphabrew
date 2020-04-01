@@ -27,10 +27,9 @@ import qtawesome
 
 from GUI.DialogHop import DialogHop
 from GUI.Base.TabIngredients import Ui_TabIngredients
-from GUI.Helpers.ComboSpinBoxDelegate import ComboSpinBoxDelegate
-from GUI.Helpers.ComboBoxDelegate import ComboBoxDelegate
+from GUI.Delegates.SimpleTypeDelegate import SimpleTypeDelegate
+from GUI.Delegates.ComboBoxDelegate import ComboBoxDelegate
 from Model.Hops import Hops
-from Model import Selections
 from Model.MeasurableUnits import MassType, TimeType, VolumeType
 from Model.Timing import TimingType
 
@@ -52,16 +51,16 @@ class TabHops(QtWidgets.QWidget):
         self.recipe = recipe
 
         # Load a list of available hops from the Excel database.
-        self.database = Hops.from_excel(workbook['Hops'])
+        self.database = Hops(limited=True)
+        self.database.from_excel(workbook['Hops'])
 
         # Setup the hop ingredient table at the top of the tab.
         self.ui.ingredients.setModel(self.recipe.hops)
-        self.recipe.hops.setWidths(self.ui.ingredients)
+        self.recipe.hops.set_control(self.ui.ingredients)
         self.ui.ingredients.selectionModel().selectionChanged.connect(self.on_ingredient_selection_change)
 
         # Setup a "delegate" to allow editing of the amount in a spinbox right inside of the table.
-        units = Selections.all_units(MassType, VolumeType)
-        delegate = ComboSpinBoxDelegate(self, units, minimum=0, maximum=32, decimals=1, singleStep=0.5)
+        delegate = SimpleTypeDelegate(self, [MassType], minimum=0, maximum=32, decimals=1, singleStep=0.5)
         self.ui.ingredients.setItemDelegateForColumn(0, delegate)
 
         # Setup a "delegate" to allow editing of the use in a combo box right inside of the table.
@@ -69,8 +68,7 @@ class TabHops(QtWidgets.QWidget):
         self.ui.ingredients.setItemDelegateForColumn(1, delegate)
 
         # Setup a "delegate" to allow editing of the duration in a spinbox right inside of the table.
-        units = Selections.all_units(TimeType)
-        delegate = ComboSpinBoxDelegate(self, units, maximum=240, decimals=0, singleStep=5)
+        delegate = SimpleTypeDelegate(self, [TimeType], maximum=240, decimals=0, singleStep=5)
         self.ui.ingredients.setItemDelegateForColumn(2, delegate)
 
         # Setup a sorting/filter proxy to make it easier to find library ingredients.
@@ -82,7 +80,7 @@ class TabHops(QtWidgets.QWidget):
         self.ui.library.setModel(self.proxy)
 
         # Setup the library table at the bottom of the tab listing available hop ingredients.
-        self.database.setWidths(self.ui.library)
+        self.database.set_control(self.ui.library)
         self.ui.library.selectionModel().selectionChanged.connect(self.on_available_selection_changed)
 
         # Setup add button with icon and connect an event handler.
