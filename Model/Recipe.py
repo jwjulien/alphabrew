@@ -79,6 +79,7 @@ class Recipe(QtCore.QObject):
         self.fermentables.changed.connect(self.changed.emit)
         self.hops.changed.connect(self.changed.emit)
         self.misc.changed.connect(self.changed.emit)
+        self.cultures.changed.connect(self.changed.emit)
 
 
 
@@ -225,9 +226,10 @@ class Recipe(QtCore.QObject):
     @property
     def finalGravity(self):
         """Recalculate the final gravity for this recipe."""
-        # TODO: No yeasts at the time this was created, put this in later to determine actual attenuation.
-        # attenuation = self.yeasts.max_attenuation
-        attenuation = 0.75
+        if not self.cultures:
+            attenuation = 0
+        else:
+            attenuation = self.cultures.averageAttenuation
 
         # Determine the number of points that come from non-fermentable sugars.
         nonFermentablePoints = self.get_gravity(self.fermentables.nonFermentableSugar, self.totalWort) - 1
@@ -239,7 +241,7 @@ class Recipe(QtCore.QObject):
         points -= nonFermentablePoints
 
         # Determine how much fermentable sugar we expect to remain after fermentation completes.
-        points *= (1 - attenuation)
+        points *= 1 - (attenuation / 100)
 
         # Add the non-fermentable points back in again.
         points += nonFermentablePoints
@@ -414,6 +416,7 @@ class Recipe(QtCore.QObject):
         self.fermentables.from_dict(self, ingredients['fermentable_additions'])
         self.hops.from_dict(self, ingredients['hop_additions'])
         self.misc.from_dict(self, ingredients['miscellaneous_additions'])
+        self.cultures.from_dict(self, ingredients['culture_additions'])
         self.notes = recipe.get('notes', '').replace('\\n', '\n')
 
 

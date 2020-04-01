@@ -60,6 +60,15 @@ class SimpleRangeType:
         self.maximum = self.RootClass(data['maximum']['value'], data['maximum']['unit'])
 
 
+# ----------------------------------------------------------------------------------------------------------------------
+    def copy(self):
+        """Return a new instance with the same numeric values."""
+        new = self.__class__()
+        new.minimum = self.minimum.copy()
+        new.maximum = self.maximum.copy()
+        return new
+
+
 
 # ======================================================================================================================
 # Overridden Methods

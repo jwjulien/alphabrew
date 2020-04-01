@@ -29,6 +29,7 @@ from PySide2 import QtCore, QtWidgets
 from GUI.Helpers.Column import Column
 from GUI.Helpers.Sizing import Stretch
 from Model.Culture import Culture
+from Model.MeasurableUnits import PercentType, PercentRangeType
 
 
 
@@ -86,6 +87,10 @@ class Cultures(QtCore.QAbstractTableModel):
                 form=str(row[2].value),
                 producer=str(row[3].value),
                 productId=str(row[4].value),
+                attenuationRange=PercentRangeType(
+                    minimum=PercentType(row[5].value * 100, '%'),
+                    maximum=PercentType(row[6].value * 100, '%')
+                ),
                 notes=str(row[11].value)
             )
             cultures.append(culture)
@@ -253,6 +258,11 @@ class Cultures(QtCore.QAbstractTableModel):
 # ======================================================================================================================
 # Properties
 # ----------------------------------------------------------------------------------------------------------------------
+    @property
+    def averageAttenuation(self):
+        """Returns the maximum attenuation of all of the cultures in the collection."""
+        return max([culture.averageAttenuation for culture in self.items])
+
 
 
 # ======================================================================================================================

@@ -20,9 +20,9 @@ class Ui_DialogCulture(object):
     def setupUi(self, DialogCulture):
         if DialogCulture.objectName():
             DialogCulture.setObjectName(u"DialogCulture")
-        DialogCulture.resize(422, 277)
-        DialogCulture.setMinimumSize(QSize(422, 250))
-        DialogCulture.setMaximumSize(QSize(16777215, 277))
+        DialogCulture.resize(422, 304)
+        DialogCulture.setMinimumSize(QSize(422, 304))
+        DialogCulture.setMaximumSize(QSize(16777215, 330))
         self.verticalLayout = QVBoxLayout(DialogCulture)
         self.verticalLayout.setObjectName(u"verticalLayout")
         self.formLayout = QFormLayout()
@@ -78,6 +78,28 @@ class Ui_DialogCulture(object):
 
         self.formLayout.setWidget(4, QFormLayout.FieldRole, self.productId)
 
+        self.lbl_attenuation_min = QLabel(DialogCulture)
+        self.lbl_attenuation_min.setObjectName(u"lbl_attenuation_min")
+
+        self.formLayout.setWidget(5, QFormLayout.LabelRole, self.lbl_attenuation_min)
+
+        self.lbl_attenuation_max = QLabel(DialogCulture)
+        self.lbl_attenuation_max.setObjectName(u"lbl_attenuation_max")
+
+        self.formLayout.setWidget(6, QFormLayout.LabelRole, self.lbl_attenuation_max)
+
+        self.minAttenuation = QDoubleSpinBox(DialogCulture)
+        self.minAttenuation.setObjectName(u"minAttenuation")
+        self.minAttenuation.setDecimals(0)
+
+        self.formLayout.setWidget(5, QFormLayout.FieldRole, self.minAttenuation)
+
+        self.maxAttenuation = QDoubleSpinBox(DialogCulture)
+        self.maxAttenuation.setObjectName(u"maxAttenuation")
+        self.maxAttenuation.setDecimals(0)
+
+        self.formLayout.setWidget(6, QFormLayout.FieldRole, self.maxAttenuation)
+
 
         self.verticalLayout.addLayout(self.formLayout)
 
@@ -114,5 +136,9 @@ class Ui_DialogCulture(object):
         self.lbl_form.setText(QCoreApplication.translate("DialogCulture", u"Form:", None))
         self.lbl_producer.setText(QCoreApplication.translate("DialogCulture", u"Producer:", None))
         self.lbl_productId.setText(QCoreApplication.translate("DialogCulture", u"Product ID:", None))
+        self.lbl_attenuation_min.setText(QCoreApplication.translate("DialogCulture", u"Min Attenuation:", None))
+        self.lbl_attenuation_max.setText(QCoreApplication.translate("DialogCulture", u"Max Attenuation:", None))
+        self.minAttenuation.setSuffix(QCoreApplication.translate("DialogCulture", u"%", None))
+        self.maxAttenuation.setSuffix(QCoreApplication.translate("DialogCulture", u"%", None))
     # retranslateUi
 

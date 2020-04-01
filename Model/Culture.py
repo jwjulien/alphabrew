@@ -26,7 +26,7 @@ from typing import Union
 
 from PySide2 import QtCore
 
-from Model.MeasurableUnits import MassType, UnitType, VolumeType
+from Model.MeasurableUnits import MassType, UnitType, VolumeType, PercentRangeType
 from Model import Selections
 
 
@@ -43,6 +43,7 @@ class Culture(QtCore.QObject):
                  form=None,
                  producer=None,
                  productId=None,
+                 attenuationRange=None,
                  notes=None):
         super().__init__()
 
@@ -53,7 +54,18 @@ class Culture(QtCore.QObject):
         self.form: str = form
         self.producer: str = producer
         self.productId: str = productId
+        self.attenuationRange: PercentRangeType = attenuationRange
         self.notes: str = notes.replace('\\n', '\n') if notes else None
+
+
+
+# ======================================================================================================================
+# Properties
+# ----------------------------------------------------------------------------------------------------------------------
+    @property
+    def averageAttenuation(self):
+        return (self.attenuationRange.minimum.as_('%') + self.attenuationRange.maximum.as_('%')) / 2
+
 
 
 # ======================================================================================================================
@@ -68,6 +80,7 @@ class Culture(QtCore.QObject):
             form=self.form,
             producer=self.producer,
             productId=self.productId,
+            attenuationRange=self.attenuationRange.copy(),
             notes=self.notes
         )
 
@@ -84,6 +97,7 @@ class Culture(QtCore.QObject):
             'form': self.form,
             'producer': self.producer,
             'productId': self.productId,
+            'attenuation_range': self.attenuationRange.to_dict(),
             'notes': self.notes.replace('\n', '\\n'),
         }
 
@@ -92,11 +106,14 @@ class Culture(QtCore.QObject):
     def from_dict(self, data: dict):
         self.name = data['name']
         amount = data['amount']
-        self.amount = Selections.one_of(amount['value'], amount['unit'], VolumeType, MassType)
+        self.amount = Selections.one_of(amount['value'], amount['unit'], VolumeType, MassType, UnitType)
         self.ctype = data['type'].title()
         self.form = data['form']
         self.producer = data['producer']
         self.productId = data['productId']
+        if 'attenuation_range' in data:
+            self.attenuationRange = PercentRangeType()
+            self.attenuationRange.from_dict(data['attenuation_range'])
         self.notes = data['notes'].replace('\\n', '\n')
 
 
