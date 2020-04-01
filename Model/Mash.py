@@ -1,5 +1,5 @@
 # ======================================================================================================================
-#        File:  Model/Fermentation.py
+#        File:  Model/Mash.py
 #     Project:  Brewing Recipe Planner
 # Description:  A base for fermenting a beer.
 #      Author:  Jared Julien <jaredjulien@gmail.com>
@@ -25,23 +25,31 @@
 from PySide2 import QtCore
 
 from Model.ListTableBase import ListTableBase
-from Model.FermentationStep import FermentationStep
+from Model.MashStep import MashStep
+from Model.MeasurableUnits import TemperatureType
 from GUI.Table.Column import Column
 from GUI.Table.Sizing import Stretch
 
 
 
 # ======================================================================================================================
-# Fermentation Class
+# Mash Class
 # ----------------------------------------------------------------------------------------------------------------------
-class Fermentation(ListTableBase):
+class Mash(ListTableBase):
     """Tabular definition for fermentation steps outlining the fermentation process."""
     Columns = [
         Column('name', size=Stretch, align=QtCore.Qt.AlignLeft, editable=True),
-        Column('startTemperature', 'Start Temp', editable=True),
-        Column('endTemperature', 'End Temp', editable=True),
+        Column('mtype', 'Type', align=QtCore.Qt.AlignLeft, editable=True),
+        Column('amount', editable=True),
+        Column('temperature', editable=True),
         Column('time', editable=True),
     ]
+
+
+# ----------------------------------------------------------------------------------------------------------------------
+    def __init__(self, recipe):
+        super().__init__()
+        self.recipe = recipe
 
 
 
@@ -50,7 +58,7 @@ class Fermentation(ListTableBase):
 # ----------------------------------------------------------------------------------------------------------------------
     def from_excel(self, worksheet):
         """Not supported for fermentable types - they don't get defined in the Excel database."""
-        raise NotImplementedError('Fermentation does not support loading library items from Excel worksheets.')
+        raise NotImplementedError('Mash does not support loading library items from Excel worksheets.')
 
 
 # ----------------------------------------------------------------------------------------------------------------------
@@ -63,16 +71,18 @@ class Fermentation(ListTableBase):
         """Convert this fermentation into BeerJSON."""
         return {
             'name': 'Why is the name required at this level?',
-            'fermentation_steps': [step.to_dict() for step in self.items]
+            'grain_temperature': self.recipe.ambient.to_dict(),
+            'mash_steps': [step.to_dict() for step in self.items]
         }
 
 
 # ----------------------------------------------------------------------------------------------------------------------
-    def from_dict(self, recipe, data):
+    def from_dict(self, data):
         """Convert a BeerJSON dict into values for this instance."""
+        self.recipe.ambient = TemperatureType(json=data['grain_temperature'])
         self.items = []
-        for child in data['fermentation_steps']:
-            step = FermentationStep(recipe)
+        for child in data['mash_steps']:
+            step = MashStep(self.recipe)
             step.from_dict(child)
             self.append(step)
 

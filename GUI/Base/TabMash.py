@@ -20,15 +20,45 @@ class Ui_TabMash(object):
     def setupUi(self, TabMash):
         if TabMash.objectName():
             TabMash.setObjectName(u"TabMash")
-        TabMash.resize(694, 300)
-        self.time_mash = QSpinBox(TabMash)
-        self.time_mash.setObjectName(u"time_mash")
-        self.time_mash.setGeometry(QRect(80, 20, 656, 20))
-        self.time_mash.setMaximum(240)
-        self.time_mash.setValue(60)
-        self.lbl_mash_time = QLabel(TabMash)
-        self.lbl_mash_time.setObjectName(u"lbl_mash_time")
-        self.lbl_mash_time.setGeometry(QRect(20, 20, 54, 20))
+        TabMash.resize(763, 478)
+        self.verticalLayout = QVBoxLayout(TabMash)
+        self.verticalLayout.setObjectName(u"verticalLayout")
+        self.steps = QTableView(TabMash)
+        self.steps.setObjectName(u"steps")
+        sizePolicy = QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.steps.sizePolicy().hasHeightForWidth())
+        self.steps.setSizePolicy(sizePolicy)
+        self.steps.setSizeAdjustPolicy(QAbstractScrollArea.AdjustToContents)
+        self.steps.setProperty("showDropIndicator", False)
+        self.steps.setAlternatingRowColors(True)
+        self.steps.setSelectionMode(QAbstractItemView.SingleSelection)
+        self.steps.setSelectionBehavior(QAbstractItemView.SelectRows)
+        self.steps.verticalHeader().setVisible(False)
+
+        self.verticalLayout.addWidget(self.steps)
+
+        self.s = QSplitter(TabMash)
+        self.s.setObjectName(u"s")
+        self.s.setOrientation(Qt.Horizontal)
+        self.add = QPushButton(self.s)
+        self.add.setObjectName(u"add")
+        sizePolicy1 = QSizePolicy(QSizePolicy.Minimum, QSizePolicy.Fixed)
+        sizePolicy1.setHorizontalStretch(1)
+        sizePolicy1.setVerticalStretch(0)
+        sizePolicy1.setHeightForWidth(self.add.sizePolicy().hasHeightForWidth())
+        self.add.setSizePolicy(sizePolicy1)
+        self.s.addWidget(self.add)
+        self.remove = QPushButton(self.s)
+        self.remove.setObjectName(u"remove")
+        self.remove.setEnabled(False)
+        sizePolicy1.setHeightForWidth(self.remove.sizePolicy().hasHeightForWidth())
+        self.remove.setSizePolicy(sizePolicy1)
+        self.s.addWidget(self.remove)
+
+        self.verticalLayout.addWidget(self.s)
+
 
         self.retranslateUi(TabMash)
 
@@ -37,7 +67,7 @@ class Ui_TabMash(object):
 
     def retranslateUi(self, TabMash):
         TabMash.setWindowTitle(QCoreApplication.translate("TabMash", u"Form", None))
-        self.time_mash.setSuffix(QCoreApplication.translate("TabMash", u" min", None))
-        self.lbl_mash_time.setText(QCoreApplication.translate("TabMash", u"Mash Time:", None))
+        self.add.setText(QCoreApplication.translate("TabMash", u"Add Step", None))
+        self.remove.setText(QCoreApplication.translate("TabMash", u"Remove Step", None))
     # retranslateUi
 

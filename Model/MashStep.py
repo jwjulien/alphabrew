@@ -1,5 +1,5 @@
 # ======================================================================================================================
-#        File:  Model/Fermentation.py
+#        File:  Model/MashStep.py
 #     Project:  Brewing Recipe Planner
 # Description:  A base for fermenting a beer.
 #      Author:  Jared Julien <jaredjulien@gmail.com>
@@ -24,57 +24,61 @@
 # ----------------------------------------------------------------------------------------------------------------------
 from PySide2 import QtCore
 
-from Model.ListTableBase import ListTableBase
-from Model.FermentationStep import FermentationStep
-from GUI.Table.Column import Column
-from GUI.Table.Sizing import Stretch
+from Model.MeasurableUnits import TemperatureType, TimeType, VolumeType
 
 
 
 # ======================================================================================================================
-# Fermentation Class
+# Mash Step Class
 # ----------------------------------------------------------------------------------------------------------------------
-class Fermentation(ListTableBase):
-    """Tabular definition for fermentation steps outlining the fermentation process."""
-    Columns = [
-        Column('name', size=Stretch, align=QtCore.Qt.AlignLeft, editable=True),
-        Column('startTemperature', 'Start Temp', editable=True),
-        Column('endTemperature', 'End Temp', editable=True),
-        Column('time', editable=True),
-    ]
+class MashStep(QtCore.QObject):
+    def __init__(self, recipe=None, name=None, mtype=None, amount=None, temperature=None, time=None):
+        super().__init__()
+
+        self.recipe = recipe
+        self.name = name
+        self.mtype = mtype
+        self.amount = amount
+        self.temperature = temperature
+        self.time = time
 
 
 
 # ======================================================================================================================
 # Methods
 # ----------------------------------------------------------------------------------------------------------------------
-    def from_excel(self, worksheet):
-        """Not supported for fermentable types - they don't get defined in the Excel database."""
-        raise NotImplementedError('Fermentation does not support loading library items from Excel worksheets.')
-
-
-# ----------------------------------------------------------------------------------------------------------------------
-    def sort(self):
-        """Steps are sorted manually. Deliberately left blank - will be called but nothing will happen."""
-
-
-# ----------------------------------------------------------------------------------------------------------------------
     def to_dict(self):
-        """Convert this fermentation into BeerJSON."""
+        """Convert this fermentation step into BeerJSON."""
         return {
-            'name': 'Why is the name required at this level?',
-            'fermentation_steps': [step.to_dict() for step in self.items]
+            'name': self.name,
+            'type': self.mtype.lower(),
+            'amount': self.amount.to_dict(),
+            'step_temperature': self.temperature.to_dict(),
+            'step_time': self.time.to_dict(),
         }
 
 
 # ----------------------------------------------------------------------------------------------------------------------
-    def from_dict(self, recipe, data):
+    def from_dict(self, data):
         """Convert a BeerJSON dict into values for this instance."""
-        self.items = []
-        for child in data['fermentation_steps']:
-            step = FermentationStep(recipe)
-            step.from_dict(child)
-            self.append(step)
+        self.name = data['name']
+        self.mtype = data['type'].title()
+        if 'amount' in data:
+            self.amount = VolumeType(json=data['amount'])
+        self.temperature = TemperatureType(json=data['step_temperature'])
+        self.time = TimeType(json=data['step_time'])
+
+
+
+# ======================================================================================================================
+# Overridden Methods
+# ----------------------------------------------------------------------------------------------------------------------
+    def __repr__(self):
+        text = '<MashStep'
+        for key, value in self.__dict__.items():
+            text += f' {key}="{value}"'
+        text += '>'
+        return text
 
 
 

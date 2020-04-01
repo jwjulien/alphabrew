@@ -108,7 +108,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.tab_fermentables = TabFermentables(self, self.recipe, workbook)
         self.ui.tabs.addTab(self.ui.tab_fermentables, "Fermentables")
 
-        self.ui.tab_mash = TabMash(self, self.recipe, workbook)
+        self.ui.tab_mash = TabMash(self, self.recipe)
         self.ui.tabs.addTab(self.ui.tab_mash, "Mash")
 
         self.ui.tab_hops = TabHops(self, self.recipe, workbook)

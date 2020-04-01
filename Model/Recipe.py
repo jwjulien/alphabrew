@@ -32,6 +32,7 @@ from Model.Miscellanea import Miscellanea
 from Model.Hops import Hops
 from Model.Cultures import Cultures
 from Model.Fermentation import Fermentation
+from Model.Mash import Mash
 from Model.MeasurableUnits import TemperatureType, TimeType, VolumeType
 from Brewhouse import Equipment, Calibrations
 from Math import Gravity, Color
@@ -74,12 +75,15 @@ class Recipe(QtCore.QObject):
         self.hops = Hops()
         self.cultures = Cultures()
         self.fermentation = Fermentation()
+        self.mash = Mash(self)
 
         # Connect events in children to top level change event.
         self.fermentables.changed.connect(self.changed.emit)
         self.hops.changed.connect(self.changed.emit)
         self.misc.changed.connect(self.changed.emit)
         self.cultures.changed.connect(self.changed.emit)
+        self.fermentation.changed.connect(self.changed.emit)
+        self.mash.changed.connect(self.changed.emit)
 
 
 
@@ -348,6 +352,7 @@ class Recipe(QtCore.QObject):
                 'miscellaneous_additions': self.misc.to_dict(),
                 'culture_additions': self.cultures.to_dict()
             },
+            'mash': self.mash.to_dict(),
             'fermentation': self.fermentation.to_dict(),
             'notes': self.notes.replace('\n', '\\n'),
             'boil': {
@@ -412,6 +417,8 @@ class Recipe(QtCore.QObject):
         self.rtype = recipe['type']
         self.size = VolumeType(json=recipe['batch_size'])
         self.author = recipe['author']
+        if 'mash' in recipe:
+            self.mash.from_dict(recipe['mash'])
         if 'fermentation' in recipe:
             self.fermentation.from_dict(self, recipe['fermentation'])
         ingredients = recipe['ingredients']

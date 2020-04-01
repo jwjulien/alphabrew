@@ -22,10 +22,14 @@
 # ======================================================================================================================
 # Import Statements
 # ----------------------------------------------------------------------------------------------------------------------
-from PySide2 import QtCore, QtGui, QtWidgets
+from PySide2 import QtWidgets
 import qtawesome
 
 from GUI.Base.TabMash import Ui_TabMash
+from GUI.Delegates.ComboBoxDelegate import ComboBoxDelegate
+from GUI.Delegates.SimpleTypeDelegate import SimpleTypeDelegate
+from Model.MashStep import MashStep
+from Model.MeasurableUnits import TemperatureType, TimeType, VolumeType
 
 
 
@@ -33,12 +37,71 @@ from GUI.Base.TabMash import Ui_TabMash
 # Mash Tab Class
 # ----------------------------------------------------------------------------------------------------------------------
 class TabMash(QtWidgets.QWidget):
-    def __init__(self, parent, recipe, workbook):
+    def __init__(self, parent, recipe):
         super().__init__(parent)
         self.ui = Ui_TabMash()
         self.ui.setupUi(self)
 
         self.recipe = recipe
+
+        self.ui.steps.setModel(self.recipe.mash)
+        self.recipe.mash.set_control(self.ui.steps)
+        self.ui.steps.selectionModel().selectionChanged.connect(self.on_selection_change)
+
+        # Add a delegate for editing the types.
+        options = ['Infusion', 'Temperature', 'Decoction', 'Souring Mash', 'Souring Wort', 'Drain Mash Tun', 'Sparge']
+        delegate = ComboBoxDelegate(self, options)
+        self.ui.steps.setItemDelegateForColumn(1, delegate)
+
+        # Add a delegate for editing the step temperature.
+        delegate = SimpleTypeDelegate(self, [VolumeType], decimals=1)
+        self.ui.steps.setItemDelegateForColumn(2, delegate)
+
+        # Add a delegate for editing the step temperature.
+        delegate = SimpleTypeDelegate(self, [TemperatureType], maximum=212, decimals=1)
+        self.ui.steps.setItemDelegateForColumn(3, delegate)
+
+        # Add a delegate for editing the step temperature.
+        delegate = SimpleTypeDelegate(self, [TimeType], decimals=1)
+        self.ui.steps.setItemDelegateForColumn(4, delegate)
+
+        # Setup add button with icon and connect an event handler.
+        icon = qtawesome.icon('fa5s.plus')
+        self.ui.add.setIcon(icon)
+        self.ui.add.clicked.connect(self.on_add)
+
+        # Setup remove button with icon and connect an event handler.
+        icon = qtawesome.icon('fa5s.trash-alt')
+        self.ui.remove.setIcon(icon)
+        self.ui.remove.clicked.connect(self.on_remove)
+
+
+# ----------------------------------------------------------------------------------------------------------------------
+    def on_selection_change(self):
+        """Fires when the user makes a selection in the table."""
+        selection = self.ui.steps.selectionModel().selectedIndexes()
+        selected = len(selection) > 0
+        self.ui.remove.setEnabled(selected)
+
+
+# ----------------------------------------------------------------------------------------------------------------------
+    def on_add(self):
+        """Fires when the user clicks the add button."""
+        step = MashStep(self.recipe)
+
+        step.mtype = 'Infusion'
+
+        self.recipe.mash.append(step)
+
+
+# ----------------------------------------------------------------------------------------------------------------------
+    def on_remove(self):
+        """Fires when the user clicks the remove button."""
+        for index in self.ui.steps.selectedIndexes():
+            if index.column() != 0:
+                continue
+            self.recipe.mash.pop(index.row())
+            break
 
 
 
