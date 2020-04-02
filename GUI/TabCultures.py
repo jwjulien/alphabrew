@@ -49,6 +49,9 @@ class TabCultures(QtWidgets.QWidget):
         # Store the recipe with which these cultures are associated.
         self.recipe = recipe
 
+        self.recipe.loaded.connect(self.on_load)
+        self.on_load()
+
         # Load a list of available cultures from the Excel database.
         self.database = Cultures(limited=True)
         self.database.from_excel(workbook['Cultures'])
@@ -88,6 +91,12 @@ class TabCultures(QtWidgets.QWidget):
         icon = qtawesome.icon('fa5s.trash-alt')
         self.ui.remove.setIcon(icon)
         self.ui.remove.clicked.connect(self.on_remove)
+
+
+# ----------------------------------------------------------------------------------------------------------------------
+    def on_load(self):
+        """Fires when the recipe gets loaded to re-associate the recipe model with the Qt table in this tab."""
+        self.ui.ingredients.setModel(self.recipe.cultures)
 
 
 # ----------------------------------------------------------------------------------------------------------------------

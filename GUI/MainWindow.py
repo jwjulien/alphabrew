@@ -57,6 +57,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.setupUi(self)
 
         self.version = _version.__version__
+        self.filename = None
 
         # Setup the range displays for OG, FG, ABV, and IBU.
         self.ui.og.setRange(1, 1.12)
@@ -86,13 +87,6 @@ class MainWindow(QtWidgets.QMainWindow):
         self.brewhouse = Brewhouse()
         self.recipe = Recipe(self.brewhouse.calibrations)
         self.recipe.changed.connect(self.update)
-
-        # try:
-        with open('recipe.json') as handle:
-            self.recipe.from_beerxml(handle.read())
-        # except:
-        #     print('Failed to load recipe')
-        #     traceback.print_exc()
 
         # Load database items into memory.
         # Load read-only just because we never need to change the database from within this tool.
@@ -134,7 +128,28 @@ class MainWindow(QtWidgets.QMainWindow):
 # ----------------------------------------------------------------------------------------------------------------------
     def closeEvent(self, event):
         """Ensure that the user has saved all changes and allow them to cancel if they didn't mean to close."""
-        # TODO: Check for unsaved changes and warn the user before exiting.
+        self._warn_unsaved(event)
+
+
+
+# ======================================================================================================================
+# Properties
+# ----------------------------------------------------------------------------------------------------------------------
+    @property
+    def isDirty(self):
+        """Returns True when the currently open file has never been saved or has changed since the last save."""
+        # If there is no filename then just assume that we might want to save.
+        if self.filename is None:
+            return True
+
+        # Otherwise, compare the existing contents of the file to the current state.
+        current = self.recipe.to_beerjson()
+        with open(self.filename) as handle:
+            existing = handle.read()
+
+        # Return True, indicating "dirty" when they aren't identical.
+        # There's probably a more robust way to compare JSON.
+        return current != existing
 
 
 
@@ -143,25 +158,40 @@ class MainWindow(QtWidgets.QMainWindow):
 # ----------------------------------------------------------------------------------------------------------------------
     def on_file_new(self):
         """Fires when the user requests to start a new recipe."""
+        if self._warn_unsaved():
+            self.filename = None
+            self.recipe.clear()
 
 
 # ----------------------------------------------------------------------------------------------------------------------
     def on_file_open(self):
         """Fires when the user requests to open a recipe from local file."""
+        filename, filters = QtWidgets.QFileDialog.getOpenFileName(self, "Open Recipe", filter="BeerJSON (*.json)")
+        if filename:
+            self.filename = filename
+            with open(filename) as handle:
+                self.recipe.from_beerxml(handle.read())
 
 
 # ----------------------------------------------------------------------------------------------------------------------
     def on_file_save(self):
         """Fires when the user requests to save the current recipe to local file."""
-        with open('recipe.json', 'w') as handle:
-            handle.write(self.recipe.to_beerjson())
-        # TODO: Handle merging BeerJSON with existing files.  The goal would be to update applicable values when saving
-        # but not nuke the existing values that may already be in the file.
+        if self.filename:
+            # TODO: Handle merging BeerJSON with existing files.  The goal would be to update applicable values when
+            # saving but not nuke the existing values that may already be in the file.
+            with open(self.filename, 'w') as handle:
+                handle.write(self.recipe.to_beerjson())
+        else:
+            self.on_file_save_as()
 
 
 # ----------------------------------------------------------------------------------------------------------------------
     def on_file_save_as(self):
         """Fires when the user specifically requests to save as a different file."""
+        filename, _ = QtWidgets.QFileDialog.getSaveFileName(self, "Save Recipe As...", filter="BeerJSON (*.json)")
+        if filename:
+            self.filename = filename
+            self.on_file_save()
 
 
 # ----------------------------------------------------------------------------------------------------------------------
@@ -227,6 +257,32 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.calcBoilSg.setText(f'{self.recipe.boilGravity:.3f}')
         self.ui.calcCalories.setText(f'{self.recipe.calories:.0f} / 16oz')
 
+
+
+# ======================================================================================================================
+# Private Methods
+# ----------------------------------------------------------------------------------------------------------------------
+    def _warn_unsaved(self, event=None):
+        """Check to see if the current file is dirty and prompt the user to save changes."""
+        if self.isDirty:
+            text = 'You have unsaved changes, would you like to save them before exiting?'
+
+            buttons = QtWidgets.QMessageBox.Save | QtWidgets.QMessageBox.Discard | QtWidgets.QMessageBox.Cancel
+            stdButtons = QtWidgets.QMessageBox.StandardButtons(buttons)
+
+            default = QtWidgets.QMessageBox.Save
+
+            result = QtWidgets.QMessageBox.warning(self, "Unsaved changes", text, stdButtons, defaultButton=default)
+
+            if result == QtWidgets.QMessageBox.Cancel:
+                if event is not None:
+                    event.ignore()
+                return False
+
+            if result == QtWidgets.QMessageBox.Save:
+                self.on_file_save()
+
+        return True
 
 
 # End of File

@@ -54,35 +54,14 @@ SucroseDensity_LbPerGal = 13.19092344776
 class Recipe(QtCore.QObject):
 
     changed = QtCore.Signal()
+    loaded = QtCore.Signal()
 
     def __init__(self, calibrations):
         super().__init__()
 
         self.calibrations: Calibrations = calibrations
 
-        self._name: str = ''
-        self._author: str = ''
-        self._style: Style = None
-        self._rtype: str = 'all grain'
-        self._equipment = Equipment()
-        self._size = VolumeType(5, 'gal')
-        self._boilTime = TimeType(60, 'min')
-        self.notes = None
-
-        self.fermentables = Fermentables()
-        self.misc = Miscellanea()
-        self.hops = Hops()
-        self.cultures = Cultures()
-        self.fermentation = Fermentation()
-        self.mash = Mash(self)
-
-        # Connect events in children to top level change event.
-        self.fermentables.changed.connect(self.changed.emit)
-        self.hops.changed.connect(self.changed.emit)
-        self.misc.changed.connect(self.changed.emit)
-        self.cultures.changed.connect(self.changed.emit)
-        self.fermentation.changed.connect(self.changed.emit)
-        self.mash.changed.connect(self.changed.emit)
+        self.clear()
 
 
 
@@ -321,6 +300,37 @@ class Recipe(QtCore.QObject):
 # ======================================================================================================================
 # Methods
 # ----------------------------------------------------------------------------------------------------------------------
+    def clear(self):
+        """Reset all of the properties of this recipe to default values."""
+        self._name: str = ''
+        self._author: str = ''
+        self._style: Style = None
+        self._rtype: str = 'all grain'
+        self._equipment = Equipment()
+        self._size = VolumeType(5, 'gal')
+        self._boilTime = TimeType(60, 'min')
+        self.notes = None
+
+        self.fermentables = Fermentables()
+        self.misc = Miscellanea()
+        self.hops = Hops()
+        self.cultures = Cultures()
+        self.fermentation = Fermentation()
+        self.mash = Mash(self)
+
+        # Connect events in children to top level change event.
+        self.fermentables.changed.connect(self.changed.emit)
+        self.hops.changed.connect(self.changed.emit)
+        self.misc.changed.connect(self.changed.emit)
+        self.cultures.changed.connect(self.changed.emit)
+        self.fermentation.changed.connect(self.changed.emit)
+        self.mash.changed.connect(self.changed.emit)
+
+        self.loaded.emit()
+        self.changed.emit()
+
+
+# ----------------------------------------------------------------------------------------------------------------------
     def to_beerjson(self):
         """Convert this instance into BeerJSON format."""
         recipeJson = {
@@ -421,6 +431,7 @@ class Recipe(QtCore.QObject):
         self.notes = recipe.get('notes', '').replace('\\n', '\n')
 
         self.mash.recalculate()
+        self.loaded.emit()
 
 
 # ----------------------------------------------------------------------------------------------------------------------

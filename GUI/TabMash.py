@@ -43,8 +43,9 @@ class TabMash(QtWidgets.QWidget):
         self.ui.setupUi(self)
 
         self.recipe = recipe
+        self.recipe.loaded.connect(self.on_load)
+        self.on_load()
 
-        self.ui.steps.setModel(self.recipe.mash)
         self.recipe.mash.set_control(self.ui.steps)
         self.ui.steps.selectionModel().selectionChanged.connect(self.on_selection_change)
 
@@ -71,13 +72,17 @@ class TabMash(QtWidgets.QWidget):
         self.ui.remove.setIcon(icon)
         self.ui.remove.clicked.connect(self.on_remove)
 
-        # Setup temperature input to set the temperature of the grains and mash tun.
-        self.ui.ambient.setValue(self.recipe.mash.ambient.as_('F'))
+        # Connect event handler for discrete inputs.
         self.ui.ambient.valueChanged.connect(self.on_ambient_changed)
-
-        # Setup input to get the desired mash thickness for the initial infusion.
-        self.ui.ratio.setValue(self.recipe.mash.ratio.as_('qt/lb'))
         self.ui.ratio.valueChanged.connect(self.on_ratio_changed)
+
+
+# ----------------------------------------------------------------------------------------------------------------------
+    def on_load(self):
+        """Fires when the recipe loads to update the discrete controls with values."""
+        self.ui.steps.setModel(self.recipe.mash)
+        self.ui.ambient.setValue(self.recipe.mash.ambient.as_('F'))
+        self.ui.ratio.setValue(self.recipe.mash.ratio.as_('qt/lb'))
 
 
 # ----------------------------------------------------------------------------------------------------------------------

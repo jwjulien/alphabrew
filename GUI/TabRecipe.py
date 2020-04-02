@@ -58,15 +58,8 @@ class TabRecipe(QtWidgets.QWidget):
             self.ui.equipment.addItem(equipment.name)
 
         # Load recipe data.
-        self.ui.name.setText(self.recipe.name)
-        self.ui.author.setText(self.recipe.author)
-        if self.recipe.style:
-            self.ui.style.setCurrentText(self.recipe.style.name)
-        self.ui.rtype.setCurrentText(self.recipe.rtype)
-        self.ui.equipment.setCurrentText(self.recipe.equipment.name)
-        self.ui.size.setValue(self.recipe.size.as_('gal'))
-        self.ui.time_boil.setValue(self.recipe.boilTime.as_('min'))
-        self.ui.notes.setPlainText(self.recipe.notes)
+        self.recipe.loaded.connect(self.on_load)
+        self.on_load()
 
         # Connect events.
         self.ui.name.textChanged.connect(self.on_name_change)
@@ -78,6 +71,19 @@ class TabRecipe(QtWidgets.QWidget):
         self.ui.time_boil.valueChanged.connect(self.on_boilTime_changed)
         self.ui.notes.textChanged.connect(self.on_notes_changed)
 
+
+# ----------------------------------------------------------------------------------------------------------------------
+    def on_load(self):
+        """Fires when a new recipe is loaded.  Populates the form fields with the data."""
+        self.ui.name.setText(self.recipe.name)
+        self.ui.author.setText(self.recipe.author)
+        if self.recipe.style:
+            self.ui.style.setCurrentText(self.recipe.style.name)
+        self.ui.rtype.setCurrentText(self.recipe.rtype)
+        self.ui.equipment.setCurrentText(self.recipe.equipment.name)
+        self.ui.size.setValue(self.recipe.size.as_('gal'))
+        self.ui.time_boil.setValue(self.recipe.boilTime.as_('min'))
+        self.ui.notes.setPlainText(self.recipe.notes)
 
 
 # ----------------------------------------------------------------------------------------------------------------------

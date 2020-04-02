@@ -43,6 +43,9 @@ class TabFermentation(QtWidgets.QWidget):
 
         self.recipe = recipe
 
+        self.recipe.loaded.connect(self.on_load)
+        self.on_load()
+
         self.ui.steps.setModel(self.recipe.fermentation)
         self.recipe.fermentation.set_control(self.ui.steps)
         self.ui.steps.selectionModel().selectionChanged.connect(self.on_selection_change)
@@ -65,6 +68,12 @@ class TabFermentation(QtWidgets.QWidget):
         icon = qtawesome.icon('fa5s.trash-alt')
         self.ui.remove.setIcon(icon)
         self.ui.remove.clicked.connect(self.on_remove)
+
+
+# ----------------------------------------------------------------------------------------------------------------------
+    def on_load(self):
+        """Fires when the recipe gets loaded to re-associate the recipe model with the Qt table in this tab."""
+        self.ui.steps.setModel(self.recipe.fermentation)
 
 
 # ----------------------------------------------------------------------------------------------------------------------

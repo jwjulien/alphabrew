@@ -48,12 +48,14 @@ class TabFermentables(QtWidgets.QWidget):
         # Store the recipe with which these fermentables are associated.
         self.recipe = recipe
 
+        self.recipe.loaded.connect(self.on_load)
+        self.on_load()
+
         # Load a list of available fermentables from the Excel database.
         self.database = Fermentables(limited=True)
         self.database.from_excel(workbook['Fermentables'])
 
         # Setup the fermentable ingredient table at the top of the tab.
-        self.ui.ingredients.setModel(self.recipe.fermentables)
         self.recipe.fermentables.set_control(self.ui.ingredients)
         self.ui.ingredients.selectionModel().selectionChanged.connect(self.on_ingredient_selection_change)
 
@@ -87,6 +89,12 @@ class TabFermentables(QtWidgets.QWidget):
         icon = qtawesome.icon('fa5s.trash-alt')
         self.ui.remove.setIcon(icon)
         self.ui.remove.clicked.connect(self.on_remove)
+
+
+# ----------------------------------------------------------------------------------------------------------------------
+    def on_load(self):
+        """Fires when the recipe gets loaded to re-associate the recipe model with the Qt table in this tab."""
+        self.ui.ingredients.setModel(self.recipe.fermentables)
 
 
 # ----------------------------------------------------------------------------------------------------------------------
