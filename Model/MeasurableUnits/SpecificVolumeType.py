@@ -1,7 +1,7 @@
 # ======================================================================================================================
-#        File:  Model/MeasureableUnits/__init__.py
+#        File:  Model/MeasureableUnits/SpecificVolumeType.py
 #     Project:  Brewing Recipe Planner
-# Description:  Top level include for model units related classes.
+# Description:  Provides a base class for working with time types in recipes which can have differing units.
 #      Author:  Jared Julien <jaredjulien@gmail.com>
 #   Copyright:  (c) 2020 Jared Julien
 # ----------------------------------------------------------------------------------------------------------------------
@@ -22,25 +22,27 @@
 # ======================================================================================================================
 # Imports
 # ----------------------------------------------------------------------------------------------------------------------
-from .AcidityType import AcidityType
-from .BitternessType import BitternessType
-from .CarbonationType import CarbonationType
-from .ColorType import ColorType
-from .DiastaticPowerType import DiastaticPowerType
-from .GravityType import GravityType
-from .MassType import MassType
-from .PercentType import PercentType
-from .SpecificVolumeType import SpecificVolumeType
-from .TemperatureType import TemperatureType
-from .TimeType import TimeType
-from .UnitType import UnitType
-from .VolumeType import VolumeType
+from Model.MeasurableUnits.SimpleType import SimpleType
 
-from .BitternessRangeType import BitternessRangeType
-from .CarbonationRangeType import CarbonationRangeType
-from .ColorRangeType import ColorRangeType
-from .GravityRangeType import GravityRangeType
-from .PercentRangeType import PercentRangeType
+
+
+# ======================================================================================================================
+# SpecificVolumeType Class
+# ----------------------------------------------------------------------------------------------------------------------
+class SpecificVolumeType(SimpleType):
+    """Extends the SimpleType class to provide a class for working with SpecificVolumeType as defined in the BeerJson
+    standard 2.0 draft."""
+
+    Types = {
+        'qt/lb': 1,
+        'gal/lb': 0.25,
+        'gal/oz': 0.015625,
+        'l/g': 0.00208635,
+        'l/kg': 2.08635,
+        'floz/oz': 2,
+        'm^3/kg': 0.00208635,
+        'ft^3/lb': 0.0334201
+    }
 
 
 

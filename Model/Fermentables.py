@@ -30,7 +30,7 @@ from Model.ListTableBase import ListTableBase
 from GUI.Table.Column import Column
 from GUI.Table.Sizing import Stretch
 from Model.Fermentable import Fermentable
-from Model.MeasurableUnits import ColorType, DiastaticPowerType, PercentType
+from Model.MeasurableUnits import ColorType, DiastaticPowerType, MassType, PercentType
 
 
 
@@ -97,6 +97,13 @@ class Fermentables(ListTableBase):
     def lateAdditionSugar(self):
         """Returns the equivalent amount of sucrose that is added post boil, but where the efficiency isn't a factor."""
         return sum([item.sucrose for item in self.items if not item.isMashed and item.addAfterBoil])
+
+
+# ----------------------------------------------------------------------------------------------------------------------
+    @property
+    def mashWeight(self) -> MassType:
+        """Returns the combined weight of all of the mashed ingredients."""
+        return sum([item.amount for item in self.items if item.isMashed], MassType(0, 'lb'))
 
 
 

@@ -47,8 +47,9 @@ class SimpleTypeDelegate(ComboSpinBoxDelegate):
     def setEditorData(self, widget: QtWidgets.QWidget, index):
         """Called to set the current value in the editor."""
         simpleType = index.model().data(index, QtCore.Qt.EditRole)
-        self.spinBox.setValue(simpleType.value)
-        self.comboBox.setCurrentText(simpleType.unit)
+        if simpleType is not None:
+            self.spinBox.setValue(simpleType.value)
+            self.comboBox.setCurrentText(simpleType.unit)
 
 
 # ----------------------------------------------------------------------------------------------------------------------

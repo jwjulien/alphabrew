@@ -23,6 +23,38 @@ class Ui_TabMash(object):
         TabMash.resize(763, 478)
         self.verticalLayout = QVBoxLayout(TabMash)
         self.verticalLayout.setObjectName(u"verticalLayout")
+        self.formLayout = QFormLayout()
+        self.formLayout.setObjectName(u"formLayout")
+        self.formLayout.setLabelAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
+        self.lbl_ambient = QLabel(TabMash)
+        self.lbl_ambient.setObjectName(u"lbl_ambient")
+
+        self.formLayout.setWidget(0, QFormLayout.LabelRole, self.lbl_ambient)
+
+        self.ambient = QSpinBox(TabMash)
+        self.ambient.setObjectName(u"ambient")
+        self.ambient.setMinimum(0)
+        self.ambient.setMaximum(120)
+        self.ambient.setValue(65)
+
+        self.formLayout.setWidget(0, QFormLayout.FieldRole, self.ambient)
+
+        self.lbl_ratio = QLabel(TabMash)
+        self.lbl_ratio.setObjectName(u"lbl_ratio")
+
+        self.formLayout.setWidget(1, QFormLayout.LabelRole, self.lbl_ratio)
+
+        self.ratio = QDoubleSpinBox(TabMash)
+        self.ratio.setObjectName(u"ratio")
+        self.ratio.setMinimum(0.750000000000000)
+        self.ratio.setMaximum(2.500000000000000)
+        self.ratio.setSingleStep(0.250000000000000)
+
+        self.formLayout.setWidget(1, QFormLayout.FieldRole, self.ratio)
+
+
+        self.verticalLayout.addLayout(self.formLayout)
+
         self.steps = QTableView(TabMash)
         self.steps.setObjectName(u"steps")
         sizePolicy = QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
@@ -67,6 +99,13 @@ class Ui_TabMash(object):
 
     def retranslateUi(self, TabMash):
         TabMash.setWindowTitle(QCoreApplication.translate("TabMash", u"Form", None))
+        self.lbl_ambient.setText(QCoreApplication.translate("TabMash", u"Ambient Temperature:", None))
+#if QT_CONFIG(tooltip)
+        self.ambient.setToolTip(QCoreApplication.translate("TabMash", u"Starting temperature of the grains and mash tun.", None))
+#endif // QT_CONFIG(tooltip)
+        self.ambient.setSuffix(QCoreApplication.translate("TabMash", u" \u00b0F", None))
+        self.lbl_ratio.setText(QCoreApplication.translate("TabMash", u"Strike Water/Grain Ratio:", None))
+        self.ratio.setSuffix(QCoreApplication.translate("TabMash", u" qt/lb", None))
         self.add.setText(QCoreApplication.translate("TabMash", u"Add Step", None))
         self.remove.setText(QCoreApplication.translate("TabMash", u"Remove Step", None))
     # retranslateUi

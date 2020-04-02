@@ -67,7 +67,6 @@ class Recipe(QtCore.QObject):
         self._equipment = Equipment()
         self._size = VolumeType(5, 'gal')
         self._boilTime = TimeType(60, 'min')
-        self._ambient = TemperatureType(70, 'F')
         self.notes = None
 
         self.fermentables = Fermentables()
@@ -153,17 +152,6 @@ class Recipe(QtCore.QObject):
     def size(self, value):
         if self._size != value:
             self._size = value
-            self.changed.emit()
-
-# ----------------------------------------------------------------------------------------------------------------------
-    @property
-    def ambient(self):
-        return self._ambient
-
-    @ambient.setter
-    def ambient(self, value):
-        if self._ambient != value:
-            self._ambient = value
             self.changed.emit()
 
 # ----------------------------------------------------------------------------------------------------------------------

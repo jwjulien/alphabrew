@@ -22,6 +22,8 @@
 # ======================================================================================================================
 # Imports
 # ----------------------------------------------------------------------------------------------------------------------
+import re
+
 from PySide2 import QtCore
 
 from GUI.Table.Sizing import Fit
@@ -48,7 +50,7 @@ class Column:
         ):
 
         self.attribute = attribute
-        self.heading = heading if heading is not None else attribute.title()
+        self.heading = heading if heading is not None else self._heading_from_attribute(attribute)
         self.default = default
         self.template = template
         self.size = size
@@ -57,6 +59,35 @@ class Column:
         self.hideLimited = hideLimited
 
 
+
+# ======================================================================================================================
+# Private Methods
+# ----------------------------------------------------------------------------------------------------------------------
+    @staticmethod
+    def _camel_case_split(identifier):
+        """Helper to take a string as an input, split each camelCase word into separate pieces.
+
+        "camelCase" would become ["camel", "Case"].
+        """
+        matches = re.finditer('.+?(?:(?<=[a-z])(?=[A-Z])|(?<=[A-Z])(?=[A-Z][a-z])|$)', identifier)
+        return [m.group(0) for m in matches]
+
+
+# ----------------------------------------------------------------------------------------------------------------------
+    @staticmethod
+    def _heading_from_attribute(attribute):
+        """Handy helper to convert an attribute string into a nice heading for the column in the table.  Takes the last
+        portion in the string after the dot (in the case of recursive attributes), splits camel case typing, and runs
+        that through the builting title() method to capitalize each word."""
+        tail = attribute.split('.')[-1]
+        words = Column._camel_case_split(tail)
+        spaced = ' '.join(words)
+        return spaced.title()
+
+
+
+# ======================================================================================================================
+# Public Methods
 # ----------------------------------------------------------------------------------------------------------------------
     def get_value(self, item):
         """Fetch the raw value of an attribute from the provided item.  Used to get the item for display and editing."""

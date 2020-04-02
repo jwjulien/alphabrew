@@ -42,7 +42,7 @@ class Hops(ListTableBase):
     Columns = [
         Column('amount', editable=True, hideLimited=True),
         Column('timing.use', 'Use In', align=QtCore.Qt.AlignLeft, editable=True, hideLimited=True),
-        Column('timing.duration', 'Duration', align=QtCore.Qt.AlignHCenter, editable=True, hideLimited=True),
+        Column('timing.duration', align=QtCore.Qt.AlignHCenter, editable=True, hideLimited=True),
         Column('_ibus', 'IBUs', template='%.1f IBUs', hideLimited=True),
         Column('name', size=Stretch, align=QtCore.Qt.AlignLeft),
         Column('htype', 'Type', align=QtCore.Qt.AlignLeft),

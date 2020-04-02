@@ -101,28 +101,15 @@ class Ui_TabRecipe(object):
 
         self.formLayout.setWidget(6, QFormLayout.FieldRole, self.time_boil)
 
-        self.lbl_ambient = QLabel(TabRecipe)
-        self.lbl_ambient.setObjectName(u"lbl_ambient")
-
-        self.formLayout.setWidget(7, QFormLayout.LabelRole, self.lbl_ambient)
-
-        self.ambient = QSpinBox(TabRecipe)
-        self.ambient.setObjectName(u"ambient")
-        self.ambient.setMinimum(0)
-        self.ambient.setMaximum(120)
-        self.ambient.setValue(65)
-
-        self.formLayout.setWidget(7, QFormLayout.FieldRole, self.ambient)
-
         self.lbl_notes = QLabel(TabRecipe)
         self.lbl_notes.setObjectName(u"lbl_notes")
 
-        self.formLayout.setWidget(8, QFormLayout.LabelRole, self.lbl_notes)
+        self.formLayout.setWidget(7, QFormLayout.LabelRole, self.lbl_notes)
 
         self.notes = QPlainTextEdit(TabRecipe)
         self.notes.setObjectName(u"notes")
 
-        self.formLayout.setWidget(8, QFormLayout.FieldRole, self.notes)
+        self.formLayout.setWidget(7, QFormLayout.FieldRole, self.notes)
 
 
         self.retranslateUi(TabRecipe)
@@ -144,11 +131,6 @@ class Ui_TabRecipe(object):
         self.size.setSuffix(QCoreApplication.translate("TabRecipe", u" gal", None))
         self.lbl_boil_time.setText(QCoreApplication.translate("TabRecipe", u"Boil Time:", None))
         self.time_boil.setSuffix(QCoreApplication.translate("TabRecipe", u" min", None))
-        self.lbl_ambient.setText(QCoreApplication.translate("TabRecipe", u"Ambient Temperature:", None))
-#if QT_CONFIG(tooltip)
-        self.ambient.setToolTip(QCoreApplication.translate("TabRecipe", u"Starting temperature of the grains and mash tun.", None))
-#endif // QT_CONFIG(tooltip)
-        self.ambient.setSuffix(QCoreApplication.translate("TabRecipe", u" \u00b0F", None))
         self.lbl_notes.setText(QCoreApplication.translate("TabRecipe", u"Notes:", None))
     # retranslateUi
 

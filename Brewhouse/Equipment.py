@@ -29,6 +29,7 @@ class Equipment:
     def __init__(self,
                  name='N/A',
                  mashTunVolume=5, # Gallons
+                 mashTunEquivVol=0.74, # Quarts
                  grainAbsorptionLoss=0.12, # Gallons per pound
                  boilOffRate=1.24, # Gallons per hour
                  coolingLoss=0, # Gallons
@@ -39,6 +40,7 @@ class Equipment:
     ):
         self.name = name
         self.mashTunVolume = mashTunVolume
+        self.mashTunEquivVol = mashTunEquivVol
         self.grainAbsorptionLoss = grainAbsorptionLoss
         self.boilOffRate = boilOffRate
         self.coolingLoss = coolingLoss

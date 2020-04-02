@@ -43,10 +43,10 @@ class Miscellanea(ListTableBase):
     Columns = [
         Column('name', size=Stretch, align=QtCore.Qt.AlignLeft, editable=True),
         Column('mtype', 'Type', align=QtCore.Qt.AlignCenter, editable=True),
-        Column('useFor', 'Use For', editable=True),
+        Column('useFor', editable=True),
         Column('amount', editable=True),
-        Column('timing.use', 'Use', editable=True),
-        Column('timing.duration', 'Duration', editable=True),
+        Column('timing.use', editable=True),
+        Column('timing.duration', editable=True),
     ]
 
 

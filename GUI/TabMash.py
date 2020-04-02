@@ -29,7 +29,7 @@ from GUI.Base.TabMash import Ui_TabMash
 from GUI.Delegates.ComboBoxDelegate import ComboBoxDelegate
 from GUI.Delegates.SimpleTypeDelegate import SimpleTypeDelegate
 from Model.MashStep import MashStep
-from Model.MeasurableUnits import TemperatureType, TimeType, VolumeType
+from Model.MeasurableUnits import TemperatureType, TimeType
 
 
 
@@ -54,16 +54,12 @@ class TabMash(QtWidgets.QWidget):
         self.ui.steps.setItemDelegateForColumn(1, delegate)
 
         # Add a delegate for editing the step temperature.
-        delegate = SimpleTypeDelegate(self, [VolumeType], decimals=1)
+        delegate = SimpleTypeDelegate(self, [TemperatureType], maximum=212, decimals=1)
         self.ui.steps.setItemDelegateForColumn(2, delegate)
 
-        # Add a delegate for editing the step temperature.
-        delegate = SimpleTypeDelegate(self, [TemperatureType], maximum=212, decimals=1)
-        self.ui.steps.setItemDelegateForColumn(3, delegate)
-
-        # Add a delegate for editing the step temperature.
+        # Add a delegate for editing the step time.
         delegate = SimpleTypeDelegate(self, [TimeType], decimals=1)
-        self.ui.steps.setItemDelegateForColumn(4, delegate)
+        self.ui.steps.setItemDelegateForColumn(3, delegate)
 
         # Setup add button with icon and connect an event handler.
         icon = qtawesome.icon('fa5s.plus')
@@ -74,6 +70,28 @@ class TabMash(QtWidgets.QWidget):
         icon = qtawesome.icon('fa5s.trash-alt')
         self.ui.remove.setIcon(icon)
         self.ui.remove.clicked.connect(self.on_remove)
+
+        # Setup temperature input to set the temperature of the grains and mash tun.
+        self.ui.ambient.setValue(self.recipe.mash.ambient.as_('F'))
+        self.ui.ambient.valueChanged.connect(self.on_ambient_changed)
+
+        # Setup input to get the desired mash thickness for the initial infusion.
+        self.ui.ratio.setValue(self.recipe.mash.ratio.as_('qt/lb'))
+        self.ui.ratio.valueChanged.connect(self.on_ratio_changed)
+
+
+# ----------------------------------------------------------------------------------------------------------------------
+    def on_ambient_changed(self, value):
+        """Fires when the user changes the ambient temperature."""
+        self.recipe.mash.ambient.value = value
+        self.recipe.mash.ambient.unit = 'F'
+
+
+# ----------------------------------------------------------------------------------------------------------------------
+    def on_ratio_changed(self, value):
+        """Fires when the user changes the value of the water/grain ratio spin box."""
+        self.recipe.mash.ratio.value = value
+        self.recipe.mash.ratio.unit = 'qt/lb'
 
 
 # ----------------------------------------------------------------------------------------------------------------------
@@ -89,7 +107,10 @@ class TabMash(QtWidgets.QWidget):
         """Fires when the user clicks the add button."""
         step = MashStep(self.recipe)
 
+        count = len(self.recipe.mash)
+        step.name = f'Rest {count + 1}'
         step.mtype = 'Infusion'
+        step.time = TimeType(0, 'min')
 
         self.recipe.mash.append(step)
 

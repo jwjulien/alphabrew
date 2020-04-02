@@ -1,14 +1,20 @@
 
 [[equipment]]
 name = 'Full System'
-mashTunVolume = 10
+mashTunVolume = 10 # Gallons
+
+# Mash Tun Initial Heat Absorption factor accounts for the thermal mass of the mash tun.
+# Expressed in terms of the amount of water with the same thermal mass as the mash tun.
+mashTunEquivVol = 0.74 # quarts
 
 
+
+# This is the water profile for Bay City Michigan as per the annual report.
 [water]
-Ca = 74
-Mg = 28
-Na = 6
-Cl = 10
-SO4 = 12
-HCO3 = 79
+Ca = 74 # PPM
+Mg = 28 # PPM
+Na = 6 # PPM
+Cl = 10 # PPM
+SO4 = 12 # PPM
+HCO3 = 79 # PPM
 pH = 7.6

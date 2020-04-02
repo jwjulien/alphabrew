@@ -103,6 +103,15 @@ class SimpleType:
         return self.value * numerator / denominator
 
 
+# ----------------------------------------------------------------------------------------------------------------------
+    def convert(self, desired):
+        """Same functionality as the "as_" method above, except that this will change the value stored into the
+        specified units.  Useful when looking to change the displayed value."""
+        self.value = self.as_(desired)
+        self.unit = desired
+        return self.value
+
+
 
 # ======================================================================================================================
 # Private Methods

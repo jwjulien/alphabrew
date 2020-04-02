@@ -191,7 +191,7 @@ class ListTableBase(QtCore.QAbstractTableModel):
         item = self[index.row()]
         column = self.columns[index.column()]
 
-        if role == QtCore.Qt.EditRole and column.editable:
+        if role == QtCore.Qt.EditRole:
             # Resize the column back to the configured width.
             if self.control is not None:
                 self.control.horizontalHeader().setSectionResizeMode(index.column(), self.columns[index.column()].size)

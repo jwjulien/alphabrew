@@ -66,7 +66,6 @@ class TabRecipe(QtWidgets.QWidget):
         self.ui.equipment.setCurrentText(self.recipe.equipment.name)
         self.ui.size.setValue(self.recipe.size.as_('gal'))
         self.ui.time_boil.setValue(self.recipe.boilTime.as_('min'))
-        self.ui.ambient.setValue(self.recipe.ambient.as_('F'))
         self.ui.notes.setPlainText(self.recipe.notes)
 
         # Connect events.
@@ -77,7 +76,6 @@ class TabRecipe(QtWidgets.QWidget):
         self.ui.equipment.currentIndexChanged.connect(self.on_equipment_changed)
         self.ui.size.valueChanged.connect(self.on_size_changed)
         self.ui.time_boil.valueChanged.connect(self.on_boilTime_changed)
-        self.ui.ambient.valueChanged.connect(self.on_ambient_changed)
         self.ui.notes.textChanged.connect(self.on_notes_changed)
 
 
@@ -124,13 +122,6 @@ class TabRecipe(QtWidgets.QWidget):
         """Fires when the user changes the boil time."""
         self.recipe.time_boil.value = value
         self.recipe.time_boil.unit = 'min'  # The GUI only works with minutes. #opinionated
-
-
-# ----------------------------------------------------------------------------------------------------------------------
-    def on_ambient_changed(self, value):
-        """Fires when the user changes the ambient temperature."""
-        self.recipe.ambient.value = value
-        self.recipe.ambient.unit = 'F'
 
 
 # ----------------------------------------------------------------------------------------------------------------------
