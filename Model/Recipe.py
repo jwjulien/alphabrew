@@ -420,6 +420,8 @@ class Recipe(QtCore.QObject):
             self.cultures.from_dict(self, ingredients['culture_additions'])
         self.notes = recipe.get('notes', '').replace('\\n', '\n')
 
+        self.mash.recalculate()
+
 
 # ----------------------------------------------------------------------------------------------------------------------
     def get_gravity(self, sugarWeight, wortVolume):

@@ -114,12 +114,12 @@ class Mash(ListTableBase):
         self.ambient = TemperatureType(json=data['grain_temperature'])
         if 'mash_steps' in data and data['mash_steps'] and 'water_grain_ratio' in data['mash_steps'][0]:
             self.ratio = SpecificVolumeType(json=data['mash_steps'][0]['water_grain_ratio'])
+
         self.items = []
         for child in data['mash_steps']:
             step = MashStep(self.recipe)
             step.from_dict(child)
             self.append(step)
-        self.recalculate()
 
 
 # ----------------------------------------------------------------------------------------------------------------------
@@ -128,7 +128,6 @@ class Mash(ListTableBase):
         # Can't do anything if there aren't any steps yet.
         if not self.items:
             return
-
         # Calculate the initial step without any previous step.
         previous = self.items[0].calculate(None)
 
