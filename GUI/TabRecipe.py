@@ -40,7 +40,7 @@ class TabRecipe(QtWidgets.QWidget):
         self.ui.setupUi(self)
 
         self.recipe = recipe
-        self.brewhouse =brewhouse
+        self.brewhouse = brewhouse
 
         self.styles = Styles.from_excel(workbook['Styles'])
 

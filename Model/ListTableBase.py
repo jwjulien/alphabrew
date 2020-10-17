@@ -213,7 +213,7 @@ class ListTableBase(QtCore.QAbstractTableModel):
 # ----------------------------------------------------------------------------------------------------------------------
     def from_excel(self, worksheet):
         """Overridden by child class to parse out data and populate this list from an Excel workbook."""
-        raise NotImplementedError(f'{self.__class__.name__} has not implemented a from_excel method')
+        raise NotImplementedError(f'{self.__class__.__name__} has not implemented a from_excel method')
 
 
 # ----------------------------------------------------------------------------------------------------------------------

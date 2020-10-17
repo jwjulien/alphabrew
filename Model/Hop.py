@@ -25,8 +25,6 @@
 import math
 from typing import Union
 
-from PySide2 import QtCore
-
 from Model.Timing import TimingType
 from Model import Selections
 from Model.MeasurableUnits import MassType, PercentType, VolumeType
@@ -36,7 +34,7 @@ from Model.MeasurableUnits import MassType, PercentType, VolumeType
 # ======================================================================================================================
 # Hop Class
 # ----------------------------------------------------------------------------------------------------------------------
-class Hop(QtCore.QObject):
+class Hop():
     def __init__(self,
                  recipe=None,
                  name=None,
@@ -54,8 +52,6 @@ class Hop(QtCore.QObject):
                  cohumulone=None,
                  myrcene=None,
                  notes=None):
-        super().__init__()
-
         self.recipe = recipe
         self.name: str = name
         self.amount: Union[MassType, VolumeType] = amount
@@ -74,11 +70,6 @@ class Hop(QtCore.QObject):
         self.notes: str = notes.replace('\\n', '\n') if notes else ''
 
         self._ibus = None
-
-
-# ======================================================================================================================
-# Properties
-# ----------------------------------------------------------------------------------------------------------------------
 
 
 

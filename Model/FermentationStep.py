@@ -22,8 +22,6 @@
 # ======================================================================================================================
 # Imports
 # ----------------------------------------------------------------------------------------------------------------------
-from PySide2 import QtCore
-
 from Model.MeasurableUnits import TemperatureType, TimeType
 
 
@@ -31,10 +29,8 @@ from Model.MeasurableUnits import TemperatureType, TimeType
 # ======================================================================================================================
 # Fermentation Step Class
 # ----------------------------------------------------------------------------------------------------------------------
-class FermentationStep(QtCore.QObject):
+class FermentationStep():
     def __init__(self, recipe=None, name=None, startTemperature=None, endTemperature=None, time=None):
-        super().__init__()
-
         self.recipe = recipe
         self.name = name
         self.startTemperature = startTemperature

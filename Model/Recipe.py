@@ -27,13 +27,14 @@ import json
 from PySide2 import QtCore
 
 from Model.Style import Style
+from Model.Waters import Waters
 from Model.Fermentables import Fermentables
 from Model.Miscellanea import Miscellanea
 from Model.Hops import Hops
 from Model.Cultures import Cultures
 from Model.Fermentation import Fermentation
 from Model.Mash import Mash
-from Model.MeasurableUnits import TemperatureType, TimeType, VolumeType
+from Model.MeasurableUnits import TimeType, VolumeType
 from Brewhouse import Equipment, Calibrations
 from Math import Gravity, Color
 
@@ -159,9 +160,12 @@ class Recipe(QtCore.QObject):
         # Determine how many gallons we expect to boil off over the time of the boil.
         boilOff = self.equipment.boilOffRate * self.boilTime.as_('hr')
 
+        # Gallons lost to the grains in the mash tun from absorption.
+        grainAbsorptionLoss = self.fermentables.mashWeight.as_('lb') * self.equipment.grainAbsorptionLoss
+
         # TODO: Review and add in other water losses between the start and end of the boil.
 
-        return self.totalWort + boilOff + hopWaterLoss
+        return self.totalWort + boilOff + hopWaterLoss+ grainAbsorptionLoss
 
 
 # ----------------------------------------------------------------------------------------------------------------------
@@ -311,6 +315,7 @@ class Recipe(QtCore.QObject):
         self._boilTime = TimeType(60, 'min')
         self.notes = None
 
+        self.waters = Waters()
         self.fermentables = Fermentables()
         self.misc = Miscellanea()
         self.hops = Hops()
@@ -323,6 +328,7 @@ class Recipe(QtCore.QObject):
         self.hops.changed.connect(self.changed.emit)
         self.misc.changed.connect(self.changed.emit)
         self.cultures.changed.connect(self.changed.emit)
+        self.waters.changed.connect(self.changed.emit)
         self.fermentation.changed.connect(self.changed.emit)
         self.mash.changed.connect(self.changed.emit)
 
@@ -348,11 +354,11 @@ class Recipe(QtCore.QObject):
                 'fermentable_additions': self.fermentables.to_dict(),
                 'hop_additions': self.hops.to_dict(),
                 'miscellaneous_additions': self.misc.to_dict(),
-                'culture_additions': self.cultures.to_dict()
+                'culture_additions': self.cultures.to_dict(),
+                'water_additions': self.waters.to_dict()
             },
             'mash': self.mash.to_dict(),
             'fermentation': self.fermentation.to_dict(),
-            'notes': self.notes.replace('\n', '\\n'),
             'boil': {
                 'pre_boil_size': {
                     'value': self.boilSize,
@@ -361,7 +367,20 @@ class Recipe(QtCore.QObject):
                 'boil_time': {
                     'value': self.boilTime.as_('min'),
                     'unit': 'min'
-                }
+                },
+                'boil_steps': [
+                    {
+                        'name': 'The boil.',
+                        'end_temperature': {
+                            'value': 70,
+                            'unit': 'F'
+                        },
+                        'start_gravity': {
+                            'value': self.boilGravity,
+                            'unit': 'sg'
+                        }
+                    }
+                ]
             },
             'original_gravity': {
                 'value': self.originalGravity,
@@ -387,6 +406,8 @@ class Recipe(QtCore.QObject):
         }
         if self.style:
             recipeJson['style'] = self.style.to_dict()
+        if self.notes:
+            recipeJson['notes'] = self.notes.replace('\n', '\\n')
         return json.dumps({
             'beerjson': {
                 'version': 2,
@@ -428,9 +449,13 @@ class Recipe(QtCore.QObject):
             self.misc.from_dict(self, ingredients['miscellaneous_additions'])
         if 'culture_additions' in ingredients:
             self.cultures.from_dict(self, ingredients['culture_additions'])
-        self.notes = recipe.get('notes', '').replace('\\n', '\n')
+        if 'water_additions' in ingredients:
+            self.waters.from_dict(self, ingredients['water_additions'])
+        if 'notes' in recipe:
+            self.notes = recipe['notes'].replace('\\n', '\n')
 
         self.mash.recalculate()
+        self.waters.calculate_percentages()
         self.loaded.emit()
 
 

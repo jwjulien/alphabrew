@@ -22,8 +22,6 @@
 # ======================================================================================================================
 # Imports
 # ----------------------------------------------------------------------------------------------------------------------
-from PySide2 import QtCore
-
 from Model.MeasurableUnits import TemperatureType, SpecificVolumeType, TimeType, VolumeType
 
 
@@ -31,10 +29,8 @@ from Model.MeasurableUnits import TemperatureType, SpecificVolumeType, TimeType,
 # ======================================================================================================================
 # Mash Step Class
 # ----------------------------------------------------------------------------------------------------------------------
-class MashStep(QtCore.QObject):
+class MashStep():
     def __init__(self, recipe=None, name=None, mtype=None, temperature=None, time=None):
-        super().__init__()
-
         self.recipe = recipe
         self.name = name
         self.mtype = mtype
@@ -45,6 +41,18 @@ class MashStep(QtCore.QObject):
         self.infusionVolume = None
         self.totalVolume = None
         self.ratio = None
+
+
+
+# ======================================================================================================================
+# Properties
+# ----------------------------------------------------------------------------------------------------------------------
+    @property
+    def postTemperature(self):
+        hours = self.time.as_('hr')
+        degrees = self.recipe.equipment.mashTunHeatLoss * hours
+        tempLoss = TemperatureType(degrees, 'F')
+        return self.temperature - tempLoss
 
 
 
@@ -157,9 +165,9 @@ class MashStep(QtCore.QObject):
             self.totalVolume = previous.totalVolume + self.infusionVolume
 
             target = self.temperature.as_('F')
-            initial = previous.temperature.as_('F')
+            initial = previous.postTemperature.as_('F')
             existing = previous.totalVolume.as_('qt')
-            mashout = temperature(initial, target, gallons / 4, existing)
+            mashout = temperature(initial, target, gallons * 4, existing)
             self.infusionTemperature = TemperatureType(mashout, 'F')
 
         # Calculate the ratio of this step.

@@ -22,7 +22,6 @@
 # ======================================================================================================================
 # Imports
 # ----------------------------------------------------------------------------------------------------------------------
-from PySide2 import QtCore
 from typing import Union
 
 from Model.Timing import TimingType
@@ -34,7 +33,7 @@ from Model.MeasurableUnits import MassType, UnitType, VolumeType
 # ======================================================================================================================
 # Miscellaneous Class
 # ----------------------------------------------------------------------------------------------------------------------
-class Miscellaneous(QtCore.QObject):
+class Miscellaneous():
     def __init__(self,
                  recipe=None,
                  name=None,
@@ -42,8 +41,6 @@ class Miscellaneous(QtCore.QObject):
                  useFor=None,
                  timing=None,
                  amount=None):
-        super().__init__()
-
         self.recipe = recipe
         self.name: str = name
         self.mtype: str = mtype

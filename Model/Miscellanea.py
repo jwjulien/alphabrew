@@ -22,15 +22,12 @@
 # ======================================================================================================================
 # Imports
 # ----------------------------------------------------------------------------------------------------------------------
-from PySide2 import QtCore, QtWidgets
-from typing import List
+from PySide2 import QtCore
 
 from Model.ListTableBase import ListTableBase
 from GUI.Table.Column import Column
 from GUI.Table.Sizing import Stretch
 from Model.Miscellaneous import Miscellaneous
-from Model import Selections
-from Model.MeasurableUnits import MassType, TimeType, UnitType, VolumeType
 
 
 
@@ -52,9 +49,28 @@ class Miscellanea(ListTableBase):
 
 
 # ======================================================================================================================
+# Properties
+# ----------------------------------------------------------------------------------------------------------------------
+    @property
+    def salts(self):
+        """Run through the items in this list a return a list of items that are marked as "water agents" without "acid"
+        in there names."""
+        return [item for item in self.items if item.mtype == 'Water Agent' and 'acid' not in item.name.lower()]
+
+
+# ----------------------------------------------------------------------------------------------------------------------
+    @property
+    def acids(self):
+        """Run through the items in this list a return a list of items that are marked as "water agents" with "acid"
+        in there names."""
+        return [item for item in self.items if item.mtype == 'Water Agent' and 'acid' in item.name.lower()]
+
+
+
+# ======================================================================================================================
 # Other Methods
 # ----------------------------------------------------------------------------------------------------------------------
-    def frmo_excel(self, worksheet):
+    def from_excel(self, worksheet):
         """Misc item are not defined in Excel libraries."""
         raise NotImplementedError('Miscellaneous items are not defined in Excel libraries.')
 

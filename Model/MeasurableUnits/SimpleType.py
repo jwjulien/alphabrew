@@ -137,11 +137,13 @@ class SimpleType:
         self._ensure_same_type(other)
         return self.root == other.root
 
+
 # ----------------------------------------------------------------------------------------------------------------------
     def __ne__(self, other):
         """Compares two values to ensure that they are not equal."""
         self._ensure_same_type(other)
         return self.root != other.root
+
 
 # ----------------------------------------------------------------------------------------------------------------------
     def __gt__(self, other):
@@ -150,12 +152,14 @@ class SimpleType:
         # can both be used with fermentables and we want to sort them together).
         return self.root > other.root
 
+
 # ----------------------------------------------------------------------------------------------------------------------
     def __lt__(self, other):
         """Compares two values to ensure that self is less than other."""
         # Deliberately don't care about type here because we want to be able to sort mixed data (i.e. Mass and Volume
         # can both be used with fermentables and we want to sort them together).
         return self.root < other.root
+
 
 # ----------------------------------------------------------------------------------------------------------------------
     def __ge__(self, other):
@@ -164,6 +168,7 @@ class SimpleType:
         # can both be used with fermentables and we want to sort them together).
         return self.root >= other.root
 
+
 # ----------------------------------------------------------------------------------------------------------------------
     def __le__(self, other):
         """Compares two values to ensure that self is less than or equal to other."""
@@ -171,11 +176,13 @@ class SimpleType:
         # can both be used with fermentables and we want to sort them together).
         return self.root <= other.root
 
+
 # ----------------------------------------------------------------------------------------------------------------------
     def __add__(self, other):
         """Add the two values together and return the result in a new instance with the units of self."""
         self._ensure_same_type(other)
         return self.__class__(self.value + other.as_(self.unit), self.unit)
+
 
 # ----------------------------------------------------------------------------------------------------------------------
     def __sub__(self, other):
@@ -183,11 +190,26 @@ class SimpleType:
         self._ensure_same_type(other)
         return self.__class__(self.value - other.as_(self.unit), self.unit)
 
+
 # ----------------------------------------------------------------------------------------------------------------------
     def __mul__(self, other):
         """Multiply other by self and return the result in a new instance with the units of self."""
-        self._ensure_same_type(other)
-        return self.__class__(self.value * other.as_(self.unit), self.unit)
+        if isinstance(other, (int, float)):
+            # Scaler multiplication.
+            multiplier = other
+
+        else:
+            try:
+                # Percentage type?
+                multiplier = other.as_('%') / 100
+
+            except KeyError:
+                # If not scaler or percentage, then the type must be identical - throw an exception when not.
+                self._ensure_same_type(other)
+                multiplier = other.as_(self.unit)
+
+        return self.__class__(self.value * multiplier, self.unit)
+
 
 # ----------------------------------------------------------------------------------------------------------------------
     def __div__(self, other):

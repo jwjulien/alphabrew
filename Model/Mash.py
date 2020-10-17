@@ -26,7 +26,7 @@ from PySide2 import QtCore
 
 from Model.ListTableBase import ListTableBase
 from Model.MashStep import MashStep
-from Model.MeasurableUnits import SpecificVolumeType, TemperatureType
+from Model.MeasurableUnits import SpecificVolumeType, TemperatureType, VolumeType
 from GUI.Table.Column import Column
 from GUI.Table.Sizing import Stretch
 
@@ -82,6 +82,13 @@ class Mash(ListTableBase):
         if self._ratio != value:
             self._ratio = value
             self.changed.emit()
+
+
+# ----------------------------------------------------------------------------------------------------------------------
+    @property
+    def totalWater(self):
+        """Calculates the total water required for all of the mashing steps."""
+        return sum([step.infusionVolume for step in self if step.infusionVolume is not None], VolumeType(0, 'gal'))
 
 
 

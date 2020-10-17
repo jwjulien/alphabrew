@@ -34,7 +34,8 @@ from GUI.Base.MainWindow import Ui_MainWindow
 from GUI.TabRecipe import TabRecipe
 from GUI.TabFermentables import TabFermentables
 from GUI.TabMiscellaneous import TabMiscellaneous
-from GUI.TabWater import TabWater
+from GUI.TabWaters import TabWaters
+from GUI.TabSalts import TabSalts
 from GUI.TabMash import TabMash
 from GUI.TabHops import TabHops
 from GUI.TabCultures import TabCultures
@@ -96,8 +97,11 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.tab_recipe = TabRecipe(self, self.recipe, self.brewhouse, workbook)
         self.ui.tabs.addTab(self.ui.tab_recipe, "Recipe")
 
-        self.ui.tab_water = TabWater(self, self.recipe, workbook)
-        self.ui.tabs.addTab(self.ui.tab_water, "Water")
+        self.ui.tab_waters = TabWaters(self, self.recipe, workbook)
+        self.ui.tabs.addTab(self.ui.tab_waters, "Waters")
+
+        self.ui.tab_salts = TabSalts(self, self.recipe)
+        self.ui.tabs.addTab(self.ui.tab_salts, "Salts")
 
         self.ui.tab_fermentables = TabFermentables(self, self.recipe, workbook)
         self.ui.tabs.addTab(self.ui.tab_fermentables, "Fermentables")
@@ -166,11 +170,13 @@ class MainWindow(QtWidgets.QMainWindow):
 # ----------------------------------------------------------------------------------------------------------------------
     def on_file_open(self):
         """Fires when the user requests to open a recipe from local file."""
-        filename, filters = QtWidgets.QFileDialog.getOpenFileName(self, "Open Recipe", filter="BeerJSON (*.json)")
-        if filename:
-            self.filename = filename
-            with open(filename) as handle:
-                self.recipe.from_beerxml(handle.read())
+        if self._warn_unsaved():
+            self.recipe.clear()
+            filename, filters = QtWidgets.QFileDialog.getOpenFileName(self, "Open Recipe", filter="BeerJSON (*.json)")
+            if filename:
+                self.filename = filename
+                with open(filename) as handle:
+                    self.recipe.from_beerxml(handle.read())
 
 
 # ----------------------------------------------------------------------------------------------------------------------

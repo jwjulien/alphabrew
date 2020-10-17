@@ -1,7 +1,7 @@
 # ======================================================================================================================
-#        File:  Brewhouse/Equipment.py
+#        File:  Model/MeasureableUnits/ConcentrationType.py
 #     Project:  Brewing Recipe Planner
-# Description:  Provides the definition for a system setup and the associated settings and calibrations.
+# Description:  Provides a base class for working with time types in recipes which can have differing units.
 #      Author:  Jared Julien <jaredjulien@gmail.com>
 #   Copyright:  (c) 2020 Jared Julien
 # ----------------------------------------------------------------------------------------------------------------------
@@ -20,36 +20,24 @@
 # ----------------------------------------------------------------------------------------------------------------------
 
 # ======================================================================================================================
-# Equipment Class
+# Imports
 # ----------------------------------------------------------------------------------------------------------------------
-class Equipment:
-    """Provides the definition for a system setup and the associated settings and calibrations.  Represents one
-    particular equipment profile/setup for a brewing system.  A single Brewhouse may contain more than one Equipment
-    profile."""
-    def __init__(self,
-                 name='N/A',
-                 mashTunVolume=5, # Gallons
-                 mashTunEquivVol=0.74, # Quarts
-                 mashTunHeatLoss=2, # Deg F per hour
-                 grainAbsorptionLoss=0.12, # Gallons per pound
-                 boilOffRate=1.24, # Gallons per hour
-                 coolingLoss=0, # Gallons
-                 strikeHltDeadspace=0, # Gallons
-                 spargeHltDeadspace=0, # Gallons
-                 kettleDeadspace=0, # Gallons
-                 siphonLoss=0, # Gallons
-    ):
-        self.name = name
-        self.mashTunVolume = mashTunVolume
-        self.mashTunEquivVol = mashTunEquivVol
-        self.mashTunHeatLoss = mashTunHeatLoss
-        self.grainAbsorptionLoss = grainAbsorptionLoss
-        self.boilOffRate = boilOffRate
-        self.coolingLoss = coolingLoss
-        self.strikeHltDeadspace = strikeHltDeadspace
-        self.spargeHltDeadspace = spargeHltDeadspace
-        self.kettleDeadspace = kettleDeadspace
-        self.siphonLoss = siphonLoss
+from Model.MeasurableUnits.SimpleType import SimpleType
+
+
+
+# ======================================================================================================================
+# ConcentrationType Class
+# ----------------------------------------------------------------------------------------------------------------------
+class ConcentrationType(SimpleType):
+    """Extends the SimpleType class to provide a class for working with ConcentrationTypes as defined in the BeerJson
+    standard 2.0 draft."""
+
+    Types = {
+        'ppm': 1,
+        'ppb': 1000,
+        'mg/l': 1,
+    }
 
 
 

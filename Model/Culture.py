@@ -24,8 +24,6 @@
 # ----------------------------------------------------------------------------------------------------------------------
 from typing import Union
 
-from PySide2 import QtCore
-
 from Model.MeasurableUnits import MassType, UnitType, VolumeType, PercentRangeType
 from Model import Selections
 
@@ -34,7 +32,7 @@ from Model import Selections
 # ======================================================================================================================
 # Culture Class
 # ----------------------------------------------------------------------------------------------------------------------
-class Culture(QtCore.QObject):
+class Culture():
     def __init__(self,
                  recipe=None,
                  name=None,
@@ -45,8 +43,6 @@ class Culture(QtCore.QObject):
                  productId=None,
                  attenuationRange=None,
                  notes=None):
-        super().__init__()
-
         self.recipe = recipe
         self.name: str = name
         self.amount: Union[VolumeType, MassType, UnitType] = amount

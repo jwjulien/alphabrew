@@ -26,6 +26,7 @@ from .AcidityType import AcidityType
 from .BitternessType import BitternessType
 from .CarbonationType import CarbonationType
 from .ColorType import ColorType
+from .ConcentrationType import ConcentrationType
 from .DiastaticPowerType import DiastaticPowerType
 from .GravityType import GravityType
 from .MassType import MassType

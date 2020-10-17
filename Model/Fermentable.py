@@ -24,8 +24,6 @@
 # ----------------------------------------------------------------------------------------------------------------------
 from typing import Union
 
-from PySide2 import QtCore, QtWidgets
-
 from Model.MeasurableUnits import ColorType, DiastaticPowerType, MassType, PercentType, VolumeType
 from Model import Selections
 
@@ -34,7 +32,7 @@ from Model import Selections
 # ======================================================================================================================
 # Fermentable Class
 # ----------------------------------------------------------------------------------------------------------------------
-class Fermentable(QtCore.QObject):
+class Fermentable():
     def __init__(self,
                  recipe=None,
                  name=None,
@@ -53,8 +51,6 @@ class Fermentable(QtCore.QObject):
                  addAfterBoil=None,
                  mashed=None,
                  notes=None):
-        super().__init__()
-
         self.recipe = recipe
         self.name: str = name
         self.amount: Union[MassType, VolumeType] = amount

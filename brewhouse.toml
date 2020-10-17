@@ -9,12 +9,25 @@ mashTunEquivVol = 0.74 # quarts
 
 
 
-# This is the water profile for Bay City Michigan as per the annual report.
-[water]
-Ca = 74 # PPM
-Mg = 28 # PPM
-Na = 6 # PPM
-Cl = 10 # PPM
-SO4 = 12 # PPM
-HCO3 = 79 # PPM
-pH = 7.6
+# This is the water profile for Bay City Michigan as per an analysis commissioned from Ward Labratories on 2020-03-31.
+[[water]]
+source = "Bay City"
+report = "Ward Labratories"
+date = "2020-03-31"
+Ca = 33.4 # PPM
+Mg = 8 # PPM
+Na = 7 # PPM
+Cl = 11 # PPM
+SO4 = 6 # PPM
+HCO3 = 107 # PPM
+pH = 7.9
+
+[[water]]
+source = "Distilled"
+Ca = 0
+Mg = 0
+Na = 0
+Cl = 0
+SO4 = 0
+HCO3 = 0
+pH = 7
