@@ -130,7 +130,6 @@ class Water():
         except ZeroDivisionError:
             # We get a divide by zero error when the mash has not been calculated yet.
             self.percentage = PercentType(100 / len(self.recipe.waters), '%')
-        print('Water: ', self)
 
 
 

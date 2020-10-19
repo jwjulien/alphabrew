@@ -101,6 +101,16 @@ class ListTableBase(QtCore.QAbstractTableModel):
 
 
 # ----------------------------------------------------------------------------------------------------------------------
+    def indexOf(self, item):
+        """Scans the list and returns the index of the provided item or None if the item is not in the list."""
+        for idx, test in enumerate(self.items):
+            if test == item:
+                return idx
+        return None
+
+
+
+# ----------------------------------------------------------------------------------------------------------------------
     def __getitem__(self, key: int):
         """A convenience function to allow array like access of items in this model."""
         return self.items[key]

@@ -48,11 +48,8 @@ class TabMiscellaneous(QtWidgets.QWidget):
 
         # Store the recipe with which these misc items are associated.
         self.recipe = recipe
-
-        # Setup the miscellaneous ingredient table at the top of the tab.
-        self.ui.ingredients.setModel(self.recipe.misc)
-        self.recipe.misc.set_control(self.ui.ingredients)
-        self.ui.ingredients.selectionModel().selectionChanged.connect(self.on_selection_change)
+        self.recipe.loaded.connect(self.on_load)
+        self.on_load()
 
         # Setup a delegates to allow editing of fields inside of the table.
         delegate = ComboBoxDelegate(self, ['Spice', 'Fining', 'Water Agent', 'Herb', 'Flavor', 'Wood', 'Other'])
@@ -79,6 +76,14 @@ class TabMiscellaneous(QtWidgets.QWidget):
 
 
 # ----------------------------------------------------------------------------------------------------------------------
+    def on_load(self):
+        """Fires when the recipe gets loaded to re-associate the recipe model with the Qt table in this tab."""
+        self.ui.ingredients.setModel(self.recipe.misc)
+        self.ui.ingredients.selectionModel().selectionChanged.connect(self.on_selection_change)
+        self.recipe.misc.set_control(self.ui.ingredients)
+
+
+# ----------------------------------------------------------------------------------------------------------------------
     def on_selection_change(self):
         """Fires when the user makes a selection in the top table."""
         selection = self.ui.ingredients.selectionModel().selectedIndexes()
@@ -90,7 +95,7 @@ class TabMiscellaneous(QtWidgets.QWidget):
     def on_add(self):
         """Fires when the user clicks the add button."""
         misc = Miscellaneous(self.recipe)
-        misc.amount = MassType(0, 'lb')
+        misc.amount = UnitType(1, 'each')
         misc.timing = TimingType(duration=TimeType(0, 'min'))
         self.recipe.misc.append(misc)
 

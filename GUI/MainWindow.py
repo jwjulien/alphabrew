@@ -259,7 +259,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.ibu_gu.setValue(self.recipe.ibuGu)
 
         # Output numbers for the calculated values.
-        self.ui.calcBoilSize.setText(f'{self.recipe.boilSize:.1f} gal')
+        self.ui.calcBoilSize.setText(f'{self.recipe.boilSize.as_("gal"):.1f} gal')
         self.ui.calcBoilSg.setText(f'{self.recipe.boilGravity:.3f}')
         self.ui.calcCalories.setText(f'{self.recipe.calories:.0f} / 16oz')
 

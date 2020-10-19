@@ -55,7 +55,21 @@ class Miscellanea(ListTableBase):
     def salts(self):
         """Run through the items in this list a return a list of items that are marked as "water agents" without "acid"
         in there names."""
-        return [item for item in self.items if item.mtype == 'Water Agent' and 'acid' not in item.name.lower()]
+        return [item for item in self.items if item.mtype.lower() == 'water agent' and 'acid' not in item.name.lower()]
+
+
+# ----------------------------------------------------------------------------------------------------------------------
+    @property
+    def mashSalts(self):
+        """Filter the salts down to just those in the mash."""
+        return [salt for salt in self.salts if salt.timing.use.lower() == 'mash']
+
+
+# ----------------------------------------------------------------------------------------------------------------------
+    @property
+    def kettleSalts(self):
+        """Filter the salts down to just those in the kettle/boil."""
+        return [salt for salt in self.salts if salt.timing.use.lower() == 'boil']
 
 
 # ----------------------------------------------------------------------------------------------------------------------
@@ -63,7 +77,7 @@ class Miscellanea(ListTableBase):
     def acids(self):
         """Run through the items in this list a return a list of items that are marked as "water agents" with "acid"
         in there names."""
-        return [item for item in self.items if item.mtype == 'Water Agent' and 'acid' in item.name.lower()]
+        return [item for item in self.items if item.mtype.lower() == 'water agent' and 'acid' in item.name.lower()]
 
 
 

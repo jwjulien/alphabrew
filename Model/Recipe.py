@@ -49,6 +49,7 @@ SucroseDensity_LbPerGal = 13.19092344776
 
 
 
+
 # ======================================================================================================================
 # Recipe Class
 # ----------------------------------------------------------------------------------------------------------------------
@@ -151,6 +152,24 @@ class Recipe(QtCore.QObject):
 # Calculated Properties
 # ----------------------------------------------------------------------------------------------------------------------
     @property
+    def strikeVolume(self):
+        """Calculates the volume of water used in the mash at the configured mash ratio with the amount of fermentables
+        in the recipe."""
+        weight = self.fermentables.mashWeight.as_('lb')
+        ratio = self.mash.ratio.as_('qt/lb')
+        quarts = weight * ratio
+        return VolumeType(quarts, 'qt')
+
+
+# ----------------------------------------------------------------------------------------------------------------------
+    @property
+    def spargeVolume(self):
+        """Calculates the volume of water used in the sparge."""
+        return self.boilSize - self.strikeVolume
+
+
+# ----------------------------------------------------------------------------------------------------------------------
+    @property
     def boilSize(self):
         """Calculates and returns to total wort volume to be collected in the boil kettle during the lautering process.
         """
@@ -165,7 +184,7 @@ class Recipe(QtCore.QObject):
 
         # TODO: Review and add in other water losses between the start and end of the boil.
 
-        return self.totalWort + boilOff + hopWaterLoss+ grainAbsorptionLoss
+        return VolumeType(self.totalWort + boilOff + hopWaterLoss + grainAbsorptionLoss, 'gal')
 
 
 # ----------------------------------------------------------------------------------------------------------------------
@@ -235,7 +254,7 @@ class Recipe(QtCore.QObject):
 
         sugar -= self.fermentables.lateAdditionSugar
 
-        return self.get_gravity(sugar, self.boilSize)
+        return self.get_gravity(sugar, self.boilSize.as_('gal'))
 
 
 # ----------------------------------------------------------------------------------------------------------------------
@@ -361,7 +380,7 @@ class Recipe(QtCore.QObject):
             'fermentation': self.fermentation.to_dict(),
             'boil': {
                 'pre_boil_size': {
-                    'value': self.boilSize,
+                    'value': self.boilSize.as_('gal'),
                     'unit': 'gal'
                 },
                 'boil_time': {

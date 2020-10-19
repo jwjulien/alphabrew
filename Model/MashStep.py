@@ -133,7 +133,7 @@ class MashStep():
         if previous is None:
             # This is the first step, calculate it based upon some of the other factors instead of previous step.
             # Calculate the strike volume from grain bill and specified ratio.
-            quarts = mashWeight * self.recipe.mash.ratio.as_('qt/lb')
+            quarts = self.recipe.strikeVolume.as_('qt')
             self.infusionVolume = VolumeType(quarts, 'qt')
             self.infusionVolume.convert('gal')
             self.totalVolume = self.infusionVolume.copy()
@@ -160,7 +160,7 @@ class MashStep():
         else:
             # Compute the temperature of the final infusion based upon the remaining quantity of water.
 
-            gallons = self.recipe.boilSize - previous.totalVolume.as_('gal')
+            gallons = self.recipe.boilSize.as_('gal') - previous.totalVolume.as_('gal')
             self.infusionVolume = VolumeType(gallons, 'gal')
             self.totalVolume = previous.totalVolume + self.infusionVolume
 

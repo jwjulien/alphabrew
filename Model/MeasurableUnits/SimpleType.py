@@ -212,11 +212,43 @@ class SimpleType:
 
 
 # ----------------------------------------------------------------------------------------------------------------------
-    def __div__(self, other):
+    def __truediv__(self, other):
         """Divide other by self and return the result in a new instance with the units of self."""
-        self._ensure_same_type(other)
-        return self.__class__(self.value / other.as_(self.unit), self.unit)
+        if isinstance(other, (int, float)):
+            # Scaler division.
+            denominator = other
 
+        else:
+            try:
+                # Percentage type?
+                denominator = other.as_('%') / 100
+
+            except KeyError:
+                # If not scaler or percentage, then the type must be identical - throw an exception when not.
+                self._ensure_same_type(other)
+                denominator = other.as_(self.unit)
+
+        return self.__class__(self.value / denominator, self.unit)
+
+
+# ----------------------------------------------------------------------------------------------------------------------
+    def __iadd__(self, other):
+        return self + other
+
+
+# ----------------------------------------------------------------------------------------------------------------------
+    def __isub__(self, other):
+        return self - other
+
+
+# ----------------------------------------------------------------------------------------------------------------------
+    def __imul__(self, other):
+        return self * other
+
+
+# ----------------------------------------------------------------------------------------------------------------------
+    def __itruediv__(self, other):
+        return self / other
 
 
 # End of File

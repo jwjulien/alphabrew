@@ -29,7 +29,7 @@ from GUI.Base.TabIngredients import Ui_TabIngredients
 from GUI.DialogFermentable import DialogFermentable
 from GUI.Delegates.SimpleTypeDelegate import SimpleTypeDelegate
 from Model.Fermentables import Fermentables
-from Model.MeasurableUnits import MassType, VolumeType
+from Model.MeasurableUnits import MassType
 
 
 

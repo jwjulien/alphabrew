@@ -57,13 +57,15 @@ class Miscellaneous():
         """Convert this misc into a Python dictionary that can be used in assembling a BeerJSON format file.
 
         Returns a BeerJSON MiscellaneousType compatible dictionary."""
-        return {
+        json = {
             'name': self.name,
             'type': self.mtype.lower(),
-            'use_for': self.useFor,
             'amount': self.amount.to_dict(),
             'timing': self.timing.to_dict()
         }
+        if self.useFor is not None:
+            json['use_for'] = self.useFor
+        return json
 
 
 # ----------------------------------------------------------------------------------------------------------------------
@@ -71,7 +73,7 @@ class Miscellaneous():
         """Populate the data in this instance from the provided BeerJSON format dict."""
         self.name = data['name']
         self.mtype = data['type'].title()
-        self.useFor = data['use_for']
+        self.useFor = data.get('use_for')
         amount = data['amount']
         self.amount = Selections.one_of(amount['value'], amount['unit'], MassType, VolumeType, UnitType)
 
