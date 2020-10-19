@@ -35,30 +35,45 @@ class Water():
     def __init__(self,
                  recipe=None,
                  name=None,
+                 amount=None,
                  calcium=None,
                  magnesium=None,
                  sodium=None,
                  chloride=None,
                  sulfate=None,
                  bicarbonate=None,
-                 ph=None,
-                 percentage=None,
+                 ph=7.0,
                  notes=None):
         self.recipe = recipe
         self.name: str = name
-        self.calcium: ConcentrationType = calcium
-        self.magnesium: ConcentrationType = magnesium
-        self.sodium: ConcentrationType = sodium
-        self.chloride: ConcentrationType = chloride
-        self.sulfate: ConcentrationType = sulfate
-        self.bicarbonate: ConcentrationType = bicarbonate
+        self.amount: VolumeType = amount
+        self.calcium: ConcentrationType = calcium if calcium is not None else ConcentrationType(0, 'ppm')
+        self.magnesium: ConcentrationType = magnesium if magnesium is not None else ConcentrationType(0, 'ppm')
+        self.sodium: ConcentrationType = sodium if sodium is not None else ConcentrationType(0, 'ppm')
+        self.chloride: ConcentrationType = chloride if chloride is not None else ConcentrationType(0, 'ppm')
+        self.sulfate: ConcentrationType = sulfate if sulfate is not None else ConcentrationType(0, 'ppm')
+        self.bicarbonate: ConcentrationType = bicarbonate if bicarbonate is not None else ConcentrationType(0, 'ppm')
         self.ph: float = ph
-        self.percentage: PercentType = percentage
         self.notes: str = notes
 
-        # This tool works in percentages, however, this is used to hold the amount read in from BeerJSON when parsing a
-        # recipe as the total amount is required before the percentage can be determined.
-        self._amount: VolumeType = None
+
+
+
+# ======================================================================================================================
+# Properties
+# ----------------------------------------------------------------------------------------------------------------------
+    @property
+    def percentage(self):
+        """Calculates the percentage of this water based upon the total amount of water needed."""
+        try:
+            percent = self.amount.as_('gal') / self.recipe.mash.totalWater.as_('gal')
+
+        except ZeroDivisionError:
+            # We get a divide by zero error when the mash has not been calculated yet.  Default to zero percent
+            # so that it remains obvious theres an issue.
+            percent = 0
+
+        return PercentType(percent * 100, '%')
 
 
 
@@ -85,10 +100,7 @@ class Water():
         """Convert this misc into a Python dictionary that can be used in assembling a BeerJSON format file.
 
         Returns a BeerJSON Water Type compatible dictionary."""
-        amount = VolumeType(0, 'gal')
-        if self.recipe is not None and self.percentage is not None:
-            amount.value = self.recipe.mash.totalWater.as_('gal') * self.percentage.as_('%') / 100
-        return {
+        water = {
             'name': self.name,
             'calcium': self.calcium.to_dict(),
             'magnesium': self.magnesium.to_dict(),
@@ -97,9 +109,11 @@ class Water():
             'sulfate': self.sulfate.to_dict(),
             'bicarbonate': self.bicarbonate.to_dict(),
             'pH': self.ph,
-            'amount': amount.to_dict(),
-            'notes': self.notes.replace('\n', '\\n')
+            'amount': self.amount.to_dict(),
         }
+        if self.notes is not None:
+            water['notes'] = self.notes.replace('\n', '\\n')
+        return water
 
 
 # ----------------------------------------------------------------------------------------------------------------------
@@ -114,22 +128,10 @@ class Water():
         self.bicarbonate = ConcentrationType(json=data['bicarbonate'])
         if 'pH' in data:
             self.ph = data['pH']
-        self._amount = VolumeType(json=data['amount'])
+        self.amount = VolumeType(json=data['amount'])
         if 'notes' in data:
             self.notes = data['notes'].replace('\\n', '\n')
 
-
-# ----------------------------------------------------------------------------------------------------------------------
-    def calculate_percentage(self):
-        """Called after the Waters object loads all of the waters from JSON to have this instance calculate it's
-        percentage of the total water in this recipe."""
-        try:
-            percent = self._amount.as_('gal') / self.recipe.mash.totalWater.as_('gal') * 100
-            self.percentage = PercentType(percent, '%')
-
-        except ZeroDivisionError:
-            # We get a divide by zero error when the mash has not been calculated yet.
-            self.percentage = PercentType(100 / len(self.recipe.waters), '%')
 
 
 

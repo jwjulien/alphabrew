@@ -165,12 +165,12 @@ class Recipe(QtCore.QObject):
     @property
     def spargeVolume(self):
         """Calculates the volume of water used in the sparge."""
-        return self.boilSize - self.strikeVolume
+        return self.boilVolume - self.strikeVolume
 
 
 # ----------------------------------------------------------------------------------------------------------------------
     @property
-    def boilSize(self):
+    def boilVolume(self):
         """Calculates and returns to total wort volume to be collected in the boil kettle during the lautering process.
         """
         # Determine how much water is needed to account for loss to the hops.
@@ -254,7 +254,7 @@ class Recipe(QtCore.QObject):
 
         sugar -= self.fermentables.lateAdditionSugar
 
-        return self.get_gravity(sugar, self.boilSize.as_('gal'))
+        return self.get_gravity(sugar, self.boilVolume.as_('gal'))
 
 
 # ----------------------------------------------------------------------------------------------------------------------
@@ -380,7 +380,7 @@ class Recipe(QtCore.QObject):
             'fermentation': self.fermentation.to_dict(),
             'boil': {
                 'pre_boil_size': {
-                    'value': self.boilSize.as_('gal'),
+                    'value': self.boilVolume.as_('gal'),
                     'unit': 'gal'
                 },
                 'boil_time': {
@@ -474,7 +474,6 @@ class Recipe(QtCore.QObject):
             self.notes = recipe['notes'].replace('\\n', '\n')
 
         self.mash.recalculate()
-        self.waters.calculate_percentages()
         self.loaded.emit()
 
 

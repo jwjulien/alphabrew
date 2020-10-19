@@ -39,7 +39,6 @@ class Waters(ListTableBase):
     """Provides for a list of Water objects, specifically created to aid in parsing Excel database files and
     display within a QtTableView."""
     Columns = [
-        Column('percentage', editable=True, hideLimited=True),
         Column('name', size=Stretch, align=QtCore.Qt.AlignLeft),
         Column('calcium'),
         Column('magnesium'),
@@ -96,6 +95,13 @@ class Waters(ListTableBase):
         return sum([water.bicarbonate * water.percentage for water in self], ConcentrationType(0, 'ppm'))
 
 
+# ----------------------------------------------------------------------------------------------------------------------
+    @property
+    def ph(self):
+        """Calculate and return the total bicarbonate in the water based upon the percentage of each water component."""
+        return sum([water.ph * water.percentage.as_('%') / 100 for water in self])
+
+
 
 
 # ======================================================================================================================
@@ -125,12 +131,13 @@ class Waters(ListTableBase):
 # ----------------------------------------------------------------------------------------------------------------------
     def sort(self):
         """A void sort function that consistently sorts the water in decreasing order of amount in the recipe."""
-        try:
-            self.items.sort(key=lambda water: water.percentage, reverse=True)
+        def sorter(water: Water):
+            """Give distilled water a higher priority in sorting than any other name."""
+            if 'distilled' in water.name.lower():
+                return 'A'
+            return 'B' + water.name
 
-        except TypeError:
-            # Percentage is None upon first sort.  Skip sorting, it's not that important.
-            pass
+        self.items.sort(key=sorter, reverse=True)
 
 
 # ----------------------------------------------------------------------------------------------------------------------
@@ -146,13 +153,6 @@ class Waters(ListTableBase):
             water = Water(recipe)
             water.from_dict(item)
             self.append(water)
-
-
-# ----------------------------------------------------------------------------------------------------------------------
-    def calculate_percentages(self):
-        """Once all the waters are loaded, we need to convert the amounts read from JSON into percentages."""
-        for water in self:
-            water.calculate_percentage()
 
 
 

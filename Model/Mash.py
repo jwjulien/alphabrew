@@ -88,6 +88,7 @@ class Mash(ListTableBase):
     @property
     def totalWater(self):
         """Calculates the total water required for all of the mashing steps."""
+        self.recalculate()
         return sum([step.infusionVolume for step in self if step.infusionVolume is not None], VolumeType(0, 'gal'))
 
 

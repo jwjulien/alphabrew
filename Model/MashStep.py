@@ -160,7 +160,7 @@ class MashStep():
         else:
             # Compute the temperature of the final infusion based upon the remaining quantity of water.
 
-            gallons = self.recipe.boilSize.as_('gal') - previous.totalVolume.as_('gal')
+            gallons = self.recipe.boilVolume.as_('gal') - previous.totalVolume.as_('gal')
             self.infusionVolume = VolumeType(gallons, 'gal')
             self.totalVolume = previous.totalVolume + self.infusionVolume
 

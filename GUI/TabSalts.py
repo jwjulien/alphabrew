@@ -263,7 +263,7 @@ class TabSalts(QtWidgets.QWidget):
         def average(mash, kettle):
             mash *= self.recipe.strikeVolume.as_('gal')
             kettle *= self.recipe.spargeVolume.as_('gal')
-            return (mash + kettle) / self.recipe.boilSize.as_('gal')
+            return (mash + kettle) / self.recipe.boilVolume.as_('gal')
 
         # Total up everything
         calcium = average(calciumMash, calciumKettle)
