@@ -58,9 +58,7 @@ class TabHops(QtWidgets.QWidget):
         self.database.from_excel(workbook['Hops'])
 
         # Setup the hop ingredient table at the top of the tab.
-        self.ui.ingredients.setModel(self.recipe.hops)
         self.recipe.hops.set_control(self.ui.ingredients)
-        self.ui.ingredients.selectionModel().selectionChanged.connect(self.on_ingredient_selection_change)
 
         # Setup a "delegate" to allow editing of the amount in a spinbox right inside of the table.
         delegate = SimpleTypeDelegate(self, [MassType], minimum=0, maximum=32, decimals=1, singleStep=0.5)
@@ -106,6 +104,7 @@ class TabHops(QtWidgets.QWidget):
     def on_load(self):
         """Fires when the recipe gets loaded to re-associate the recipe model with the Qt table in this tab."""
         self.ui.ingredients.setModel(self.recipe.hops)
+        self.ui.ingredients.selectionModel().selectionChanged.connect(self.on_ingredient_selection_change)
 
 
 # ----------------------------------------------------------------------------------------------------------------------

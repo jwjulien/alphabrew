@@ -368,9 +368,9 @@ class TabChemistry(QtWidgets.QWidget):
         self.ui.ph.setText(f'{ph:.2f}')
         self.ui.phSlide.setValue(ph * 100)
         if ph < 5.2 or ph > 5.6:
-            self.ui.ph.setStyleSheet("QSlider::handle:horizontal {background-color: red;}")
+            self.ui.phSlide.setStyleSheet("QSlider::handle:horizontal {background-color: red;}")
         else:
-            self.ui.ph.setStyleSheet("QSlider::handle:horizontal {}")
+            self.ui.phSlide.setStyleSheet("QSlider::handle:horizontal {}")
 
         # Calculate the chloride to sulfate ratio.
         try:

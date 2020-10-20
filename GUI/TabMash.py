@@ -47,7 +47,6 @@ class TabMash(QtWidgets.QWidget):
         self.on_load()
 
         self.recipe.mash.set_control(self.ui.steps)
-        self.ui.steps.selectionModel().selectionChanged.connect(self.on_selection_change)
 
         # Add a delegate for editing the types.
         options = ['Infusion', 'Temperature', 'Decoction', 'Souring Mash', 'Souring Wort', 'Drain Mash Tun', 'Sparge']
@@ -81,6 +80,7 @@ class TabMash(QtWidgets.QWidget):
     def on_load(self):
         """Fires when the recipe loads to update the discrete controls with values."""
         self.ui.steps.setModel(self.recipe.mash)
+        self.ui.steps.selectionModel().selectionChanged.connect(self.on_selection_change)
         self.ui.ambient.setValue(self.recipe.mash.ambient.as_('F'))
         self.ui.ratio.setValue(self.recipe.mash.ratio.as_('qt/lb'))
 

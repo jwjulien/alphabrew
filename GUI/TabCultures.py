@@ -57,9 +57,7 @@ class TabCultures(QtWidgets.QWidget):
         self.database.from_excel(workbook['Cultures'])
 
         # Setup the culture ingredient table at the top of the tab.
-        self.ui.ingredients.setModel(self.recipe.cultures)
         self.recipe.cultures.set_control(self.ui.ingredients)
-        self.ui.ingredients.selectionModel().selectionChanged.connect(self.on_ingredient_selection_change)
 
         # Setup a "delegate" to allow editing of the amount in a spinbox right inside of the table.
         delegate = SimpleTypeDelegate(self, [MassType, VolumeType, UnitType], maximum=1000, decimals=2, singleStep=1)
@@ -97,6 +95,7 @@ class TabCultures(QtWidgets.QWidget):
     def on_load(self):
         """Fires when the recipe gets loaded to re-associate the recipe model with the Qt table in this tab."""
         self.ui.ingredients.setModel(self.recipe.cultures)
+        self.ui.ingredients.selectionModel().selectionChanged.connect(self.on_ingredient_selection_change)
 
 
 # ----------------------------------------------------------------------------------------------------------------------

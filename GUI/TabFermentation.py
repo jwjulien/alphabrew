@@ -46,9 +46,7 @@ class TabFermentation(QtWidgets.QWidget):
         self.recipe.loaded.connect(self.on_load)
         self.on_load()
 
-        self.ui.steps.setModel(self.recipe.fermentation)
         self.recipe.fermentation.set_control(self.ui.steps)
-        self.ui.steps.selectionModel().selectionChanged.connect(self.on_selection_change)
 
         # Setup a delegate for editing of start and end temperatures.
         temperatureDelegate = SimpleTypeDelegate(self, [TemperatureType], maximum=212, decimals=0, singleStep=5)
@@ -74,6 +72,7 @@ class TabFermentation(QtWidgets.QWidget):
     def on_load(self):
         """Fires when the recipe gets loaded to re-associate the recipe model with the Qt table in this tab."""
         self.ui.steps.setModel(self.recipe.fermentation)
+        self.ui.steps.selectionModel().selectionChanged.connect(self.on_selection_change)
 
 
 # ----------------------------------------------------------------------------------------------------------------------

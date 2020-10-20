@@ -211,11 +211,13 @@ class MainWindow(QtWidgets.QMainWindow):
             filename, filters = QtWidgets.QFileDialog.getOpenFileName(self, "Open Recipe", filter="BeerJSON (*.json)")
             if filename:
                 self.filename = filename
+                self.recipe.changed.disconnect(self.update)
                 with open(filename) as handle:
                     self.recipe.from_beerxml(handle.read())
                 # Newly loaded recipe was not touched.  Clear that up despite all of the "change" events reported during
                 # the loading.
                 self.touched = False
+                self.recipe.changed.connect(self.update)
 
 
 # ----------------------------------------------------------------------------------------------------------------------
