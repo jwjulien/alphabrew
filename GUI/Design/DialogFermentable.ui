@@ -7,19 +7,19 @@
     <x>0</x>
     <y>0</y>
     <width>422</width>
-    <height>484</height>
+    <height>470</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
     <width>422</width>
-    <height>484</height>
+    <height>470</height>
    </size>
   </property>
   <property name="maximumSize">
    <size>
     <width>16777215</width>
-    <height>484</height>
+    <height>470</height>
    </size>
   </property>
   <property name="windowTitle">
@@ -159,86 +159,57 @@
       </widget>
      </item>
      <item row="9" column="0">
-      <widget class="QLabel" name="lbl_protein">
-       <property name="text">
-        <string>Protein:</string>
-       </property>
-      </widget>
-     </item>
-     <item row="9" column="1">
-      <widget class="QDoubleSpinBox" name="protein">
-       <property name="toolTip">
-        <string>The percentage of protein. Higher values may indicate a possibility of haze, or lautering issues.</string>
-       </property>
-       <property name="suffix">
-        <string>%</string>
-       </property>
-       <property name="decimals">
-        <number>1</number>
-       </property>
-      </widget>
-     </item>
-     <item row="10" column="0">
-      <widget class="QLabel" name="lbl_maxBatch">
-       <property name="text">
-        <string>Max in Batch:</string>
-       </property>
-      </widget>
-     </item>
-     <item row="10" column="1">
-      <widget class="QDoubleSpinBox" name="maxInBatch">
-       <property name="toolTip">
-        <string>The recommended maximum percentage to use in a grain bill.</string>
-       </property>
-       <property name="suffix">
-        <string>%</string>
-       </property>
-       <property name="decimals">
-        <number>1</number>
-       </property>
-      </widget>
-     </item>
-     <item row="11" column="0">
-      <widget class="QLabel" name="lbl_coarseFineDiff">
-       <property name="text">
-        <string>Coarse/Fine Difference:</string>
-       </property>
-      </widget>
-     </item>
-     <item row="11" column="1">
-      <widget class="QDoubleSpinBox" name="coarseFineDiff">
-       <property name="toolTip">
-        <string>The difference between fine and coarse grind, a difference more than 2 percent can indicate a protein or step mash may be desirable.</string>
-       </property>
-       <property name="suffix">
-        <string>%</string>
-       </property>
-       <property name="decimals">
-        <number>1</number>
-       </property>
-      </widget>
-     </item>
-     <item row="12" column="0">
       <widget class="QLabel" name="lbl_addAfterBoil">
        <property name="text">
         <string>Add After Boil:</string>
        </property>
       </widget>
      </item>
-     <item row="12" column="1">
+     <item row="9" column="1">
       <widget class="QCheckBox" name="addAfterBoil"/>
      </item>
-     <item row="13" column="0">
+     <item row="10" column="0">
       <widget class="QLabel" name="lbl_mashed">
        <property name="text">
         <string>Mash Required:</string>
        </property>
       </widget>
      </item>
-     <item row="13" column="1">
+     <item row="10" column="1">
       <widget class="QCheckBox" name="mashed">
        <property name="toolTip">
         <string>True if the fermentable must be mashed, false if it can be steeped.</string>
+       </property>
+      </widget>
+     </item>
+     <item row="11" column="0">
+      <widget class="QLabel" name="lbl_phi">
+       <property name="text">
+        <string>pH_i:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="12" column="0">
+      <widget class="QLabel" name="lbl_bi">
+       <property name="text">
+        <string>B_i:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="11" column="1">
+      <widget class="QDoubleSpinBox" name="phi">
+       <property name="toolTip">
+        <string>This is the distilled water mash pH for this grain.  A value of zero is expected when unknown.</string>
+       </property>
+      </widget>
+     </item>
+     <item row="12" column="1">
+      <widget class="QDoubleSpinBox" name="bi">
+       <property name="toolTip">
+        <string>Distilled water mash buffering capacity of this grain - zero implies unknown.</string>
+       </property>
+       <property name="maximum">
+        <double>500.000000000000000</double>
        </property>
       </widget>
      </item>

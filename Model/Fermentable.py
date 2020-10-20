@@ -45,12 +45,11 @@ class Fermentable():
                  color=None,
                  moisture=None,
                  diastaticPower=None,
-                 protein=None,
-                 maxPerBatch=None,
-                 coarseFineDiff=None,
                  addAfterBoil=None,
                  mashed=None,
-                 notes=None):
+                 notes=None,
+                 phi=None,
+                 bi=None):
         self.recipe = recipe
         self.name: str = name
         self.amount: Union[MassType, VolumeType] = amount
@@ -62,12 +61,17 @@ class Fermentable():
         self.color: ColorType = color
         self.moisture: PercentType = moisture
         self.diastaticPower: DiastaticPowerType = diastaticPower
-        self.protein: PercentType = protein
-        self.maxPerBatch: PercentType = maxPerBatch
-        self.coarseFineDiff: PercentType = coarseFineDiff
         self.addAfterBoil: bool = addAfterBoil
         self.mashed: bool = mashed
         self.notes: str = notes.replace('\\n', '\n') if notes else ''
+
+        # These attributes are NOT part of the BeerJSON format but are in the Excel database of grains to support pH
+        # calculations.  They are separate from the other attributes to denote this.  They have been added to the
+        # BeerJSON output from this tool and therefore make the output non-standard.  Because of this they are also
+        # optional and no error is thrown when they are missing from input times.  pH calculations will not be as
+        # accurate without them but reasonable defaults will be assumed.
+        self._phi = phi
+        self._bi = bi
 
 
 # ======================================================================================================================
@@ -135,6 +139,113 @@ class Fermentable():
         return sucrose
 
 
+# ----------------------------------------------------------------------------------------------------------------------
+    @property
+    def phi(self) -> float:
+        """Calculates the pH component that this fermentable contributes to a distilled water mash."""
+        if self._phi is not None:
+            # If a pH_i value is explicitly defined in the database then just return that.
+            return self._phi
+
+        # If not explicitly specified then try to determine a reasonable default for this grain.
+        if not self.isMashed:
+            # Non-mashed ingredients will have no contribution.
+            return 0
+
+        srm = self.color.as_('srm')
+        if srm > 300:
+            # Roasted malts take priority.
+            return 4.64
+
+        if 'wheat' in self.name.lower():
+            # Wheat malts can be safely assumed as fixed.
+            return 5.97
+
+        if self.group == 'Caramel':
+            # Crystal malts vary wildly by color and therefore pH.
+            if srm < 5:
+                return 5.71
+            elif srm < 15:
+                return 5.26
+            elif srm < 30:
+                return 5.15
+            elif srm < 50:
+                return 4.89
+            elif srm < 70:
+                return 4.81
+            elif srm < 100:
+                return 4.74
+            elif srm < 130:
+                return 4.68
+            else:
+                return 4.48
+
+        # Assume that everything else is more or less a base malt and use it's color to make an estimate.
+        if srm < 2.5:
+            # Light Base
+            return 5.72
+        elif srm < 30:
+            # Medium Base
+            return 5.69
+        else:
+            # Toasted
+            return 5.39
+
+
+# ----------------------------------------------------------------------------------------------------------------------
+    @property
+    def bi(self):
+        """Calculates the buffering capacity for this grain.  If not explicitly known, a rough estimate is provided
+        based upon the grain type."""
+        if self._bi is not None:
+            # If the value was explicitly stated in the database then use that.
+            return self._bi
+
+        # If not explicitly specified then try to determine a reasonable default for this grain.
+        if not self.isMashed:
+            # Non-mashed ingredients will have no contribution.
+            return 0
+
+        srm = self.color.as_('srm')
+        if srm > 300:
+            # Roasted malts take priority.
+            return 68.7
+
+        if 'wheat' in self.name.lower():
+            # Wheat malts can be safely assumed as fixed.
+            return 34.8
+
+        if self.group == 'Caramel':
+            # Crystal malts vary wildly by color and therefore pH.
+            if srm < 5:
+                return 34.8
+            elif srm < 15:
+                return 49.3
+            elif srm < 30:
+                return 54.5
+            elif srm < 50:
+                return 65
+            elif srm < 70:
+                return 68.3
+            elif srm < 100:
+                return 74
+            elif srm < 130:
+                return 77
+            else:
+                return 89.1
+
+        # Assume that everything else is more or less a base malt and use it's color to make an estimate.
+        if srm < 2.5:
+            # Light Base
+            return 45.5
+        elif srm < 30:
+            # Medium Base
+            return 52.3
+        else:
+            # Toasted
+            return 55.1
+
+
 
 
 # ======================================================================================================================
@@ -153,12 +264,11 @@ class Fermentable():
             color=self.color.copy(),
             moisture=self.moisture.copy(),
             diastaticPower=self.diastaticPower.copy(),
-            protein=self.protein.copy(),
-            maxPerBatch=self.maxPerBatch.copy(),
-            coarseFineDiff=self.coarseFineDiff.copy(),
             addAfterBoil=self.addAfterBoil,
             mashed=self.mashed,
-            notes=self.notes
+            notes=self.notes,
+            phi=self._phi,
+            bi=self._bi,
         )
 
 
@@ -174,19 +284,23 @@ class Fermentable():
             'producer': self.producer,
             'yield': {
                 'fine_grind': self.fyield.to_dict(),
-                'fine_coarse_difference': self.coarseFineDiff.to_dict(),
             },
             'color': self.color.to_dict(),
             'amount': self.amount.to_dict(),
             'notes': self.notes.replace('\n', '\\n'),
             'moisture': self.moisture.to_dict(),
             'diastatic_power': self.diastaticPower.to_dict(),
-            'protein': self.protein.to_dict(),
-            'max_in_batch': self.maxPerBatch.to_dict(),
-            'recommend_mash': self.mashed
+            'recommend_mash': self.mashed,
         }
         if self.group is not None:
             data['grain_group'] = self.group.lower()
+
+        # phi and bi are not part of the BeerJSON standard (yet) so don't include them unless they are set.
+        if self._phi is not None:
+            data['phi'] = self._phi
+        if self._bi is not None:
+            data['bi'] = self._bi
+
         return data
 
 
@@ -203,12 +317,13 @@ class Fermentable():
         self.color = ColorType(json=data['color'])
         self.moisture = PercentType(json=data['moisture'])
         self.diastaticPower = DiastaticPowerType(json=data['diastatic_power'])
-        self.protein = PercentType(json=data['protein'])
-        self.maxPerBatch = PercentType(json=data['max_in_batch'])
         self.fyield = PercentType(json=data['yield']['fine_grind'])
-        self.coarseFineDiff = PercentType(json=data['yield']['fine_coarse_difference'])
         self.mashed = data['recommend_mash']
         self.notes = data['notes'].replace('\\n', '\n')
+
+        # phi and bi are not a part of the BeerJSON standard so don't worry if they are missing.
+        self._phi = data.get('phi')
+        self._bi = data.get('bi')
 
 
 

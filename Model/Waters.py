@@ -97,6 +97,27 @@ class Waters(ListTableBase):
 
 # ----------------------------------------------------------------------------------------------------------------------
     @property
+    def carbonate(self):
+        """Calculate and return the total carbonate in the water based upon the percentage of each water component."""
+        return sum([water.carbonate * water.percentage for water in self], ConcentrationType(0, 'ppm'))
+
+
+# ----------------------------------------------------------------------------------------------------------------------
+    @property
+    def alkalinity(self):
+        """Calculate and return the total alkalinity in the water based upon the percentage of each water component."""
+        return sum([water.alkalinity * water.percentage for water in self], ConcentrationType(0, 'ppm'))
+
+
+# ----------------------------------------------------------------------------------------------------------------------
+    @property
+    def hardness(self):
+        """Calculate and return the total harness in the water based upon the percentage of each water component."""
+        return sum([water.hardness * water.percentage.as_('%') / 100 for water in self])
+
+
+# ----------------------------------------------------------------------------------------------------------------------
+    @property
     def ph(self):
         """Calculate and return the total bicarbonate in the water based upon the percentage of each water component."""
         return sum([water.ph * water.percentage.as_('%') / 100 for water in self])

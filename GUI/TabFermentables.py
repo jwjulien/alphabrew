@@ -57,7 +57,6 @@ class TabFermentables(QtWidgets.QWidget):
 
         # Setup the fermentable ingredient table at the top of the tab.
         self.recipe.fermentables.set_control(self.ui.ingredients)
-        self.ui.ingredients.selectionModel().selectionChanged.connect(self.on_ingredient_selection_change)
 
         # Setup a "delegate" to allow editing of the amount in a spinbox right inside of the table.
         delegate = SimpleTypeDelegate(self, [MassType], maximum=1000, decimals=2, singleStep=1)
@@ -95,6 +94,7 @@ class TabFermentables(QtWidgets.QWidget):
     def on_load(self):
         """Fires when the recipe gets loaded to re-associate the recipe model with the Qt table in this tab."""
         self.ui.ingredients.setModel(self.recipe.fermentables)
+        self.ui.ingredients.selectionModel().selectionChanged.connect(self.on_ingredient_selection_change)
 
 
 # ----------------------------------------------------------------------------------------------------------------------

@@ -20,9 +20,9 @@ class Ui_DialogFermentable(object):
     def setupUi(self, DialogFermentable):
         if DialogFermentable.objectName():
             DialogFermentable.setObjectName(u"DialogFermentable")
-        DialogFermentable.resize(422, 484)
-        DialogFermentable.setMinimumSize(QSize(422, 484))
-        DialogFermentable.setMaximumSize(QSize(16777215, 484))
+        DialogFermentable.resize(422, 470)
+        DialogFermentable.setMinimumSize(QSize(422, 470))
+        DialogFermentable.setMaximumSize(QSize(16777215, 470))
         self.verticalLayout = QVBoxLayout(DialogFermentable)
         self.verticalLayout.setObjectName(u"verticalLayout")
         self.formLayout = QFormLayout()
@@ -123,58 +123,46 @@ class Ui_DialogFermentable(object):
 
         self.formLayout.setWidget(8, QFormLayout.FieldRole, self.diastaticPower)
 
-        self.lbl_protein = QLabel(DialogFermentable)
-        self.lbl_protein.setObjectName(u"lbl_protein")
-
-        self.formLayout.setWidget(9, QFormLayout.LabelRole, self.lbl_protein)
-
-        self.protein = QDoubleSpinBox(DialogFermentable)
-        self.protein.setObjectName(u"protein")
-        self.protein.setDecimals(1)
-
-        self.formLayout.setWidget(9, QFormLayout.FieldRole, self.protein)
-
-        self.lbl_maxBatch = QLabel(DialogFermentable)
-        self.lbl_maxBatch.setObjectName(u"lbl_maxBatch")
-
-        self.formLayout.setWidget(10, QFormLayout.LabelRole, self.lbl_maxBatch)
-
-        self.maxInBatch = QDoubleSpinBox(DialogFermentable)
-        self.maxInBatch.setObjectName(u"maxInBatch")
-        self.maxInBatch.setDecimals(1)
-
-        self.formLayout.setWidget(10, QFormLayout.FieldRole, self.maxInBatch)
-
-        self.lbl_coarseFineDiff = QLabel(DialogFermentable)
-        self.lbl_coarseFineDiff.setObjectName(u"lbl_coarseFineDiff")
-
-        self.formLayout.setWidget(11, QFormLayout.LabelRole, self.lbl_coarseFineDiff)
-
-        self.coarseFineDiff = QDoubleSpinBox(DialogFermentable)
-        self.coarseFineDiff.setObjectName(u"coarseFineDiff")
-        self.coarseFineDiff.setDecimals(1)
-
-        self.formLayout.setWidget(11, QFormLayout.FieldRole, self.coarseFineDiff)
-
         self.lbl_addAfterBoil = QLabel(DialogFermentable)
         self.lbl_addAfterBoil.setObjectName(u"lbl_addAfterBoil")
 
-        self.formLayout.setWidget(12, QFormLayout.LabelRole, self.lbl_addAfterBoil)
+        self.formLayout.setWidget(9, QFormLayout.LabelRole, self.lbl_addAfterBoil)
 
         self.addAfterBoil = QCheckBox(DialogFermentable)
         self.addAfterBoil.setObjectName(u"addAfterBoil")
 
-        self.formLayout.setWidget(12, QFormLayout.FieldRole, self.addAfterBoil)
+        self.formLayout.setWidget(9, QFormLayout.FieldRole, self.addAfterBoil)
 
         self.lbl_mashed = QLabel(DialogFermentable)
         self.lbl_mashed.setObjectName(u"lbl_mashed")
 
-        self.formLayout.setWidget(13, QFormLayout.LabelRole, self.lbl_mashed)
+        self.formLayout.setWidget(10, QFormLayout.LabelRole, self.lbl_mashed)
 
         self.mashed = QCheckBox(DialogFermentable)
         self.mashed.setObjectName(u"mashed")
 
-        self.formLayout.setWidget(13, QFormLayout.FieldRole, self.mashed)
+        self.formLayout.setWidget(10, QFormLayout.FieldRole, self.mashed)
+
+        self.lbl_phi = QLabel(DialogFermentable)
+        self.lbl_phi.setObjectName(u"lbl_phi")
+
+        self.formLayout.setWidget(11, QFormLayout.LabelRole, self.lbl_phi)
+
+        self.lbl_bi = QLabel(DialogFermentable)
+        self.lbl_bi.setObjectName(u"lbl_bi")
+
+        self.formLayout.setWidget(12, QFormLayout.LabelRole, self.lbl_bi)
+
+        self.phi = QDoubleSpinBox(DialogFermentable)
+        self.phi.setObjectName(u"phi")
+
+        self.formLayout.setWidget(11, QFormLayout.FieldRole, self.phi)
+
+        self.bi = QDoubleSpinBox(DialogFermentable)
+        self.bi.setObjectName(u"bi")
+        self.bi.setMaximum(500.000000000000000)
+
+        self.formLayout.setWidget(12, QFormLayout.FieldRole, self.bi)
 
 
         self.verticalLayout.addLayout(self.formLayout)
@@ -226,25 +214,18 @@ class Ui_DialogFermentable(object):
         self.diastaticPower.setToolTip(QCoreApplication.translate("DialogFermentable", u"Diastatic power is a measurement of malted grains enzymatic content. A value of 35 Lintner is needed to self convert, while a value of 100 or more is desirable.", None))
 #endif // QT_CONFIG(tooltip)
         self.diastaticPower.setSuffix(QCoreApplication.translate("DialogFermentable", u" Lintner", None))
-        self.lbl_protein.setText(QCoreApplication.translate("DialogFermentable", u"Protein:", None))
-#if QT_CONFIG(tooltip)
-        self.protein.setToolTip(QCoreApplication.translate("DialogFermentable", u"The percentage of protein. Higher values may indicate a possibility of haze, or lautering issues.", None))
-#endif // QT_CONFIG(tooltip)
-        self.protein.setSuffix(QCoreApplication.translate("DialogFermentable", u"%", None))
-        self.lbl_maxBatch.setText(QCoreApplication.translate("DialogFermentable", u"Max in Batch:", None))
-#if QT_CONFIG(tooltip)
-        self.maxInBatch.setToolTip(QCoreApplication.translate("DialogFermentable", u"The recommended maximum percentage to use in a grain bill.", None))
-#endif // QT_CONFIG(tooltip)
-        self.maxInBatch.setSuffix(QCoreApplication.translate("DialogFermentable", u"%", None))
-        self.lbl_coarseFineDiff.setText(QCoreApplication.translate("DialogFermentable", u"Coarse/Fine Difference:", None))
-#if QT_CONFIG(tooltip)
-        self.coarseFineDiff.setToolTip(QCoreApplication.translate("DialogFermentable", u"The difference between fine and coarse grind, a difference more than 2 percent can indicate a protein or step mash may be desirable.", None))
-#endif // QT_CONFIG(tooltip)
-        self.coarseFineDiff.setSuffix(QCoreApplication.translate("DialogFermentable", u"%", None))
         self.lbl_addAfterBoil.setText(QCoreApplication.translate("DialogFermentable", u"Add After Boil:", None))
         self.lbl_mashed.setText(QCoreApplication.translate("DialogFermentable", u"Mash Required:", None))
 #if QT_CONFIG(tooltip)
         self.mashed.setToolTip(QCoreApplication.translate("DialogFermentable", u"True if the fermentable must be mashed, false if it can be steeped.", None))
+#endif // QT_CONFIG(tooltip)
+        self.lbl_phi.setText(QCoreApplication.translate("DialogFermentable", u"pH_i:", None))
+        self.lbl_bi.setText(QCoreApplication.translate("DialogFermentable", u"B_i:", None))
+#if QT_CONFIG(tooltip)
+        self.phi.setToolTip(QCoreApplication.translate("DialogFermentable", u"This is the distilled water mash pH for this grain.  A value of zero is expected when unknown.", None))
+#endif // QT_CONFIG(tooltip)
+#if QT_CONFIG(tooltip)
+        self.bi.setToolTip(QCoreApplication.translate("DialogFermentable", u"Distilled water mash buffering capacity of this grain - zero implies unknown.", None))
 #endif // QT_CONFIG(tooltip)
     # retranslateUi
 

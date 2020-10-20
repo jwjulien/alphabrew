@@ -46,7 +46,7 @@ class TabChemistry(QtWidgets.QWidget):
         # Store the recipe with which these misc items are associated.
         self.recipe = recipe
         self.recipe.changed.connect(self.recalculate)
-        self.recipe.loaded.connect(self.on_load)
+        self.recipe.loaded.connect(self.activated)
 
         # Connect event handlers for each of the input boxes to trigger recalculation.
         self.ui.cacl2_mash.valueChanged.connect(self.update_recipe_salts)
@@ -69,21 +69,13 @@ class TabChemistry(QtWidgets.QWidget):
         self.ui.acidMalt.valueChanged.connect(self.recalculate)
 
         self.setup_recommendations()
-        self.on_load()
+        self.activated()
 
 
 
 
 # ======================================================================================================================
 # Methods
-# ----------------------------------------------------------------------------------------------------------------------
-    def activated(self):
-        """Called by the MainWindow when this tab is selected by the user.  This provides an opportunity for us to
-        update the salts from the recipe.  That way, if changes were made on the misc tab, they will be reflected here
-        without a circular update."""
-        self.on_load()
-
-
 # ----------------------------------------------------------------------------------------------------------------------
     def setup_recommendations(self):
         """Sets up the dropdowns and values in the recommendation box."""
@@ -109,34 +101,48 @@ class TabChemistry(QtWidgets.QWidget):
 
 
 # ----------------------------------------------------------------------------------------------------------------------
-    def on_load(self):
-        """Populate and run the calculations for the salt addition spin boxes from the recipe."""
-        def load_mass(salts, name):
+    def activated(self):
+        """Called by the MainWindow when this tab is selected by the user.  This provides an opportunity for us to
+        update the salts from the recipe.  That way, if changes were made on the misc tab, they will be reflected here
+        without a circular update.
+
+        Populate and run the calculations for the salt addition spin boxes from the recipe."""
+        def load_simple_type(items: dict, name: str, unit: str):
             """Helper to extract the mass amount for a given salt by name and return it's decimal value."""
-            if name not in salts:
+            if name not in items:
                 return 0
-            salt = salts[name]
-            return salt.amount.as_('g')
+            item = items[name]
+            return item.amount.as_(unit)
 
         mash = self._list_to_dict(self.recipe.misc.mashSalts)
-        self.ui.cacl2_mash.setValue(load_mass(mash, 'Calcium Chloride'))
-        self.ui.caso4_mash.setValue(load_mass(mash, 'Calcium Sulfate'))
-        self.ui.mgcl2_mash.setValue(load_mass(mash, 'Magnesium Chloride'))
-        self.ui.mgso4_mash.setValue(load_mass(mash, 'Magnesium Sulfate'))
-        self.ui.nacl_mash.setValue(load_mass(mash, 'Sodium Chloride'))
-        self.ui.nahco3_mash.setValue(load_mass(mash, 'Sodium Bicarbonate'))
-        self.ui.caoh2_mash.setValue(load_mass(mash, 'Calcium Hydroxide'))
+        self.ui.cacl2_mash.setValue(load_simple_type(mash, 'Calcium Chloride', 'g'))
+        self.ui.caso4_mash.setValue(load_simple_type(mash, 'Calcium Sulfate', 'g'))
+        self.ui.mgcl2_mash.setValue(load_simple_type(mash, 'Magnesium Chloride', 'g'))
+        self.ui.mgso4_mash.setValue(load_simple_type(mash, 'Magnesium Sulfate', 'g'))
+        self.ui.nacl_mash.setValue(load_simple_type(mash, 'Sodium Chloride', 'g'))
+        self.ui.nahco3_mash.setValue(load_simple_type(mash, 'Sodium Bicarbonate', 'g'))
+        self.ui.caoh2_mash.setValue(load_simple_type(mash, 'Calcium Hydroxide', 'g'))
 
         kettle = self._list_to_dict(self.recipe.misc.kettleSalts)
-        self.ui.cacl2_kettle.setValue(load_mass(kettle, 'Calcium Chloride'))
-        self.ui.caso4_kettle.setValue(load_mass(kettle, 'Calcium Sulfate'))
-        self.ui.mgcl2_kettle.setValue(load_mass(kettle, 'Magnesium Chloride'))
-        self.ui.mgso4_kettle.setValue(load_mass(kettle, 'Magnesium Sulfate'))
-        self.ui.nacl_kettle.setValue(load_mass(kettle, 'Sodium Chloride'))
-        self.ui.nahco3_kettle.setValue(load_mass(kettle, 'Sodium Bicarbonate'))
-        self.ui.caoh2_kettle.setValue(load_mass(kettle, 'Calcium Hydroxide'))
+        self.ui.cacl2_kettle.setValue(load_simple_type(kettle, 'Calcium Chloride', 'g'))
+        self.ui.caso4_kettle.setValue(load_simple_type(kettle, 'Calcium Sulfate', 'g'))
+        self.ui.mgcl2_kettle.setValue(load_simple_type(kettle, 'Magnesium Chloride', 'g'))
+        self.ui.mgso4_kettle.setValue(load_simple_type(kettle, 'Magnesium Sulfate', 'g'))
+        self.ui.nacl_kettle.setValue(load_simple_type(kettle, 'Sodium Chloride', 'g'))
+        self.ui.nahco3_kettle.setValue(load_simple_type(kettle, 'Sodium Bicarbonate', 'g'))
+        self.ui.caoh2_kettle.setValue(load_simple_type(kettle, 'Calcium Hydroxide', 'g'))
 
-        # TODO: Load acids from recipe.
+        acids = self._list_to_dict(self.recipe.misc.acids)
+        self.ui.lactic.setValue(load_simple_type(acids, 'Lactic Acid', 'ml'))
+        self.ui.phosphoric.setValue(load_simple_type(acids, 'Phosphoric Acid', 'ml'))
+
+        # TODO: This is a little bit quirky.  There are actually a few malts that are specifically acidic and this
+        # tool is currently attempting to keep track of them.  To make things a little easier, this just tallies them
+        # and re-runs calculations.  The acidic grains must be added to the fermentables tab by the user.
+        grains = self._list_to_dict(self.recipe.fermentables)
+        acidMalts = load_simple_type(grains, 'Acid Malt', 'oz')
+        acidMalts += load_simple_type(grains, 'Acidulated Malt', 'oz')
+        self.ui.acidMalt.setValue(acidMalts)
 
         # Run the calculations once to generate an initial set of values.
         self.recalculate()
@@ -302,6 +308,79 @@ class TabChemistry(QtWidgets.QWidget):
         self.ui.bicarbonateSlide.setValue(bicarbonate.as_('ppm'))
 
 
+        strikeL = self.recipe.strikeVolume.as_('l')
+
+        # Strength is fixed in this tool as 10% phosphoric seems pretty typical.
+        phosphoricStrength = 0.1
+        phosphoricVolume = self.ui.phosphoric.value()
+        phosphoricDensity = 1 + (0.49 * phosphoricStrength) + ((0.375 * phosphoricStrength) ** 2)
+        phosphoricAlkalinity = -phosphoricStrength * phosphoricDensity / 98 * 1000 * phosphoricVolume / strikeL
+
+        # Strength is fixed in this tool as 88% lactic seems pretty typical.
+        lacticStrength = 0.88
+        lacticVolume = self.ui.lactic.value()
+        lacticDensity = 1 + (0.237 * lacticStrength)
+        lacticAlkalinity = -lacticStrength * lacticDensity / 90.09 * 1000 * lacticVolume / strikeL
+
+        acidMaltStrength = 0.03
+        actiMaltMass = self.ui.acidMalt.value() # oz
+        acidMaltAlkalinity = -acidMaltStrength * actiMaltMass * 28.35 / 90.09 / strikeL * 1000
+
+        bicarbonateNorm = bicarbonateMash.as_('ppm') / 61.016
+        carbonateNorm = 2 * self.recipe.waters.carbonate.as_('ppm') / 60.008
+        cAlkalinity = bicarbonateNorm + carbonateNorm
+
+        mashHardness = self.recipe.waters.hardness + (self.ui.nahco3_mash.value() / 61.016 / strikeL * 1000)
+        calciumNorm = 2 * calciumMash.as_('ppm') / 40.078
+        magnesiumNorm = 2 * magnesiumMash.as_('ppm') / 24.305
+
+        hydroxide = 0.459 * self.ui.caoh2_mash.value() * 1000 / strikeL
+        hydroxideNorm = hydroxide / 17.007
+
+        phRaSlope = self.recipe.mash.ratio.as_('l/kg') / self.recipe.fermentables.mashBiFi
+        phRaSlopeCorrected = phRaSlope / self.recipe.calibrations.maltBufferingCorrectionFactor
+
+        def calculate_ph(ph, salts=True, acids=True):
+            """Run a single iteration of the pH calculations.  The optional arguments will run the calculations using
+            inputs from salts and acids, respectively, when True."""
+            for _ in range(25):
+                fph = 1
+                fph += 4.435e-7 * (10 ** ph)
+                fph += 4.435e-7 * 4.667e-11 * (10 ** (2 * ph))
+                fph /= 4.435e-7 * (10 ** ph)
+
+                zra = cAlkalinity
+                zra -= mashHardness / fph
+                zra -= calciumNorm / 2.8
+                zra -= magnesiumNorm / 5.6
+                if acids:
+                    zra += phosphoricAlkalinity
+                    zra += lacticAlkalinity
+                    zra += acidMaltAlkalinity
+                if salts:
+                    zra += hydroxideNorm
+
+                ph = self.recipe.fermentables.mashPh + phRaSlopeCorrected * zra
+
+            return ph
+
+        ph = calculate_ph(self.recipe.fermentables.mashPh)
+        self.ui.ph.setText(f'{ph:.2f}')
+        self.ui.phSlide.setValue(ph * 100)
+        if ph < 5.2 or ph > 5.6:
+            self.ui.ph.setStyleSheet("QSlider::handle:horizontal {background-color: red;}")
+        else:
+            self.ui.ph.setStyleSheet("QSlider::handle:horizontal {}")
+
+        # Calculate the chloride to sulfate ratio.
+        try:
+            ratio = chloride.as_('ppm') / sulfate.as_('ppm')
+        except ZeroDivisionError:
+            ratio = 0
+        self.ui.ratio.setText(f'{ratio:.2f}')
+        self.ui.ratioSlide.setValue(ratio * 100)
+
+
 # ----------------------------------------------------------------------------------------------------------------------
     def update_recipe_salts(self):
         """Update that salts in the actual recipe in response to a change in one of the input boxes."""
@@ -350,14 +429,14 @@ class TabChemistry(QtWidgets.QWidget):
 # ======================================================================================================================
 # Private Functions
 # ----------------------------------------------------------------------------------------------------------------------
-    def _list_to_dict(self, salts):
-        """Convert a list of salts into a dict of salts combinint items by name."""
+    def _list_to_dict(self, items):
+        """Convert a list of items (salts or acids) into a dict of items combining items by name."""
         output = {}
-        for salt in salts:
-            if salt.name not in output:
-                output[salt.name] = salt
+        for item in items:
+            if item.name not in output:
+                output[item.name] = item
             else:
-                output[salt.name].amount += salt.amount
+                output[item.name].amount += item.amount
         return output
 
 

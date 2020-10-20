@@ -20,7 +20,7 @@ class Ui_TabChemistry(object):
     def setupUi(self, TabChemistry):
         if TabChemistry.objectName():
             TabChemistry.setObjectName(u"TabChemistry")
-        TabChemistry.resize(796, 546)
+        TabChemistry.resize(898, 546)
         self.verticalLayout = QVBoxLayout(TabChemistry)
         self.verticalLayout.setObjectName(u"verticalLayout")
         self.group_salts = QGroupBox(TabChemistry)
@@ -226,272 +226,17 @@ class Ui_TabChemistry(object):
         self.group_results.setObjectName(u"group_results")
         self.gridLayout_2 = QGridLayout(self.group_results)
         self.gridLayout_2.setObjectName(u"gridLayout_2")
-        self.lbl_spargeResults = QLabel(self.group_results)
-        self.lbl_spargeResults.setObjectName(u"lbl_spargeResults")
-        self.lbl_spargeResults.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
-
-        self.gridLayout_2.addWidget(self.lbl_spargeResults, 2, 0, 1, 1)
-
-        self.lbl_chlorideSulfideRatio = QLabel(self.group_results)
-        self.lbl_chlorideSulfideRatio.setObjectName(u"lbl_chlorideSulfideRatio")
-        self.lbl_chlorideSulfideRatio.setAlignment(Qt.AlignCenter)
-
-        self.gridLayout_2.addWidget(self.lbl_chlorideSulfideRatio, 0, 8, 1, 1)
-
-        self.magnesium = QLineEdit(self.group_results)
-        self.magnesium.setObjectName(u"magnesium")
-        font = QFont()
-        font.setBold(True)
-        font.setWeight(75)
-        self.magnesium.setFont(font)
-        self.magnesium.setAlignment(Qt.AlignCenter)
-        self.magnesium.setReadOnly(True)
-
-        self.gridLayout_2.addWidget(self.magnesium, 4, 2, 1, 1)
-
-        self.lbl_overallResults = QLabel(self.group_results)
-        self.lbl_overallResults.setObjectName(u"lbl_overallResults")
-        self.lbl_overallResults.setFont(font)
-        self.lbl_overallResults.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
-
-        self.gridLayout_2.addWidget(self.lbl_overallResults, 4, 0, 1, 1)
-
         self.lbl_ca = QLabel(self.group_results)
         self.lbl_ca.setObjectName(u"lbl_ca")
         self.lbl_ca.setAlignment(Qt.AlignCenter)
 
         self.gridLayout_2.addWidget(self.lbl_ca, 0, 1, 1, 1)
 
-        self.calcium = QLineEdit(self.group_results)
-        self.calcium.setObjectName(u"calcium")
-        self.calcium.setFont(font)
-        self.calcium.setAlignment(Qt.AlignCenter)
-        self.calcium.setReadOnly(True)
-
-        self.gridLayout_2.addWidget(self.calcium, 4, 1, 1, 1)
-
-        self.spargeBicarbonate = QLineEdit(self.group_results)
-        self.spargeBicarbonate.setObjectName(u"spargeBicarbonate")
-        self.spargeBicarbonate.setAlignment(Qt.AlignCenter)
-        self.spargeBicarbonate.setReadOnly(True)
-
-        self.gridLayout_2.addWidget(self.spargeBicarbonate, 2, 6, 1, 1)
-
-        self.sulfate = QLineEdit(self.group_results)
-        self.sulfate.setObjectName(u"sulfate")
-        self.sulfate.setFont(font)
-        self.sulfate.setAlignment(Qt.AlignCenter)
-        self.sulfate.setReadOnly(True)
-
-        self.gridLayout_2.addWidget(self.sulfate, 4, 5, 1, 1)
-
-        self.lbl_hco3 = QLabel(self.group_results)
-        self.lbl_hco3.setObjectName(u"lbl_hco3")
-        self.lbl_hco3.setAlignment(Qt.AlignCenter)
-
-        self.gridLayout_2.addWidget(self.lbl_hco3, 0, 6, 1, 1)
-
-        self.ratio = QLineEdit(self.group_results)
-        self.ratio.setObjectName(u"ratio")
-        self.ratio.setAlignment(Qt.AlignCenter)
-        self.ratio.setReadOnly(True)
-
-        self.gridLayout_2.addWidget(self.ratio, 1, 8, 1, 1)
-
-        self.line_3 = QFrame(self.group_results)
-        self.line_3.setObjectName(u"line_3")
-        self.line_3.setFrameShape(QFrame.VLine)
-        self.line_3.setFrameShadow(QFrame.Sunken)
-
-        self.gridLayout_2.addWidget(self.line_3, 0, 7, 6, 1)
-
-        self.chlorideSlide = QSlider(self.group_results)
-        self.chlorideSlide.setObjectName(u"chlorideSlide")
-        self.chlorideSlide.setEnabled(False)
-        self.chlorideSlide.setMinimum(0)
-        self.chlorideSlide.setMaximum(250)
-        self.chlorideSlide.setValue(0)
-        self.chlorideSlide.setOrientation(Qt.Horizontal)
-        self.chlorideSlide.setTickPosition(QSlider.TicksBelow)
-        self.chlorideSlide.setTickInterval(50)
-
-        self.gridLayout_2.addWidget(self.chlorideSlide, 5, 4, 1, 1)
-
-        self.sodium = QLineEdit(self.group_results)
-        self.sodium.setObjectName(u"sodium")
-        self.sodium.setFont(font)
-        self.sodium.setAlignment(Qt.AlignCenter)
-        self.sodium.setReadOnly(True)
-
-        self.gridLayout_2.addWidget(self.sodium, 4, 3, 1, 1)
-
-        self.strikeCalcium = QLineEdit(self.group_results)
-        self.strikeCalcium.setObjectName(u"strikeCalcium")
-        self.strikeCalcium.setAlignment(Qt.AlignCenter)
-        self.strikeCalcium.setReadOnly(True)
-
-        self.gridLayout_2.addWidget(self.strikeCalcium, 1, 1, 1, 1)
-
-        self.spargeCalcium = QLineEdit(self.group_results)
-        self.spargeCalcium.setObjectName(u"spargeCalcium")
-        self.spargeCalcium.setAlignment(Qt.AlignCenter)
-        self.spargeCalcium.setReadOnly(True)
-
-        self.gridLayout_2.addWidget(self.spargeCalcium, 2, 1, 1, 1)
-
-        self.lbl_mg = QLabel(self.group_results)
-        self.lbl_mg.setObjectName(u"lbl_mg")
-        self.lbl_mg.setAlignment(Qt.AlignCenter)
-
-        self.gridLayout_2.addWidget(self.lbl_mg, 0, 2, 1, 1)
-
-        self.lbl_cl = QLabel(self.group_results)
-        self.lbl_cl.setObjectName(u"lbl_cl")
-        self.lbl_cl.setAlignment(Qt.AlignCenter)
-
-        self.gridLayout_2.addWidget(self.lbl_cl, 0, 4, 1, 1)
-
-        self.bicarbonateSlide = QSlider(self.group_results)
-        self.bicarbonateSlide.setObjectName(u"bicarbonateSlide")
-        self.bicarbonateSlide.setEnabled(False)
-        self.bicarbonateSlide.setMinimum(0)
-        self.bicarbonateSlide.setMaximum(250)
-        self.bicarbonateSlide.setValue(0)
-        self.bicarbonateSlide.setOrientation(Qt.Horizontal)
-        self.bicarbonateSlide.setTickPosition(QSlider.TicksBelow)
-        self.bicarbonateSlide.setTickInterval(50)
-
-        self.gridLayout_2.addWidget(self.bicarbonateSlide, 5, 6, 1, 1)
-
-        self.line_5 = QFrame(self.group_results)
-        self.line_5.setObjectName(u"line_5")
-        self.line_5.setFrameShape(QFrame.HLine)
-        self.line_5.setFrameShadow(QFrame.Sunken)
-
-        self.gridLayout_2.addWidget(self.line_5, 3, 0, 1, 7)
-
-        self.chloride = QLineEdit(self.group_results)
-        self.chloride.setObjectName(u"chloride")
-        self.chloride.setFont(font)
-        self.chloride.setAlignment(Qt.AlignCenter)
-        self.chloride.setReadOnly(True)
-
-        self.gridLayout_2.addWidget(self.chloride, 4, 4, 1, 1)
-
-        self.strikeBicarbonate = QLineEdit(self.group_results)
-        self.strikeBicarbonate.setObjectName(u"strikeBicarbonate")
-        self.strikeBicarbonate.setAlignment(Qt.AlignCenter)
-        self.strikeBicarbonate.setReadOnly(True)
-
-        self.gridLayout_2.addWidget(self.strikeBicarbonate, 1, 6, 1, 1)
-
-        self.calciumSlide = QSlider(self.group_results)
-        self.calciumSlide.setObjectName(u"calciumSlide")
-        self.calciumSlide.setEnabled(False)
-        self.calciumSlide.setMinimum(50)
-        self.calciumSlide.setMaximum(150)
-        self.calciumSlide.setOrientation(Qt.Horizontal)
-        self.calciumSlide.setTickPosition(QSlider.TicksBelow)
-        self.calciumSlide.setTickInterval(10)
-
-        self.gridLayout_2.addWidget(self.calciumSlide, 5, 1, 1, 1)
-
-        self.strikeSulfate = QLineEdit(self.group_results)
-        self.strikeSulfate.setObjectName(u"strikeSulfate")
-        self.strikeSulfate.setAlignment(Qt.AlignCenter)
-        self.strikeSulfate.setReadOnly(True)
-
-        self.gridLayout_2.addWidget(self.strikeSulfate, 1, 5, 1, 1)
-
         self.lbl_mashResults = QLabel(self.group_results)
         self.lbl_mashResults.setObjectName(u"lbl_mashResults")
         self.lbl_mashResults.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
 
         self.gridLayout_2.addWidget(self.lbl_mashResults, 1, 0, 1, 1)
-
-        self.spargeMagnesium = QLineEdit(self.group_results)
-        self.spargeMagnesium.setObjectName(u"spargeMagnesium")
-        self.spargeMagnesium.setAlignment(Qt.AlignCenter)
-        self.spargeMagnesium.setReadOnly(True)
-
-        self.gridLayout_2.addWidget(self.spargeMagnesium, 2, 2, 1, 1)
-
-        self.strikeChloride = QLineEdit(self.group_results)
-        self.strikeChloride.setObjectName(u"strikeChloride")
-        self.strikeChloride.setAlignment(Qt.AlignCenter)
-        self.strikeChloride.setReadOnly(True)
-
-        self.gridLayout_2.addWidget(self.strikeChloride, 1, 4, 1, 1)
-
-        self.sodiumSlide = QSlider(self.group_results)
-        self.sodiumSlide.setObjectName(u"sodiumSlide")
-        self.sodiumSlide.setEnabled(False)
-        self.sodiumSlide.setMinimum(0)
-        self.sodiumSlide.setMaximum(150)
-        self.sodiumSlide.setValue(0)
-        self.sodiumSlide.setOrientation(Qt.Horizontal)
-        self.sodiumSlide.setTickPosition(QSlider.TicksBelow)
-        self.sodiumSlide.setTickInterval(25)
-
-        self.gridLayout_2.addWidget(self.sodiumSlide, 5, 3, 1, 1)
-
-        self.lbl_na = QLabel(self.group_results)
-        self.lbl_na.setObjectName(u"lbl_na")
-        self.lbl_na.setAlignment(Qt.AlignCenter)
-
-        self.gridLayout_2.addWidget(self.lbl_na, 0, 3, 1, 1)
-
-        self.spargeSodium = QLineEdit(self.group_results)
-        self.spargeSodium.setObjectName(u"spargeSodium")
-        self.spargeSodium.setAlignment(Qt.AlignCenter)
-        self.spargeSodium.setReadOnly(True)
-
-        self.gridLayout_2.addWidget(self.spargeSodium, 2, 3, 1, 1)
-
-        self.magnesiumSlide = QSlider(self.group_results)
-        self.magnesiumSlide.setObjectName(u"magnesiumSlide")
-        self.magnesiumSlide.setEnabled(False)
-        self.magnesiumSlide.setMinimum(10)
-        self.magnesiumSlide.setMaximum(30)
-        self.magnesiumSlide.setOrientation(Qt.Horizontal)
-        self.magnesiumSlide.setTickPosition(QSlider.TicksBelow)
-        self.magnesiumSlide.setTickInterval(5)
-
-        self.gridLayout_2.addWidget(self.magnesiumSlide, 5, 2, 1, 1)
-
-        self.strikeSodium = QLineEdit(self.group_results)
-        self.strikeSodium.setObjectName(u"strikeSodium")
-        self.strikeSodium.setAlignment(Qt.AlignCenter)
-        self.strikeSodium.setReadOnly(True)
-
-        self.gridLayout_2.addWidget(self.strikeSodium, 1, 3, 1, 1)
-
-        self.strikeMagnesium = QLineEdit(self.group_results)
-        self.strikeMagnesium.setObjectName(u"strikeMagnesium")
-        self.strikeMagnesium.setAlignment(Qt.AlignCenter)
-        self.strikeMagnesium.setReadOnly(True)
-
-        self.gridLayout_2.addWidget(self.strikeMagnesium, 1, 2, 1, 1)
-
-        self.spargeSulfate = QLineEdit(self.group_results)
-        self.spargeSulfate.setObjectName(u"spargeSulfate")
-        self.spargeSulfate.setAlignment(Qt.AlignCenter)
-        self.spargeSulfate.setReadOnly(True)
-
-        self.gridLayout_2.addWidget(self.spargeSulfate, 2, 5, 1, 1)
-
-        self.spargeChloride = QLineEdit(self.group_results)
-        self.spargeChloride.setObjectName(u"spargeChloride")
-        self.spargeChloride.setAlignment(Qt.AlignCenter)
-        self.spargeChloride.setReadOnly(True)
-
-        self.gridLayout_2.addWidget(self.spargeChloride, 2, 4, 1, 1)
-
-        self.lbl_so4 = QLabel(self.group_results)
-        self.lbl_so4.setObjectName(u"lbl_so4")
-        self.lbl_so4.setAlignment(Qt.AlignCenter)
-
-        self.gridLayout_2.addWidget(self.lbl_so4, 0, 5, 1, 1)
 
         self.sulfateSlide = QSlider(self.group_results)
         self.sulfateSlide.setObjectName(u"sulfateSlide")
@@ -506,33 +251,259 @@ class Ui_TabChemistry(object):
 
         self.bicarbonate = QLineEdit(self.group_results)
         self.bicarbonate.setObjectName(u"bicarbonate")
+        font = QFont()
+        font.setBold(True)
+        font.setWeight(75)
         self.bicarbonate.setFont(font)
         self.bicarbonate.setAlignment(Qt.AlignCenter)
         self.bicarbonate.setReadOnly(True)
 
         self.gridLayout_2.addWidget(self.bicarbonate, 4, 6, 1, 1)
 
-        self.ph = QLineEdit(self.group_results)
-        self.ph.setObjectName(u"ph")
-        self.ph.setAlignment(Qt.AlignCenter)
-        self.ph.setReadOnly(True)
+        self.strikeCalcium = QLineEdit(self.group_results)
+        self.strikeCalcium.setObjectName(u"strikeCalcium")
+        self.strikeCalcium.setAlignment(Qt.AlignCenter)
+        self.strikeCalcium.setReadOnly(True)
 
-        self.gridLayout_2.addWidget(self.ph, 4, 8, 1, 1)
+        self.gridLayout_2.addWidget(self.strikeCalcium, 1, 1, 1, 1)
 
-        self.lbl_mashPh = QLabel(self.group_results)
-        self.lbl_mashPh.setObjectName(u"lbl_mashPh")
-        self.lbl_mashPh.setAlignment(Qt.AlignCenter)
+        self.magnesium = QLineEdit(self.group_results)
+        self.magnesium.setObjectName(u"magnesium")
+        self.magnesium.setFont(font)
+        self.magnesium.setAlignment(Qt.AlignCenter)
+        self.magnesium.setReadOnly(True)
 
-        self.gridLayout_2.addWidget(self.lbl_mashPh, 3, 8, 1, 1)
+        self.gridLayout_2.addWidget(self.magnesium, 4, 2, 1, 1)
+
+        self.spargeSodium = QLineEdit(self.group_results)
+        self.spargeSodium.setObjectName(u"spargeSodium")
+        self.spargeSodium.setAlignment(Qt.AlignCenter)
+        self.spargeSodium.setReadOnly(True)
+
+        self.gridLayout_2.addWidget(self.spargeSodium, 2, 3, 1, 1)
+
+        self.lbl_na = QLabel(self.group_results)
+        self.lbl_na.setObjectName(u"lbl_na")
+        self.lbl_na.setAlignment(Qt.AlignCenter)
+
+        self.gridLayout_2.addWidget(self.lbl_na, 0, 3, 1, 1)
+
+        self.magnesiumSlide = QSlider(self.group_results)
+        self.magnesiumSlide.setObjectName(u"magnesiumSlide")
+        self.magnesiumSlide.setEnabled(False)
+        self.magnesiumSlide.setMinimum(10)
+        self.magnesiumSlide.setMaximum(30)
+        self.magnesiumSlide.setOrientation(Qt.Horizontal)
+        self.magnesiumSlide.setTickPosition(QSlider.TicksBelow)
+        self.magnesiumSlide.setTickInterval(5)
+
+        self.gridLayout_2.addWidget(self.magnesiumSlide, 5, 2, 1, 1)
+
+        self.sulfate = QLineEdit(self.group_results)
+        self.sulfate.setObjectName(u"sulfate")
+        self.sulfate.setFont(font)
+        self.sulfate.setAlignment(Qt.AlignCenter)
+        self.sulfate.setReadOnly(True)
+
+        self.gridLayout_2.addWidget(self.sulfate, 4, 5, 1, 1)
+
+        self.lbl_spargeResults = QLabel(self.group_results)
+        self.lbl_spargeResults.setObjectName(u"lbl_spargeResults")
+        self.lbl_spargeResults.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
+
+        self.gridLayout_2.addWidget(self.lbl_spargeResults, 2, 0, 1, 1)
+
+        self.spargeSulfate = QLineEdit(self.group_results)
+        self.spargeSulfate.setObjectName(u"spargeSulfate")
+        self.spargeSulfate.setAlignment(Qt.AlignCenter)
+        self.spargeSulfate.setReadOnly(True)
+
+        self.gridLayout_2.addWidget(self.spargeSulfate, 2, 5, 1, 1)
+
+        self.strikeSulfate = QLineEdit(self.group_results)
+        self.strikeSulfate.setObjectName(u"strikeSulfate")
+        self.strikeSulfate.setAlignment(Qt.AlignCenter)
+        self.strikeSulfate.setReadOnly(True)
+
+        self.gridLayout_2.addWidget(self.strikeSulfate, 1, 5, 1, 1)
+
+        self.lbl_overallResults = QLabel(self.group_results)
+        self.lbl_overallResults.setObjectName(u"lbl_overallResults")
+        self.lbl_overallResults.setFont(font)
+        self.lbl_overallResults.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
+
+        self.gridLayout_2.addWidget(self.lbl_overallResults, 4, 0, 1, 1)
+
+        self.bicarbonateSlide = QSlider(self.group_results)
+        self.bicarbonateSlide.setObjectName(u"bicarbonateSlide")
+        self.bicarbonateSlide.setEnabled(False)
+        self.bicarbonateSlide.setMinimum(0)
+        self.bicarbonateSlide.setMaximum(250)
+        self.bicarbonateSlide.setValue(0)
+        self.bicarbonateSlide.setOrientation(Qt.Horizontal)
+        self.bicarbonateSlide.setTickPosition(QSlider.TicksBelow)
+        self.bicarbonateSlide.setTickInterval(50)
+
+        self.gridLayout_2.addWidget(self.bicarbonateSlide, 5, 6, 1, 1)
+
+        self.lbl_cl = QLabel(self.group_results)
+        self.lbl_cl.setObjectName(u"lbl_cl")
+        self.lbl_cl.setAlignment(Qt.AlignCenter)
+
+        self.gridLayout_2.addWidget(self.lbl_cl, 0, 4, 1, 1)
+
+        self.line_5 = QFrame(self.group_results)
+        self.line_5.setObjectName(u"line_5")
+        self.line_5.setFrameShape(QFrame.HLine)
+        self.line_5.setFrameShadow(QFrame.Sunken)
+
+        self.gridLayout_2.addWidget(self.line_5, 3, 0, 1, 7)
+
+        self.strikeSodium = QLineEdit(self.group_results)
+        self.strikeSodium.setObjectName(u"strikeSodium")
+        self.strikeSodium.setAlignment(Qt.AlignCenter)
+        self.strikeSodium.setReadOnly(True)
+
+        self.gridLayout_2.addWidget(self.strikeSodium, 1, 3, 1, 1)
+
+        self.lbl_hco3 = QLabel(self.group_results)
+        self.lbl_hco3.setObjectName(u"lbl_hco3")
+        self.lbl_hco3.setAlignment(Qt.AlignCenter)
+
+        self.gridLayout_2.addWidget(self.lbl_hco3, 0, 6, 1, 1)
+
+        self.spargeCalcium = QLineEdit(self.group_results)
+        self.spargeCalcium.setObjectName(u"spargeCalcium")
+        self.spargeCalcium.setAlignment(Qt.AlignCenter)
+        self.spargeCalcium.setReadOnly(True)
+
+        self.gridLayout_2.addWidget(self.spargeCalcium, 2, 1, 1, 1)
+
+        self.chlorideSlide = QSlider(self.group_results)
+        self.chlorideSlide.setObjectName(u"chlorideSlide")
+        self.chlorideSlide.setEnabled(False)
+        self.chlorideSlide.setMinimum(0)
+        self.chlorideSlide.setMaximum(250)
+        self.chlorideSlide.setValue(0)
+        self.chlorideSlide.setOrientation(Qt.Horizontal)
+        self.chlorideSlide.setTickPosition(QSlider.TicksBelow)
+        self.chlorideSlide.setTickInterval(50)
+
+        self.gridLayout_2.addWidget(self.chlorideSlide, 5, 4, 1, 1)
+
+        self.strikeChloride = QLineEdit(self.group_results)
+        self.strikeChloride.setObjectName(u"strikeChloride")
+        self.strikeChloride.setAlignment(Qt.AlignCenter)
+        self.strikeChloride.setReadOnly(True)
+
+        self.gridLayout_2.addWidget(self.strikeChloride, 1, 4, 1, 1)
+
+        self.spargeBicarbonate = QLineEdit(self.group_results)
+        self.spargeBicarbonate.setObjectName(u"spargeBicarbonate")
+        self.spargeBicarbonate.setAlignment(Qt.AlignCenter)
+        self.spargeBicarbonate.setReadOnly(True)
+
+        self.gridLayout_2.addWidget(self.spargeBicarbonate, 2, 6, 1, 1)
+
+        self.sodiumSlide = QSlider(self.group_results)
+        self.sodiumSlide.setObjectName(u"sodiumSlide")
+        self.sodiumSlide.setEnabled(False)
+        self.sodiumSlide.setMinimum(0)
+        self.sodiumSlide.setMaximum(150)
+        self.sodiumSlide.setValue(0)
+        self.sodiumSlide.setOrientation(Qt.Horizontal)
+        self.sodiumSlide.setTickPosition(QSlider.TicksBelow)
+        self.sodiumSlide.setTickInterval(25)
+
+        self.gridLayout_2.addWidget(self.sodiumSlide, 5, 3, 1, 1)
+
+        self.spargeMagnesium = QLineEdit(self.group_results)
+        self.spargeMagnesium.setObjectName(u"spargeMagnesium")
+        self.spargeMagnesium.setAlignment(Qt.AlignCenter)
+        self.spargeMagnesium.setReadOnly(True)
+
+        self.gridLayout_2.addWidget(self.spargeMagnesium, 2, 2, 1, 1)
+
+        self.calciumSlide = QSlider(self.group_results)
+        self.calciumSlide.setObjectName(u"calciumSlide")
+        self.calciumSlide.setEnabled(False)
+        self.calciumSlide.setMinimum(50)
+        self.calciumSlide.setMaximum(150)
+        self.calciumSlide.setOrientation(Qt.Horizontal)
+        self.calciumSlide.setTickPosition(QSlider.TicksBelow)
+        self.calciumSlide.setTickInterval(10)
+
+        self.gridLayout_2.addWidget(self.calciumSlide, 5, 1, 1, 1)
+
+        self.chloride = QLineEdit(self.group_results)
+        self.chloride.setObjectName(u"chloride")
+        self.chloride.setFont(font)
+        self.chloride.setAlignment(Qt.AlignCenter)
+        self.chloride.setReadOnly(True)
+
+        self.gridLayout_2.addWidget(self.chloride, 4, 4, 1, 1)
+
+        self.lbl_mg = QLabel(self.group_results)
+        self.lbl_mg.setObjectName(u"lbl_mg")
+        self.lbl_mg.setAlignment(Qt.AlignCenter)
+
+        self.gridLayout_2.addWidget(self.lbl_mg, 0, 2, 1, 1)
+
+        self.strikeMagnesium = QLineEdit(self.group_results)
+        self.strikeMagnesium.setObjectName(u"strikeMagnesium")
+        self.strikeMagnesium.setAlignment(Qt.AlignCenter)
+        self.strikeMagnesium.setReadOnly(True)
+
+        self.gridLayout_2.addWidget(self.strikeMagnesium, 1, 2, 1, 1)
+
+        self.calcium = QLineEdit(self.group_results)
+        self.calcium.setObjectName(u"calcium")
+        self.calcium.setFont(font)
+        self.calcium.setAlignment(Qt.AlignCenter)
+        self.calcium.setReadOnly(True)
+
+        self.gridLayout_2.addWidget(self.calcium, 4, 1, 1, 1)
+
+        self.sodium = QLineEdit(self.group_results)
+        self.sodium.setObjectName(u"sodium")
+        self.sodium.setFont(font)
+        self.sodium.setAlignment(Qt.AlignCenter)
+        self.sodium.setReadOnly(True)
+
+        self.gridLayout_2.addWidget(self.sodium, 4, 3, 1, 1)
+
+        self.strikeBicarbonate = QLineEdit(self.group_results)
+        self.strikeBicarbonate.setObjectName(u"strikeBicarbonate")
+        self.strikeBicarbonate.setAlignment(Qt.AlignCenter)
+        self.strikeBicarbonate.setReadOnly(True)
+
+        self.gridLayout_2.addWidget(self.strikeBicarbonate, 1, 6, 1, 1)
+
+        self.spargeChloride = QLineEdit(self.group_results)
+        self.spargeChloride.setObjectName(u"spargeChloride")
+        self.spargeChloride.setAlignment(Qt.AlignCenter)
+        self.spargeChloride.setReadOnly(True)
+
+        self.gridLayout_2.addWidget(self.spargeChloride, 2, 4, 1, 1)
+
+        self.lbl_so4 = QLabel(self.group_results)
+        self.lbl_so4.setObjectName(u"lbl_so4")
+        self.lbl_so4.setAlignment(Qt.AlignCenter)
+
+        self.gridLayout_2.addWidget(self.lbl_so4, 0, 5, 1, 1)
 
 
         self.verticalLayout.addWidget(self.group_results)
 
-        self.splitter = QSplitter(TabChemistry)
-        self.splitter.setObjectName(u"splitter")
-        self.splitter.setOrientation(Qt.Horizontal)
-        self.group_targets = QGroupBox(self.splitter)
+        self.horizontalLayout = QHBoxLayout()
+        self.horizontalLayout.setObjectName(u"horizontalLayout")
+        self.group_targets = QGroupBox(TabChemistry)
         self.group_targets.setObjectName(u"group_targets")
+        sizePolicy = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
+        sizePolicy.setHorizontalStretch(1)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.group_targets.sizePolicy().hasHeightForWidth())
+        self.group_targets.setSizePolicy(sizePolicy)
         self.formLayout = QFormLayout(self.group_targets)
         self.formLayout.setObjectName(u"formLayout")
         self.formLayout.setLabelAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
@@ -594,9 +565,13 @@ class Ui_TabChemistry(object):
 
         self.formLayout.setWidget(5, QFormLayout.FieldRole, self.recommended)
 
-        self.splitter.addWidget(self.group_targets)
-        self.group_acids = QGroupBox(self.splitter)
+
+        self.horizontalLayout.addWidget(self.group_targets)
+
+        self.group_acids = QGroupBox(TabChemistry)
         self.group_acids.setObjectName(u"group_acids")
+        sizePolicy.setHeightForWidth(self.group_acids.sizePolicy().hasHeightForWidth())
+        self.group_acids.setSizePolicy(sizePolicy)
         self.formLayout_2 = QFormLayout(self.group_acids)
         self.formLayout_2.setObjectName(u"formLayout_2")
         self.formLayout_2.setLabelAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
@@ -632,13 +607,102 @@ class Ui_TabChemistry(object):
         self.acidMalt = QDoubleSpinBox(self.group_acids)
         self.acidMalt.setObjectName(u"acidMalt")
         self.acidMalt.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
+        self.acidMalt.setReadOnly(True)
         self.acidMalt.setDecimals(1)
 
         self.formLayout_2.setWidget(2, QFormLayout.FieldRole, self.acidMalt)
 
-        self.splitter.addWidget(self.group_acids)
 
-        self.verticalLayout.addWidget(self.splitter)
+        self.horizontalLayout.addWidget(self.group_acids)
+
+        self.group_ph = QGroupBox(TabChemistry)
+        self.group_ph.setObjectName(u"group_ph")
+        sizePolicy.setHeightForWidth(self.group_ph.sizePolicy().hasHeightForWidth())
+        self.group_ph.setSizePolicy(sizePolicy)
+        self.gridLayout_4 = QGridLayout(self.group_ph)
+        self.gridLayout_4.setObjectName(u"gridLayout_4")
+        self.ph = QLineEdit(self.group_ph)
+        self.ph.setObjectName(u"ph")
+        self.ph.setAlignment(Qt.AlignCenter)
+        self.ph.setReadOnly(True)
+
+        self.gridLayout_4.addWidget(self.ph, 0, 0, 1, 3)
+
+        self.phSlide = QSlider(self.group_ph)
+        self.phSlide.setObjectName(u"phSlide")
+        self.phSlide.setEnabled(False)
+        self.phSlide.setMinimum(520)
+        self.phSlide.setMaximum(560)
+        self.phSlide.setValue(560)
+        self.phSlide.setOrientation(Qt.Horizontal)
+        self.phSlide.setTickPosition(QSlider.TicksBelow)
+        self.phSlide.setTickInterval(10)
+
+        self.gridLayout_4.addWidget(self.phSlide, 1, 0, 1, 3)
+
+        self.lbl_ph52 = QLabel(self.group_ph)
+        self.lbl_ph52.setObjectName(u"lbl_ph52")
+
+        self.gridLayout_4.addWidget(self.lbl_ph52, 2, 0, 1, 1)
+
+        self.lbl_ph56 = QLabel(self.group_ph)
+        self.lbl_ph56.setObjectName(u"lbl_ph56")
+        self.lbl_ph56.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
+
+        self.gridLayout_4.addWidget(self.lbl_ph56, 2, 2, 1, 1)
+
+        self.verticalSpacer_2 = QSpacerItem(20, 52, QSizePolicy.Minimum, QSizePolicy.Expanding)
+
+        self.gridLayout_4.addItem(self.verticalSpacer_2, 3, 1, 1, 1)
+
+
+        self.horizontalLayout.addWidget(self.group_ph)
+
+        self.group_ratio = QGroupBox(TabChemistry)
+        self.group_ratio.setObjectName(u"group_ratio")
+        sizePolicy.setHeightForWidth(self.group_ratio.sizePolicy().hasHeightForWidth())
+        self.group_ratio.setSizePolicy(sizePolicy)
+        self.gridLayout_3 = QGridLayout(self.group_ratio)
+        self.gridLayout_3.setObjectName(u"gridLayout_3")
+        self.ratio = QLineEdit(self.group_ratio)
+        self.ratio.setObjectName(u"ratio")
+        self.ratio.setAlignment(Qt.AlignCenter)
+        self.ratio.setReadOnly(True)
+
+        self.gridLayout_3.addWidget(self.ratio, 0, 0, 1, 2)
+
+        self.ratioSlide = QSlider(self.group_ratio)
+        self.ratioSlide.setObjectName(u"ratioSlide")
+        self.ratioSlide.setEnabled(False)
+        self.ratioSlide.setMinimum(0)
+        self.ratioSlide.setMaximum(200)
+        self.ratioSlide.setValue(100)
+        self.ratioSlide.setOrientation(Qt.Horizontal)
+        self.ratioSlide.setTickPosition(QSlider.TicksBelow)
+        self.ratioSlide.setTickInterval(50)
+
+        self.gridLayout_3.addWidget(self.ratioSlide, 1, 0, 1, 2)
+
+        self.lbl_ratioCrisp = QLabel(self.group_ratio)
+        self.lbl_ratioCrisp.setObjectName(u"lbl_ratioCrisp")
+
+        self.gridLayout_3.addWidget(self.lbl_ratioCrisp, 2, 0, 1, 1)
+
+        self.lbl_ratioMalty = QLabel(self.group_ratio)
+        self.lbl_ratioMalty.setObjectName(u"lbl_ratioMalty")
+        self.lbl_ratioMalty.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
+
+        self.gridLayout_3.addWidget(self.lbl_ratioMalty, 2, 1, 1, 1)
+
+        self.verticalSpacer_3 = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
+
+        self.gridLayout_3.addItem(self.verticalSpacer_3, 3, 0, 1, 1)
+
+
+        self.horizontalLayout.addWidget(self.group_ratio)
+
+
+        self.verticalLayout.addLayout(self.horizontalLayout)
 
         self.verticalSpacer = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
 
@@ -724,125 +788,10 @@ class Ui_TabChemistry(object):
         self.lbl_increase.setText(QCoreApplication.translate("TabChemistry", u"Increase pH", None))
         self.group_results.setTitle(QCoreApplication.translate("TabChemistry", u"Water Results:", None))
 #if QT_CONFIG(tooltip)
-        self.lbl_spargeResults.setToolTip(QCoreApplication.translate("TabChemistry", u"The words 'Sparge' and 'Kettle' are used somewhat interchangeably.  Sparge/Kettle salts should normally be added to the Kettle rather than to the sparge/mashout water.  The separate Sparge Water acidification calculation assumes these salts are added to the kettle (and so do not affect the sparge water acidification calculation).", None))
-#endif // QT_CONFIG(tooltip)
-        self.lbl_spargeResults.setText(QCoreApplication.translate("TabChemistry", u"<html><head/><body><p>Sparge H<span style=\" vertical-align:sub;\">2</span>O Concentrations:</p></body></html>", None))
-        self.lbl_chlorideSulfideRatio.setText(QCoreApplication.translate("TabChemistry", u"Chloride/Sulfide Ratio:", None))
-#if QT_CONFIG(tooltip)
-        self.magnesium.setToolTip(QCoreApplication.translate("TabChemistry", u"Beer wort naturally contains more Magnesium than the yeast need. ", None))
-#endif // QT_CONFIG(tooltip)
-        self.magnesium.setPlaceholderText(QCoreApplication.translate("TabChemistry", u"0 ppm", None))
-        self.lbl_overallResults.setText(QCoreApplication.translate("TabChemistry", u"<html><head/><body><p>Overall H<span style=\" vertical-align:sub;\">2</span>O Concentrations:</p></body></html>", None))
-#if QT_CONFIG(tooltip)
         self.lbl_ca.setToolTip(QCoreApplication.translate("TabChemistry", u"In general, at least 50 ppm of Calcium in the fermenter is recommended for yeast flocculation.", None))
 #endif // QT_CONFIG(tooltip)
         self.lbl_ca.setText(QCoreApplication.translate("TabChemistry", u"Ca", None))
-#if QT_CONFIG(tooltip)
-        self.calcium.setToolTip(QCoreApplication.translate("TabChemistry", u"In general, at least 50 ppm of Calcium in the fermenter is recommended for yeast flocculation.", None))
-#endif // QT_CONFIG(tooltip)
-        self.calcium.setPlaceholderText(QCoreApplication.translate("TabChemistry", u"0 ppm", None))
-#if QT_CONFIG(tooltip)
-        self.spargeBicarbonate.setToolTip(QCoreApplication.translate("TabChemistry", u"Equivalent bicarbonate concentration.", None))
-#endif // QT_CONFIG(tooltip)
-        self.spargeBicarbonate.setPlaceholderText(QCoreApplication.translate("TabChemistry", u"0 ppm", None))
-#if QT_CONFIG(tooltip)
-        self.sulfate.setToolTip(QCoreApplication.translate("TabChemistry", u"Sulfate enhances the perception of crisp bitterness.", None))
-#endif // QT_CONFIG(tooltip)
-        self.sulfate.setPlaceholderText(QCoreApplication.translate("TabChemistry", u"0 ppm", None))
-#if QT_CONFIG(tooltip)
-        self.lbl_hco3.setToolTip(QCoreApplication.translate("TabChemistry", u"Equivalent bicarbonate concentration.", None))
-#endif // QT_CONFIG(tooltip)
-        self.lbl_hco3.setText(QCoreApplication.translate("TabChemistry", u"<html><head/><body><p>HCO<span style=\" vertical-align:sub;\">3</span></p></body></html>", None))
-#if QT_CONFIG(tooltip)
-        self.ratio.setToolTip(QCoreApplication.translate("TabChemistry", u"Chloride/Sulfate ratios greater than 1.0 tend to accentuate malt flavors.  Chloride/Sulfate ratios less than 1.0 tend to accentuate crisp bitterness. ", None))
-#endif // QT_CONFIG(tooltip)
-        self.ratio.setPlaceholderText(QCoreApplication.translate("TabChemistry", u"N/A", None))
-#if QT_CONFIG(tooltip)
-        self.chlorideSlide.setToolTip(QCoreApplication.translate("TabChemistry", u"0-250 ppm", None))
-#endif // QT_CONFIG(tooltip)
-#if QT_CONFIG(tooltip)
-        self.sodium.setToolTip(QCoreApplication.translate("TabChemistry", u"Sodium enhances flavors, but too much can cause a salty taste.", None))
-#endif // QT_CONFIG(tooltip)
-        self.sodium.setPlaceholderText(QCoreApplication.translate("TabChemistry", u"0 ppm", None))
-#if QT_CONFIG(tooltip)
-        self.strikeCalcium.setToolTip(QCoreApplication.translate("TabChemistry", u"In general, at least 50 ppm of Calcium in the fermenter is recommended for yeast flocculation.", None))
-#endif // QT_CONFIG(tooltip)
-        self.strikeCalcium.setPlaceholderText(QCoreApplication.translate("TabChemistry", u"0 ppm", None))
-#if QT_CONFIG(tooltip)
-        self.spargeCalcium.setToolTip(QCoreApplication.translate("TabChemistry", u"In general, at least 50 ppm of Calcium in the fermenter is recommended for yeast flocculation.", None))
-#endif // QT_CONFIG(tooltip)
-        self.spargeCalcium.setPlaceholderText(QCoreApplication.translate("TabChemistry", u"0 ppm", None))
-#if QT_CONFIG(tooltip)
-        self.lbl_mg.setToolTip(QCoreApplication.translate("TabChemistry", u"Beer wort naturally contains more Magnesium than the yeast need. ", None))
-#endif // QT_CONFIG(tooltip)
-        self.lbl_mg.setText(QCoreApplication.translate("TabChemistry", u"Mg", None))
-#if QT_CONFIG(tooltip)
-        self.lbl_cl.setToolTip(QCoreApplication.translate("TabChemistry", u"Chloride enhances malty flavors.", None))
-#endif // QT_CONFIG(tooltip)
-        self.lbl_cl.setText(QCoreApplication.translate("TabChemistry", u"Cl", None))
-#if QT_CONFIG(tooltip)
-        self.bicarbonateSlide.setToolTip(QCoreApplication.translate("TabChemistry", u"0-50 ppm for pale, base malt-only beers\n"
-"50-150 ppm for amber-colored, toasted malt beers\n"
-"150-250 ppm for dark, roasted malt beers", None))
-#endif // QT_CONFIG(tooltip)
-#if QT_CONFIG(tooltip)
-        self.chloride.setToolTip(QCoreApplication.translate("TabChemistry", u"Chloride enhances malty flavors.", None))
-#endif // QT_CONFIG(tooltip)
-        self.chloride.setPlaceholderText(QCoreApplication.translate("TabChemistry", u"0 ppm", None))
-#if QT_CONFIG(tooltip)
-        self.strikeBicarbonate.setToolTip(QCoreApplication.translate("TabChemistry", u"Equivalent bicarbonate concentration.", None))
-#endif // QT_CONFIG(tooltip)
-        self.strikeBicarbonate.setPlaceholderText(QCoreApplication.translate("TabChemistry", u"0 ppm", None))
-#if QT_CONFIG(tooltip)
-        self.calciumSlide.setToolTip(QCoreApplication.translate("TabChemistry", u"50-150 ppm", None))
-#endif // QT_CONFIG(tooltip)
-#if QT_CONFIG(tooltip)
-        self.strikeSulfate.setToolTip(QCoreApplication.translate("TabChemistry", u"Sulfate enhances the perception of crisp bitterness.", None))
-#endif // QT_CONFIG(tooltip)
-        self.strikeSulfate.setPlaceholderText(QCoreApplication.translate("TabChemistry", u"0 ppm", None))
         self.lbl_mashResults.setText(QCoreApplication.translate("TabChemistry", u"<html><head/><body><p>Mash H<span style=\" vertical-align:sub;\">2</span>O Concentrations:</p></body></html>", None))
-#if QT_CONFIG(tooltip)
-        self.spargeMagnesium.setToolTip(QCoreApplication.translate("TabChemistry", u"Beer wort naturally contains more Magnesium than the yeast need. ", None))
-#endif // QT_CONFIG(tooltip)
-        self.spargeMagnesium.setPlaceholderText(QCoreApplication.translate("TabChemistry", u"0 ppm", None))
-#if QT_CONFIG(tooltip)
-        self.strikeChloride.setToolTip(QCoreApplication.translate("TabChemistry", u"Chloride enhances malty flavors.", None))
-#endif // QT_CONFIG(tooltip)
-        self.strikeChloride.setPlaceholderText(QCoreApplication.translate("TabChemistry", u"0 ppm", None))
-#if QT_CONFIG(tooltip)
-        self.sodiumSlide.setToolTip(QCoreApplication.translate("TabChemistry", u"0-150 ppm", None))
-#endif // QT_CONFIG(tooltip)
-#if QT_CONFIG(tooltip)
-        self.lbl_na.setToolTip(QCoreApplication.translate("TabChemistry", u"Sodium enhances flavors, but too much can cause a salty taste.", None))
-#endif // QT_CONFIG(tooltip)
-        self.lbl_na.setText(QCoreApplication.translate("TabChemistry", u"Na", None))
-#if QT_CONFIG(tooltip)
-        self.spargeSodium.setToolTip(QCoreApplication.translate("TabChemistry", u"Sodium enhances flavors, but too much can cause a salty taste.", None))
-#endif // QT_CONFIG(tooltip)
-        self.spargeSodium.setPlaceholderText(QCoreApplication.translate("TabChemistry", u"0 ppm", None))
-#if QT_CONFIG(tooltip)
-        self.magnesiumSlide.setToolTip(QCoreApplication.translate("TabChemistry", u"10-30 ppm", None))
-#endif // QT_CONFIG(tooltip)
-#if QT_CONFIG(tooltip)
-        self.strikeSodium.setToolTip(QCoreApplication.translate("TabChemistry", u"Sodium enhances flavors, but too much can cause a salty taste.", None))
-#endif // QT_CONFIG(tooltip)
-        self.strikeSodium.setPlaceholderText(QCoreApplication.translate("TabChemistry", u"0 ppm", None))
-#if QT_CONFIG(tooltip)
-        self.strikeMagnesium.setToolTip(QCoreApplication.translate("TabChemistry", u"Beer wort naturally contains more Magnesium than the yeast need. ", None))
-#endif // QT_CONFIG(tooltip)
-        self.strikeMagnesium.setPlaceholderText(QCoreApplication.translate("TabChemistry", u"0 ppm", None))
-#if QT_CONFIG(tooltip)
-        self.spargeSulfate.setToolTip(QCoreApplication.translate("TabChemistry", u"Sulfate enhances the perception of crisp bitterness.", None))
-#endif // QT_CONFIG(tooltip)
-        self.spargeSulfate.setPlaceholderText(QCoreApplication.translate("TabChemistry", u"0 ppm", None))
-#if QT_CONFIG(tooltip)
-        self.spargeChloride.setToolTip(QCoreApplication.translate("TabChemistry", u"Chloride enhances malty flavors.", None))
-#endif // QT_CONFIG(tooltip)
-        self.spargeChloride.setPlaceholderText(QCoreApplication.translate("TabChemistry", u"0 ppm", None))
-#if QT_CONFIG(tooltip)
-        self.lbl_so4.setToolTip(QCoreApplication.translate("TabChemistry", u"Sulfate enhances the perception of crisp bitterness.", None))
-#endif // QT_CONFIG(tooltip)
-        self.lbl_so4.setText(QCoreApplication.translate("TabChemistry", u"<html><head/><body><p>SO<span style=\" vertical-align:sub;\">4</span></p></body></html>", None))
 #if QT_CONFIG(tooltip)
         self.sulfateSlide.setToolTip(QCoreApplication.translate("TabChemistry", u"50-150 ppm for normally bitter beers\n"
 "150-350 ppm for very bitter beers", None))
@@ -852,12 +801,115 @@ class Ui_TabChemistry(object):
 #endif // QT_CONFIG(tooltip)
         self.bicarbonate.setPlaceholderText(QCoreApplication.translate("TabChemistry", u"0 ppm", None))
 #if QT_CONFIG(tooltip)
-        self.ph.setToolTip(QCoreApplication.translate("TabChemistry", u"Ideally, mash pH should be in the range of 5.2 to 5.6, measured at room temperature.\n"
-"\n"
-"Note: For Step Mashes, this pH will not necessarily be accurate for any given step. It represents the pH that would be achieved in a single infusion with all of the recipe water.", None))
+        self.strikeCalcium.setToolTip(QCoreApplication.translate("TabChemistry", u"In general, at least 50 ppm of Calcium in the fermenter is recommended for yeast flocculation.", None))
 #endif // QT_CONFIG(tooltip)
-        self.ph.setPlaceholderText(QCoreApplication.translate("TabChemistry", u"7", None))
-        self.lbl_mashPh.setText(QCoreApplication.translate("TabChemistry", u"Mash pH:", None))
+        self.strikeCalcium.setPlaceholderText(QCoreApplication.translate("TabChemistry", u"0 ppm", None))
+#if QT_CONFIG(tooltip)
+        self.magnesium.setToolTip(QCoreApplication.translate("TabChemistry", u"Beer wort naturally contains more Magnesium than the yeast need. ", None))
+#endif // QT_CONFIG(tooltip)
+        self.magnesium.setPlaceholderText(QCoreApplication.translate("TabChemistry", u"0 ppm", None))
+#if QT_CONFIG(tooltip)
+        self.spargeSodium.setToolTip(QCoreApplication.translate("TabChemistry", u"Sodium enhances flavors, but too much can cause a salty taste.", None))
+#endif // QT_CONFIG(tooltip)
+        self.spargeSodium.setPlaceholderText(QCoreApplication.translate("TabChemistry", u"0 ppm", None))
+#if QT_CONFIG(tooltip)
+        self.lbl_na.setToolTip(QCoreApplication.translate("TabChemistry", u"Sodium enhances flavors, but too much can cause a salty taste.", None))
+#endif // QT_CONFIG(tooltip)
+        self.lbl_na.setText(QCoreApplication.translate("TabChemistry", u"Na", None))
+#if QT_CONFIG(tooltip)
+        self.magnesiumSlide.setToolTip(QCoreApplication.translate("TabChemistry", u"10-30 ppm", None))
+#endif // QT_CONFIG(tooltip)
+#if QT_CONFIG(tooltip)
+        self.sulfate.setToolTip(QCoreApplication.translate("TabChemistry", u"Sulfate enhances the perception of crisp bitterness.", None))
+#endif // QT_CONFIG(tooltip)
+        self.sulfate.setPlaceholderText(QCoreApplication.translate("TabChemistry", u"0 ppm", None))
+#if QT_CONFIG(tooltip)
+        self.lbl_spargeResults.setToolTip(QCoreApplication.translate("TabChemistry", u"The words 'Sparge' and 'Kettle' are used somewhat interchangeably.  Sparge/Kettle salts should normally be added to the Kettle rather than to the sparge/mashout water.  The separate Sparge Water acidification calculation assumes these salts are added to the kettle (and so do not affect the sparge water acidification calculation).", None))
+#endif // QT_CONFIG(tooltip)
+        self.lbl_spargeResults.setText(QCoreApplication.translate("TabChemistry", u"<html><head/><body><p>Sparge H<span style=\" vertical-align:sub;\">2</span>O Concentrations:</p></body></html>", None))
+#if QT_CONFIG(tooltip)
+        self.spargeSulfate.setToolTip(QCoreApplication.translate("TabChemistry", u"Sulfate enhances the perception of crisp bitterness.", None))
+#endif // QT_CONFIG(tooltip)
+        self.spargeSulfate.setPlaceholderText(QCoreApplication.translate("TabChemistry", u"0 ppm", None))
+#if QT_CONFIG(tooltip)
+        self.strikeSulfate.setToolTip(QCoreApplication.translate("TabChemistry", u"Sulfate enhances the perception of crisp bitterness.", None))
+#endif // QT_CONFIG(tooltip)
+        self.strikeSulfate.setPlaceholderText(QCoreApplication.translate("TabChemistry", u"0 ppm", None))
+        self.lbl_overallResults.setText(QCoreApplication.translate("TabChemistry", u"<html><head/><body><p>Overall H<span style=\" vertical-align:sub;\">2</span>O Concentrations:</p></body></html>", None))
+#if QT_CONFIG(tooltip)
+        self.bicarbonateSlide.setToolTip(QCoreApplication.translate("TabChemistry", u"0-50 ppm for pale, base malt-only beers\n"
+"50-150 ppm for amber-colored, toasted malt beers\n"
+"150-250 ppm for dark, roasted malt beers", None))
+#endif // QT_CONFIG(tooltip)
+#if QT_CONFIG(tooltip)
+        self.lbl_cl.setToolTip(QCoreApplication.translate("TabChemistry", u"Chloride enhances malty flavors.", None))
+#endif // QT_CONFIG(tooltip)
+        self.lbl_cl.setText(QCoreApplication.translate("TabChemistry", u"Cl", None))
+#if QT_CONFIG(tooltip)
+        self.strikeSodium.setToolTip(QCoreApplication.translate("TabChemistry", u"Sodium enhances flavors, but too much can cause a salty taste.", None))
+#endif // QT_CONFIG(tooltip)
+        self.strikeSodium.setPlaceholderText(QCoreApplication.translate("TabChemistry", u"0 ppm", None))
+#if QT_CONFIG(tooltip)
+        self.lbl_hco3.setToolTip(QCoreApplication.translate("TabChemistry", u"Equivalent bicarbonate concentration.", None))
+#endif // QT_CONFIG(tooltip)
+        self.lbl_hco3.setText(QCoreApplication.translate("TabChemistry", u"<html><head/><body><p>HCO<span style=\" vertical-align:sub;\">3</span></p></body></html>", None))
+#if QT_CONFIG(tooltip)
+        self.spargeCalcium.setToolTip(QCoreApplication.translate("TabChemistry", u"In general, at least 50 ppm of Calcium in the fermenter is recommended for yeast flocculation.", None))
+#endif // QT_CONFIG(tooltip)
+        self.spargeCalcium.setPlaceholderText(QCoreApplication.translate("TabChemistry", u"0 ppm", None))
+#if QT_CONFIG(tooltip)
+        self.chlorideSlide.setToolTip(QCoreApplication.translate("TabChemistry", u"0-250 ppm", None))
+#endif // QT_CONFIG(tooltip)
+#if QT_CONFIG(tooltip)
+        self.strikeChloride.setToolTip(QCoreApplication.translate("TabChemistry", u"Chloride enhances malty flavors.", None))
+#endif // QT_CONFIG(tooltip)
+        self.strikeChloride.setPlaceholderText(QCoreApplication.translate("TabChemistry", u"0 ppm", None))
+#if QT_CONFIG(tooltip)
+        self.spargeBicarbonate.setToolTip(QCoreApplication.translate("TabChemistry", u"Equivalent bicarbonate concentration.", None))
+#endif // QT_CONFIG(tooltip)
+        self.spargeBicarbonate.setPlaceholderText(QCoreApplication.translate("TabChemistry", u"0 ppm", None))
+#if QT_CONFIG(tooltip)
+        self.sodiumSlide.setToolTip(QCoreApplication.translate("TabChemistry", u"0-150 ppm", None))
+#endif // QT_CONFIG(tooltip)
+#if QT_CONFIG(tooltip)
+        self.spargeMagnesium.setToolTip(QCoreApplication.translate("TabChemistry", u"Beer wort naturally contains more Magnesium than the yeast need. ", None))
+#endif // QT_CONFIG(tooltip)
+        self.spargeMagnesium.setPlaceholderText(QCoreApplication.translate("TabChemistry", u"0 ppm", None))
+#if QT_CONFIG(tooltip)
+        self.calciumSlide.setToolTip(QCoreApplication.translate("TabChemistry", u"50-150 ppm", None))
+#endif // QT_CONFIG(tooltip)
+#if QT_CONFIG(tooltip)
+        self.chloride.setToolTip(QCoreApplication.translate("TabChemistry", u"Chloride enhances malty flavors.", None))
+#endif // QT_CONFIG(tooltip)
+        self.chloride.setPlaceholderText(QCoreApplication.translate("TabChemistry", u"0 ppm", None))
+#if QT_CONFIG(tooltip)
+        self.lbl_mg.setToolTip(QCoreApplication.translate("TabChemistry", u"Beer wort naturally contains more Magnesium than the yeast need. ", None))
+#endif // QT_CONFIG(tooltip)
+        self.lbl_mg.setText(QCoreApplication.translate("TabChemistry", u"Mg", None))
+#if QT_CONFIG(tooltip)
+        self.strikeMagnesium.setToolTip(QCoreApplication.translate("TabChemistry", u"Beer wort naturally contains more Magnesium than the yeast need. ", None))
+#endif // QT_CONFIG(tooltip)
+        self.strikeMagnesium.setPlaceholderText(QCoreApplication.translate("TabChemistry", u"0 ppm", None))
+#if QT_CONFIG(tooltip)
+        self.calcium.setToolTip(QCoreApplication.translate("TabChemistry", u"In general, at least 50 ppm of Calcium in the fermenter is recommended for yeast flocculation.", None))
+#endif // QT_CONFIG(tooltip)
+        self.calcium.setPlaceholderText(QCoreApplication.translate("TabChemistry", u"0 ppm", None))
+#if QT_CONFIG(tooltip)
+        self.sodium.setToolTip(QCoreApplication.translate("TabChemistry", u"Sodium enhances flavors, but too much can cause a salty taste.", None))
+#endif // QT_CONFIG(tooltip)
+        self.sodium.setPlaceholderText(QCoreApplication.translate("TabChemistry", u"0 ppm", None))
+#if QT_CONFIG(tooltip)
+        self.strikeBicarbonate.setToolTip(QCoreApplication.translate("TabChemistry", u"Equivalent bicarbonate concentration.", None))
+#endif // QT_CONFIG(tooltip)
+        self.strikeBicarbonate.setPlaceholderText(QCoreApplication.translate("TabChemistry", u"0 ppm", None))
+#if QT_CONFIG(tooltip)
+        self.spargeChloride.setToolTip(QCoreApplication.translate("TabChemistry", u"Chloride enhances malty flavors.", None))
+#endif // QT_CONFIG(tooltip)
+        self.spargeChloride.setPlaceholderText(QCoreApplication.translate("TabChemistry", u"0 ppm", None))
+#if QT_CONFIG(tooltip)
+        self.lbl_so4.setToolTip(QCoreApplication.translate("TabChemistry", u"Sulfate enhances the perception of crisp bitterness.", None))
+#endif // QT_CONFIG(tooltip)
+        self.lbl_so4.setText(QCoreApplication.translate("TabChemistry", u"<html><head/><body><p>SO<span style=\" vertical-align:sub;\">4</span></p></body></html>", None))
         self.group_targets.setTitle(QCoreApplication.translate("TabChemistry", u"Target Characteristics:", None))
         self.lbl_pale.setText(QCoreApplication.translate("TabChemistry", u"Maintain Palest Color:", None))
         self.lbl_body.setText(QCoreApplication.translate("TabChemistry", u"Desired Body:", None))
@@ -875,5 +927,21 @@ class Ui_TabChemistry(object):
         self.lactic.setSuffix(QCoreApplication.translate("TabChemistry", u" ml", None))
         self.lbl_acidMalt.setText(QCoreApplication.translate("TabChemistry", u"Acid Malt (3%):", None))
         self.acidMalt.setSuffix(QCoreApplication.translate("TabChemistry", u" oz", None))
+#if QT_CONFIG(tooltip)
+        self.group_ph.setToolTip(QCoreApplication.translate("TabChemistry", u"Ideally, mash pH should be in the range of 5.2 to 5.6, measured at room temperature.\n"
+"\n"
+"Note: For Step Mashes, this pH will not necessarily be accurate for any given step. It represents the pH that would be achieved in a single infusion with all of the recipe water.", None))
+#endif // QT_CONFIG(tooltip)
+        self.group_ph.setTitle(QCoreApplication.translate("TabChemistry", u"Mash pH:", None))
+        self.ph.setPlaceholderText(QCoreApplication.translate("TabChemistry", u"7", None))
+        self.lbl_ph52.setText(QCoreApplication.translate("TabChemistry", u"5.2", None))
+        self.lbl_ph56.setText(QCoreApplication.translate("TabChemistry", u"5.6", None))
+#if QT_CONFIG(tooltip)
+        self.group_ratio.setToolTip(QCoreApplication.translate("TabChemistry", u"Chloride/Sulfate ratios greater than 1.0 tend to accentuate malt flavors.  Chloride/Sulfate ratios less than 1.0 tend to accentuate crisp bitterness. ", None))
+#endif // QT_CONFIG(tooltip)
+        self.group_ratio.setTitle(QCoreApplication.translate("TabChemistry", u"Chloride/Sulfide Ratio:", None))
+        self.ratio.setPlaceholderText(QCoreApplication.translate("TabChemistry", u"N/A", None))
+        self.lbl_ratioCrisp.setText(QCoreApplication.translate("TabChemistry", u"Crisp Bitterness", None))
+        self.lbl_ratioMalty.setText(QCoreApplication.translate("TabChemistry", u"Malty", None))
     # retranslateUi
 

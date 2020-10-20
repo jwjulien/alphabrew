@@ -29,17 +29,13 @@ class Calibrations:
     The intent of this class is to contain parameters, such as boil off rate, which remain pretty much fixed across
     all of the equipment in a Brewhouse but may need to be tweaked and adjusted from Brewhouse to Brewhouse.
     """
-    def __init__(self,
-                 brewhouseEfficiency=70, # Percent
-                 leafHopTrubLoss=0.0625, # Gallons per ounce
-                 pelletHopTrubLoss=0.025, # Gallons per ounce
-                 ca=0, # PPM
-                 mg=0, # PPM
-                 na=0, # PPM
-                 cl=0, # PPM
-                 so4=0, # PPM
-                 hco3=0, # PPM
-                 ph=7): # Unitless
+    def __init__(
+            self,
+            brewhouseEfficiency=70, # Percent
+            leafHopTrubLoss=0.0625, # Gallons per ounce
+            pelletHopTrubLoss=0.025, # Gallons per ounce
+            maltBufferingCorrectionFactor=0.60, # Unitless
+        ):
 
         # Overall Conversion Efficiency
         self.brewhouseEfficiency = brewhouseEfficiency
@@ -48,14 +44,7 @@ class Calibrations:
         self.leafHopTrubLoss = leafHopTrubLoss
         self.pelletHopTrubLoss = pelletHopTrubLoss
 
-        # Water Profile
-        self.ca = ca
-        self.mg = mg
-        self.na = na
-        self.cl = cl
-        self.so4 = so4
-        self.hco3 = hco3
-        self.ph = ph
+        self.maltBufferingCorrectionFactor = maltBufferingCorrectionFactor
 
 
 

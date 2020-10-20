@@ -76,6 +76,36 @@ class Water():
         return PercentType(percent * 100, '%')
 
 
+# ----------------------------------------------------------------------------------------------------------------------
+    @property
+    def carbonate(self):
+        """Calculates and returns the carbonate level for this water source.  Carbonate is a representation of the
+        water hardness and is a factor of the water's pH and alkalinity."""
+        alkalinityAsCaCO3 = self.bicarbonate.as_('ppm') / 1.22
+        k2 = 10.3309621991148
+        carbonate = alkalinityAsCaCO3 * (10 ** (self.ph - k2)) / (1 + (2 * (10 ** (self.ph - k2)))) * 60.008 / 50.043
+        return ConcentrationType(carbonate, 'ppm')
+
+
+# ----------------------------------------------------------------------------------------------------------------------
+    @property
+    def alkalinity(self):
+        """Computes the waters alkalinity based upon the bicarbonate and carbonate contributions."""
+        return (self.bicarbonate.as_('ppm') / 61.016) + (2 * self.carbonate.as_('ppm') / 60.008)
+
+
+# ----------------------------------------------------------------------------------------------------------------------
+    @property
+    def hardness(self):
+        """Compute the total hardness of this water source."""
+        totalC = 1
+        totalC += 4.435e-7 * (10 ** self.ph)
+        totalC += 4.435e-7 * 4.667e-11 * (10 ** (2 * self.ph))
+        totalC *= (self.bicarbonate.as_('ppm') / 61.016)
+        totalC /= 4.435e-7 * (10 ** self.ph)
+        return totalC
+
+
 
 # ======================================================================================================================
 # Methods

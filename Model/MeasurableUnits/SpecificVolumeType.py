@@ -38,7 +38,7 @@ class SpecificVolumeType(SimpleType):
         'gal/lb': 0.25,
         'gal/oz': 0.015625,
         'l/g': 0.00208635,
-        'l/kg': 2.08635,
+        'l/kg': 0.47930596496273396122414743451482,
         'floz/oz': 2,
         'm^3/kg': 0.00208635,
         'ft^3/lb': 0.0334201

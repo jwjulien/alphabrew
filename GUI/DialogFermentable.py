@@ -90,11 +90,10 @@ class DialogFermentable(QtWidgets.QDialog):
         self.ui.color.setValue(self.fermentable.color.as_('SRM'))
         self.ui.moisture.setValue(self.fermentable.moisture.as_('%'))
         self.ui.diastaticPower.setValue(self.fermentable.diastaticPower.as_('Lintner'))
-        self.ui.protein.setValue(self.fermentable.protein.as_('%'))
-        self.ui.maxInBatch.setValue(self.fermentable.maxPerBatch.as_('%'))
-        self.ui.coarseFineDiff.setValue(self.fermentable.coarseFineDiff.as_('%'))
         self.ui.addAfterBoil.setChecked(self.fermentable.addAfterBoil or False)
         self.ui.mashed.setChecked(self.fermentable.mashed or False)
+        self.ui.phi.setValue(self.fermentable._phi if self.fermentable._phi is not None else 0.0)
+        self.ui.bi.setValue(self.fermentable._bi if self.fermentable._bi is not None else 0.0)
         self.ui.notes.setPlainText(self.fermentable.notes)
 
 
@@ -102,6 +101,12 @@ class DialogFermentable(QtWidgets.QDialog):
     def on_accept(self):
         """Fires when the user hits to okay button, stores the data from the GUI back into the fermentable passed into
         init."""
+        def zero_to_none(value):
+            """Convert a zero value to a None type."""
+            if value == 0.0:
+                return None
+            return value
+
         self.fermentable.name = self.ui.name.text()
         self.fermentable.ftype = self.ui.type.currentText()
         self.fermentable.group = self.ui.group.currentText()
@@ -113,11 +118,10 @@ class DialogFermentable(QtWidgets.QDialog):
         self.fermentable.moisture.value = self.ui.moisture.value()
         self.fermentable.diastaticPower.value = self.ui.diastaticPower.value()
         self.fermentable.diastaticPower.unit = 'Lintner'
-        self.fermentable.protein.value = self.ui.protein.value()
-        self.fermentable.maxPerBatch.value = self.ui.maxInBatch.value()
-        self.fermentable.coarseFineDiff.value = self.ui.coarseFineDiff.value()
         self.fermentable.addAfterBoil = self.ui.addAfterBoil.isChecked()
         self.fermentable.mashed = self.ui.mashed.isChecked()
+        self.fermentable._phi = zero_to_none(self.ui.phi.value())
+        self.fermentable._bi = zero_to_none(self.ui.bi.value())
         self.fermentable.notes = self.ui.notes.toPlainText()
 
 

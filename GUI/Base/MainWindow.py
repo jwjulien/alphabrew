@@ -213,7 +213,7 @@ class Ui_MainWindow(object):
     # setupUi
 
     def retranslateUi(self, MainWindow):
-        MainWindow.setWindowTitle(QCoreApplication.translate("MainWindow", u"Beer Recipe Planner", None))
+        MainWindow.setWindowTitle(QCoreApplication.translate("MainWindow", u"AlphaBrew", None))
         self.actionNew.setText(QCoreApplication.translate("MainWindow", u"New", None))
 #if QT_CONFIG(shortcut)
         self.actionNew.setShortcut(QCoreApplication.translate("MainWindow", u"Ctrl+N", None))

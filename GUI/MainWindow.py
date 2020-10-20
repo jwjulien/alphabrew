@@ -23,6 +23,7 @@
 # Import Statements
 # ----------------------------------------------------------------------------------------------------------------------
 import traceback
+import os
 
 import openpyxl
 from PySide2 import QtCore, QtGui, QtWidgets
@@ -56,6 +57,8 @@ class MainWindow(QtWidgets.QMainWindow):
         super().__init__(parent)
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
+
+        self._touched = None
 
         self.version = _version.__version__
         self.filename = None
@@ -100,14 +103,14 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.tab_waters = TabWaters(self, self.recipe, workbook)
         self.ui.tabs.addTab(self.ui.tab_waters, "Waters")
 
-        self.ui.tab_chemistry = TabChemistry(self, self.recipe)
-        self.ui.tabs.addTab(self.ui.tab_chemistry, "Chemistry")
-
         self.ui.tab_fermentables = TabFermentables(self, self.recipe, workbook)
         self.ui.tabs.addTab(self.ui.tab_fermentables, "Fermentables")
 
         self.ui.tab_mash = TabMash(self, self.recipe)
         self.ui.tabs.addTab(self.ui.tab_mash, "Mash")
+
+        self.ui.tab_chemistry = TabChemistry(self, self.recipe)
+        self.ui.tabs.addTab(self.ui.tab_chemistry, "Chemistry")
 
         self.ui.tab_hops = TabHops(self, self.recipe, workbook)
         self.ui.tabs.addTab(self.ui.tab_hops, "Hops")
@@ -127,6 +130,9 @@ class MainWindow(QtWidgets.QMainWindow):
 
         self.update()
 
+        # Once loaded it's safe to assume that nothing has been touched yet.
+        self.touched = False
+
 
 
 # ======================================================================================================================
@@ -144,7 +150,11 @@ class MainWindow(QtWidgets.QMainWindow):
     @property
     def isDirty(self):
         """Returns True when the currently open file has never been saved or has changed since the last save."""
-        # If there is no filename then just assume that we might want to save.
+        # If the recipe has not been changed then it's safe to assume that it's not dirty.
+        if not self.touched:
+            return False
+
+        # Touched, but possibly no filename yet - no file, nothing to compare - definitely dirty.
         if self.filename is None:
             return True
 
@@ -158,6 +168,29 @@ class MainWindow(QtWidgets.QMainWindow):
         return current != existing
 
 
+# ----------------------------------------------------------------------------------------------------------------------
+    @property
+    def touched(self):
+        """Fetches the "dirty" flag that comes from recipe changes.  This is used to better capture when a recipe has
+        been modified before it has been saved."""
+        return self._touched
+
+
+# ----------------------------------------------------------------------------------------------------------------------
+    @touched.setter
+    def touched(self, state):
+        """Sets the "touched" flag and updates the GUI window to show an asterisk when it is dirty."""
+        self._touched = state
+        title = 'AlphaBrew - '
+        if self.filename is not None:
+            title += os.path.basename(self.filename)
+        else:
+            title += 'untitled'
+        if self.isDirty:
+            title += '*'
+        self.setWindowTitle(title)
+
+
 
 # ======================================================================================================================
 # Event Handlers
@@ -167,6 +200,7 @@ class MainWindow(QtWidgets.QMainWindow):
         if self._warn_unsaved():
             self.filename = None
             self.recipe.clear()
+            self.touched = False
 
 
 # ----------------------------------------------------------------------------------------------------------------------
@@ -179,6 +213,9 @@ class MainWindow(QtWidgets.QMainWindow):
                 self.filename = filename
                 with open(filename) as handle:
                     self.recipe.from_beerxml(handle.read())
+                # Newly loaded recipe was not touched.  Clear that up despite all of the "change" events reported during
+                # the loading.
+                self.touched = False
 
 
 # ----------------------------------------------------------------------------------------------------------------------
@@ -189,6 +226,7 @@ class MainWindow(QtWidgets.QMainWindow):
             # saving but not nuke the existing values that may already be in the file.
             with open(self.filename, 'w') as handle:
                 handle.write(self.recipe.to_beerjson())
+            self.touched = False
         else:
             self.on_file_save_as()
 
@@ -264,6 +302,8 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.calcBoilSize.setText(f'{self.recipe.boilVolume.as_("gal"):.1f} gal')
         self.ui.calcBoilSg.setText(f'{self.recipe.boilGravity:.3f}')
         self.ui.calcCalories.setText(f'{self.recipe.calories:.0f} / 16oz')
+
+        self.touched = True
 
 
 # ----------------------------------------------------------------------------------------------------------------------

@@ -44,10 +44,11 @@ class Fermentables(ListTableBase):
         Column('amount', editable=True, hideLimited=True),
         Column('proportion', 'Percent', template='%.0f', align=QtCore.Qt.AlignHCenter, hideLimited=True),
         Column('name', 'Grain/Fermentable', size=Stretch, align=QtCore.Qt.AlignLeft),
+        Column('color'),
         Column('ftype', 'Type'),
         Column('group'),
-        Column('fyield', 'Yield'),
-        Column('color'),
+        Column('producer'),
+        Column('origin'),
     ]
 
 
@@ -106,12 +107,39 @@ class Fermentables(ListTableBase):
         return sum([item.amount for item in self.items if item.isMashed], MassType(0, 'lb'))
 
 
+# ----------------------------------------------------------------------------------------------------------------------
+    @property
+    def mashBiFi(self):
+        """A step in calculating the mash pH but also required for calculating the overall water chemistry."""
+        total = 0
+        for fermentable in self.items:
+            total += fermentable.bi * fermentable.proportion / 100
+        return total
+
+
+# ----------------------------------------------------------------------------------------------------------------------
+    @property
+    def mashPh(self):
+        """Calculates the distilled water mash pH for each mashed fermentable and returns the result."""
+        phiBiFi = 0
+        for fermentable in self.items:
+            phiBiFi += fermentable.phi * fermentable.bi * fermentable.proportion / 100
+        return phiBiFi / self.mashBiFi
+
+
 
 # ======================================================================================================================
 # Other Methods
 # ----------------------------------------------------------------------------------------------------------------------
     def from_excel(self, worksheet):
         """Parses out a list og Fermentable object and appends them to this instance."""
+        def float_or(value, fallback=None):
+            """Return the provided value as a float or return fallback if the float conversion fails."""
+            try:
+                return float(value)
+            except TypeError:
+                return fallback
+
         self.items = []
         for idx, row in enumerate(worksheet):
             # Skip the header row.
@@ -128,12 +156,11 @@ class Fermentables(ListTableBase):
                 color=ColorType(row[6].value, 'SRM'),
                 moisture=PercentType(row[7].value, '%'),
                 diastaticPower=DiastaticPowerType(row[8].value, 'Lintner'),
-                protein=PercentType(row[9].value, '%'),
-                maxPerBatch=PercentType(row[10].value, '%'),
-                coarseFineDiff=PercentType(row[11].value, '%'),
-                addAfterBoil=bool(row[12].value),
-                mashed=bool(row[13].value),
-                notes=str(row[14].value)
+                addAfterBoil=bool(row[9].value),
+                mashed=bool(row[10].value),
+                phi=float_or(row[11].value),
+                bi=float_or(row[12].value),
+                notes=str(row[13].value)
             ))
 
 
