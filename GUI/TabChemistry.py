@@ -307,6 +307,41 @@ class TabChemistry(QtWidgets.QWidget):
         self.ui.bicarbonate.setText(str(bicarbonate))
         self.ui.bicarbonateSlide.setValue(bicarbonate.as_('ppm'))
 
+        # Change the slider color if any of the values go out of range.
+        errorStyle = "QSlider::handle:horizontal {background-color: red;}"
+        resetStyle = "QSlider::handle:horizontal {}"
+
+        if calcium.as_('ppm') < 50 or calcium.as_('ppm') > 150:
+            self.ui.calciumSlide.setStyleSheet(errorStyle)
+        else:
+            self.ui.calciumSlide.setStyleSheet(resetStyle)
+
+        if magnesium.as_('ppm') < 10 or magnesium.as_('ppm') > 30:
+            self.ui.magnesiumSlide.setStyleSheet(errorStyle)
+        else:
+            self.ui.magnesiumSlide.setStyleSheet(resetStyle)
+
+        if sodium.as_('ppm') > 150:
+            self.ui.sodiumSlide.setStyleSheet(errorStyle)
+        else:
+            self.ui.sodiumSlide.setStyleSheet(resetStyle)
+
+        if chloride.as_('ppm') > 250:
+            self.ui.chlorideSlide.setStyleSheet(errorStyle)
+        else:
+            self.ui.chlorideSlide.setStyleSheet(resetStyle)
+
+        if sulfate.as_('ppm') < 50 or sulfate.as_('ppm') > 300:
+            self.ui.sulfateSlide.setStyleSheet(errorStyle)
+        else:
+            self.ui.sulfateSlide.setStyleSheet(resetStyle)
+
+        if bicarbonate.as_('ppm') > 250:
+            self.ui.bicarbonateSlide.setStyleSheet(errorStyle)
+        else:
+            self.ui.bicarbonateSlide.setStyleSheet(resetStyle)
+
+
 
         strikeL = self.recipe.strikeVolume.as_('l')
 
@@ -368,9 +403,9 @@ class TabChemistry(QtWidgets.QWidget):
         self.ui.ph.setText(f'{ph:.2f}')
         self.ui.phSlide.setValue(ph * 100)
         if ph < 5.2 or ph > 5.6:
-            self.ui.phSlide.setStyleSheet("QSlider::handle:horizontal {background-color: red;}")
+            self.ui.phSlide.setStyleSheet(errorStyle)
         else:
-            self.ui.phSlide.setStyleSheet("QSlider::handle:horizontal {}")
+            self.ui.phSlide.setStyleSheet(resetStyle)
 
         # Calculate the chloride to sulfate ratio.
         try:

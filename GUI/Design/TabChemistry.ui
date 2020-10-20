@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>898</width>
+    <width>916</width>
     <height>546</height>
    </rect>
   </property>
@@ -411,6 +411,71 @@ Salts added to the kettle will affect flavor. </string>
         </property>
        </widget>
       </item>
+      <item row="0" column="2">
+       <widget class="QLabel" name="lbl_mg">
+        <property name="toolTip">
+         <string>Beer wort naturally contains more Magnesium than the yeast need. </string>
+        </property>
+        <property name="text">
+         <string>Mg</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="3">
+       <widget class="QLabel" name="lbl_na">
+        <property name="toolTip">
+         <string>Sodium enhances flavors, but too much can cause a salty taste.</string>
+        </property>
+        <property name="text">
+         <string>Na</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="4">
+       <widget class="QLabel" name="lbl_cl">
+        <property name="toolTip">
+         <string>Chloride enhances malty flavors.</string>
+        </property>
+        <property name="text">
+         <string>Cl</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="5">
+       <widget class="QLabel" name="lbl_so4">
+        <property name="toolTip">
+         <string>Sulfate enhances the perception of crisp bitterness.</string>
+        </property>
+        <property name="text">
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;SO&lt;span style=&quot; vertical-align:sub;&quot;&gt;4&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="6">
+       <widget class="QLabel" name="lbl_hco3">
+        <property name="toolTip">
+         <string>Equivalent bicarbonate concentration.</string>
+        </property>
+        <property name="text">
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;HCO&lt;span style=&quot; vertical-align:sub;&quot;&gt;3&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+       </widget>
+      </item>
       <item row="1" column="0">
        <widget class="QLabel" name="lbl_mashResults">
         <property name="text">
@@ -421,40 +486,88 @@ Salts added to the kettle will affect flavor. </string>
         </property>
        </widget>
       </item>
-      <item row="5" column="5">
-       <widget class="QSlider" name="sulfateSlide">
-        <property name="enabled">
-         <bool>false</bool>
-        </property>
+      <item row="1" column="1">
+       <widget class="QLineEdit" name="strikeCalcium">
         <property name="toolTip">
-         <string>50-150 ppm for normally bitter beers
-150-350 ppm for very bitter beers</string>
+         <string>In general, at least 50 ppm of Calcium in the fermenter is recommended for yeast flocculation.</string>
         </property>
-        <property name="minimum">
-         <number>50</number>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
         </property>
-        <property name="maximum">
-         <number>350</number>
+        <property name="readOnly">
+         <bool>true</bool>
         </property>
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="tickPosition">
-         <enum>QSlider::TicksBelow</enum>
-        </property>
-        <property name="tickInterval">
-         <number>50</number>
+        <property name="placeholderText">
+         <string>0 ppm</string>
         </property>
        </widget>
       </item>
-      <item row="4" column="6">
-       <widget class="QLineEdit" name="bicarbonate">
-        <property name="font">
-         <font>
-          <weight>75</weight>
-          <bold>true</bold>
-         </font>
+      <item row="1" column="2">
+       <widget class="QLineEdit" name="strikeMagnesium">
+        <property name="toolTip">
+         <string>Beer wort naturally contains more Magnesium than the yeast need. </string>
         </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
+        <property name="placeholderText">
+         <string>0 ppm</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="3">
+       <widget class="QLineEdit" name="strikeSodium">
+        <property name="toolTip">
+         <string>Sodium enhances flavors, but too much can cause a salty taste.</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
+        <property name="placeholderText">
+         <string>0 ppm</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="4">
+       <widget class="QLineEdit" name="strikeChloride">
+        <property name="toolTip">
+         <string>Chloride enhances malty flavors.</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
+        <property name="placeholderText">
+         <string>0 ppm</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="5">
+       <widget class="QLineEdit" name="strikeSulfate">
+        <property name="toolTip">
+         <string>Sulfate enhances the perception of crisp bitterness.</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
+        <property name="placeholderText">
+         <string>0 ppm</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="6">
+       <widget class="QLineEdit" name="strikeBicarbonate">
         <property name="toolTip">
          <string>Equivalent bicarbonate concentration.</string>
         </property>
@@ -469,8 +582,146 @@ Salts added to the kettle will affect flavor. </string>
         </property>
        </widget>
       </item>
-      <item row="1" column="1">
-       <widget class="QLineEdit" name="strikeCalcium">
+      <item row="2" column="0">
+       <widget class="QLabel" name="lbl_spargeResults">
+        <property name="toolTip">
+         <string>The words 'Sparge' and 'Kettle' are used somewhat interchangeably.  Sparge/Kettle salts should normally be added to the Kettle rather than to the sparge/mashout water.  The separate Sparge Water acidification calculation assumes these salts are added to the kettle (and so do not affect the sparge water acidification calculation).</string>
+        </property>
+        <property name="text">
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Sparge H&lt;span style=&quot; vertical-align:sub;&quot;&gt;2&lt;/span&gt;O Concentrations:&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1">
+       <widget class="QLineEdit" name="spargeCalcium">
+        <property name="toolTip">
+         <string>In general, at least 50 ppm of Calcium in the fermenter is recommended for yeast flocculation.</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
+        <property name="placeholderText">
+         <string>0 ppm</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="2">
+       <widget class="QLineEdit" name="spargeMagnesium">
+        <property name="toolTip">
+         <string>Beer wort naturally contains more Magnesium than the yeast need. </string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
+        <property name="placeholderText">
+         <string>0 ppm</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="3">
+       <widget class="QLineEdit" name="spargeSodium">
+        <property name="toolTip">
+         <string>Sodium enhances flavors, but too much can cause a salty taste.</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
+        <property name="placeholderText">
+         <string>0 ppm</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="4">
+       <widget class="QLineEdit" name="spargeChloride">
+        <property name="toolTip">
+         <string>Chloride enhances malty flavors.</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
+        <property name="placeholderText">
+         <string>0 ppm</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="5">
+       <widget class="QLineEdit" name="spargeSulfate">
+        <property name="toolTip">
+         <string>Sulfate enhances the perception of crisp bitterness.</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
+        <property name="placeholderText">
+         <string>0 ppm</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="6">
+       <widget class="QLineEdit" name="spargeBicarbonate">
+        <property name="toolTip">
+         <string>Equivalent bicarbonate concentration.</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
+        <property name="placeholderText">
+         <string>0 ppm</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="0" colspan="7">
+       <widget class="Line" name="line_5">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="0">
+       <widget class="QLabel" name="lbl_overallResults">
+        <property name="font">
+         <font>
+          <weight>75</weight>
+          <bold>true</bold>
+         </font>
+        </property>
+        <property name="text">
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Overall H&lt;span style=&quot; vertical-align:sub;&quot;&gt;2&lt;/span&gt;O Concentrations:&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="1">
+       <widget class="QLineEdit" name="calcium">
+        <property name="font">
+         <font>
+          <weight>75</weight>
+          <bold>true</bold>
+         </font>
+        </property>
         <property name="toolTip">
          <string>In general, at least 50 ppm of Calcium in the fermenter is recommended for yeast flocculation.</string>
         </property>
@@ -507,8 +758,14 @@ Salts added to the kettle will affect flavor. </string>
         </property>
        </widget>
       </item>
-      <item row="2" column="3">
-       <widget class="QLineEdit" name="spargeSodium">
+      <item row="4" column="3">
+       <widget class="QLineEdit" name="sodium">
+        <property name="font">
+         <font>
+          <weight>75</weight>
+          <bold>true</bold>
+         </font>
+        </property>
         <property name="toolTip">
          <string>Sodium enhances flavors, but too much can cause a salty taste.</string>
         </property>
@@ -523,41 +780,25 @@ Salts added to the kettle will affect flavor. </string>
         </property>
        </widget>
       </item>
-      <item row="0" column="3">
-       <widget class="QLabel" name="lbl_na">
-        <property name="toolTip">
-         <string>Sodium enhances flavors, but too much can cause a salty taste.</string>
+      <item row="4" column="4">
+       <widget class="QLineEdit" name="chloride">
+        <property name="font">
+         <font>
+          <weight>75</weight>
+          <bold>true</bold>
+         </font>
         </property>
-        <property name="text">
-         <string>Na</string>
+        <property name="toolTip">
+         <string>Chloride enhances malty flavors.</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignCenter</set>
         </property>
-       </widget>
-      </item>
-      <item row="5" column="2">
-       <widget class="QSlider" name="magnesiumSlide">
-        <property name="enabled">
-         <bool>false</bool>
+        <property name="readOnly">
+         <bool>true</bool>
         </property>
-        <property name="toolTip">
-         <string>10-30 ppm</string>
-        </property>
-        <property name="minimum">
-         <number>10</number>
-        </property>
-        <property name="maximum">
-         <number>30</number>
-        </property>
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="tickPosition">
-         <enum>QSlider::TicksBelow</enum>
-        </property>
-        <property name="tickInterval">
-         <number>5</number>
+        <property name="placeholderText">
+         <string>0 ppm</string>
         </property>
        </widget>
       </item>
@@ -583,254 +824,16 @@ Salts added to the kettle will affect flavor. </string>
         </property>
        </widget>
       </item>
-      <item row="2" column="0">
-       <widget class="QLabel" name="lbl_spargeResults">
-        <property name="toolTip">
-         <string>The words 'Sparge' and 'Kettle' are used somewhat interchangeably.  Sparge/Kettle salts should normally be added to the Kettle rather than to the sparge/mashout water.  The separate Sparge Water acidification calculation assumes these salts are added to the kettle (and so do not affect the sparge water acidification calculation).</string>
-        </property>
-        <property name="text">
-         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Sparge H&lt;span style=&quot; vertical-align:sub;&quot;&gt;2&lt;/span&gt;O Concentrations:&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="5">
-       <widget class="QLineEdit" name="spargeSulfate">
-        <property name="toolTip">
-         <string>Sulfate enhances the perception of crisp bitterness.</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignCenter</set>
-        </property>
-        <property name="readOnly">
-         <bool>true</bool>
-        </property>
-        <property name="placeholderText">
-         <string>0 ppm</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="5">
-       <widget class="QLineEdit" name="strikeSulfate">
-        <property name="toolTip">
-         <string>Sulfate enhances the perception of crisp bitterness.</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignCenter</set>
-        </property>
-        <property name="readOnly">
-         <bool>true</bool>
-        </property>
-        <property name="placeholderText">
-         <string>0 ppm</string>
-        </property>
-       </widget>
-      </item>
-      <item row="4" column="0">
-       <widget class="QLabel" name="lbl_overallResults">
+      <item row="4" column="6">
+       <widget class="QLineEdit" name="bicarbonate">
         <property name="font">
          <font>
           <weight>75</weight>
           <bold>true</bold>
          </font>
         </property>
-        <property name="text">
-         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Overall H&lt;span style=&quot; vertical-align:sub;&quot;&gt;2&lt;/span&gt;O Concentrations:&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-        </property>
-       </widget>
-      </item>
-      <item row="5" column="6">
-       <widget class="QSlider" name="bicarbonateSlide">
-        <property name="enabled">
-         <bool>false</bool>
-        </property>
-        <property name="toolTip">
-         <string>0-50 ppm for pale, base malt-only beers
-50-150 ppm for amber-colored, toasted malt beers
-150-250 ppm for dark, roasted malt beers</string>
-        </property>
-        <property name="minimum">
-         <number>0</number>
-        </property>
-        <property name="maximum">
-         <number>250</number>
-        </property>
-        <property name="value">
-         <number>0</number>
-        </property>
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="tickPosition">
-         <enum>QSlider::TicksBelow</enum>
-        </property>
-        <property name="tickInterval">
-         <number>50</number>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="4">
-       <widget class="QLabel" name="lbl_cl">
-        <property name="toolTip">
-         <string>Chloride enhances malty flavors.</string>
-        </property>
-        <property name="text">
-         <string>Cl</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignCenter</set>
-        </property>
-       </widget>
-      </item>
-      <item row="3" column="0" colspan="7">
-       <widget class="Line" name="line_5">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="3">
-       <widget class="QLineEdit" name="strikeSodium">
-        <property name="toolTip">
-         <string>Sodium enhances flavors, but too much can cause a salty taste.</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignCenter</set>
-        </property>
-        <property name="readOnly">
-         <bool>true</bool>
-        </property>
-        <property name="placeholderText">
-         <string>0 ppm</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="6">
-       <widget class="QLabel" name="lbl_hco3">
         <property name="toolTip">
          <string>Equivalent bicarbonate concentration.</string>
-        </property>
-        <property name="text">
-         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;HCO&lt;span style=&quot; vertical-align:sub;&quot;&gt;3&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignCenter</set>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="1">
-       <widget class="QLineEdit" name="spargeCalcium">
-        <property name="toolTip">
-         <string>In general, at least 50 ppm of Calcium in the fermenter is recommended for yeast flocculation.</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignCenter</set>
-        </property>
-        <property name="readOnly">
-         <bool>true</bool>
-        </property>
-        <property name="placeholderText">
-         <string>0 ppm</string>
-        </property>
-       </widget>
-      </item>
-      <item row="5" column="4">
-       <widget class="QSlider" name="chlorideSlide">
-        <property name="enabled">
-         <bool>false</bool>
-        </property>
-        <property name="toolTip">
-         <string>0-250 ppm</string>
-        </property>
-        <property name="minimum">
-         <number>0</number>
-        </property>
-        <property name="maximum">
-         <number>250</number>
-        </property>
-        <property name="value">
-         <number>0</number>
-        </property>
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="tickPosition">
-         <enum>QSlider::TicksBelow</enum>
-        </property>
-        <property name="tickInterval">
-         <number>50</number>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="4">
-       <widget class="QLineEdit" name="strikeChloride">
-        <property name="toolTip">
-         <string>Chloride enhances malty flavors.</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignCenter</set>
-        </property>
-        <property name="readOnly">
-         <bool>true</bool>
-        </property>
-        <property name="placeholderText">
-         <string>0 ppm</string>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="6">
-       <widget class="QLineEdit" name="spargeBicarbonate">
-        <property name="toolTip">
-         <string>Equivalent bicarbonate concentration.</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignCenter</set>
-        </property>
-        <property name="readOnly">
-         <bool>true</bool>
-        </property>
-        <property name="placeholderText">
-         <string>0 ppm</string>
-        </property>
-       </widget>
-      </item>
-      <item row="5" column="3">
-       <widget class="QSlider" name="sodiumSlide">
-        <property name="enabled">
-         <bool>false</bool>
-        </property>
-        <property name="toolTip">
-         <string>0-150 ppm</string>
-        </property>
-        <property name="minimum">
-         <number>0</number>
-        </property>
-        <property name="maximum">
-         <number>150</number>
-        </property>
-        <property name="value">
-         <number>0</number>
-        </property>
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="tickPosition">
-         <enum>QSlider::TicksBelow</enum>
-        </property>
-        <property name="tickInterval">
-         <number>25</number>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="2">
-       <widget class="QLineEdit" name="spargeMagnesium">
-        <property name="toolTip">
-         <string>Beer wort naturally contains more Magnesium than the yeast need. </string>
         </property>
         <property name="alignment">
          <set>Qt::AlignCenter</set>
@@ -868,145 +871,319 @@ Salts added to the kettle will affect flavor. </string>
         </property>
        </widget>
       </item>
-      <item row="4" column="4">
-       <widget class="QLineEdit" name="chloride">
-        <property name="font">
-         <font>
-          <weight>75</weight>
-          <bold>true</bold>
-         </font>
+      <item row="5" column="2">
+       <widget class="QSlider" name="magnesiumSlide">
+        <property name="enabled">
+         <bool>false</bool>
         </property>
         <property name="toolTip">
-         <string>Chloride enhances malty flavors.</string>
+         <string>10-30 ppm</string>
         </property>
-        <property name="alignment">
-         <set>Qt::AlignCenter</set>
+        <property name="minimum">
+         <number>10</number>
         </property>
-        <property name="readOnly">
-         <bool>true</bool>
+        <property name="maximum">
+         <number>30</number>
         </property>
-        <property name="placeholderText">
-         <string>0 ppm</string>
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="tickPosition">
+         <enum>QSlider::TicksBelow</enum>
+        </property>
+        <property name="tickInterval">
+         <number>5</number>
         </property>
        </widget>
       </item>
-      <item row="0" column="2">
-       <widget class="QLabel" name="lbl_mg">
+      <item row="5" column="3">
+       <widget class="QSlider" name="sodiumSlide">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
         <property name="toolTip">
-         <string>Beer wort naturally contains more Magnesium than the yeast need. </string>
+         <string>0-150 ppm</string>
         </property>
-        <property name="text">
-         <string>Mg</string>
+        <property name="minimum">
+         <number>0</number>
         </property>
-        <property name="alignment">
-         <set>Qt::AlignCenter</set>
+        <property name="maximum">
+         <number>150</number>
+        </property>
+        <property name="value">
+         <number>0</number>
+        </property>
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="tickPosition">
+         <enum>QSlider::TicksBelow</enum>
+        </property>
+        <property name="tickInterval">
+         <number>25</number>
         </property>
        </widget>
       </item>
-      <item row="1" column="2">
-       <widget class="QLineEdit" name="strikeMagnesium">
+      <item row="5" column="4">
+       <widget class="QSlider" name="chlorideSlide">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
         <property name="toolTip">
-         <string>Beer wort naturally contains more Magnesium than the yeast need. </string>
+         <string>0-250 ppm</string>
         </property>
-        <property name="alignment">
-         <set>Qt::AlignCenter</set>
+        <property name="minimum">
+         <number>0</number>
         </property>
-        <property name="readOnly">
-         <bool>true</bool>
+        <property name="maximum">
+         <number>250</number>
         </property>
-        <property name="placeholderText">
-         <string>0 ppm</string>
+        <property name="value">
+         <number>0</number>
+        </property>
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="tickPosition">
+         <enum>QSlider::TicksBelow</enum>
+        </property>
+        <property name="tickInterval">
+         <number>50</number>
         </property>
        </widget>
       </item>
-      <item row="4" column="1">
-       <widget class="QLineEdit" name="calcium">
-        <property name="font">
-         <font>
-          <weight>75</weight>
-          <bold>true</bold>
-         </font>
+      <item row="5" column="5">
+       <widget class="QSlider" name="sulfateSlide">
+        <property name="enabled">
+         <bool>false</bool>
         </property>
         <property name="toolTip">
-         <string>In general, at least 50 ppm of Calcium in the fermenter is recommended for yeast flocculation.</string>
+         <string>50-150 ppm for normally bitter beers
+150-350 ppm for very bitter beers</string>
         </property>
-        <property name="alignment">
-         <set>Qt::AlignCenter</set>
+        <property name="minimum">
+         <number>50</number>
         </property>
-        <property name="readOnly">
-         <bool>true</bool>
+        <property name="maximum">
+         <number>350</number>
         </property>
-        <property name="placeholderText">
-         <string>0 ppm</string>
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="tickPosition">
+         <enum>QSlider::TicksBelow</enum>
+        </property>
+        <property name="tickInterval">
+         <number>50</number>
         </property>
        </widget>
       </item>
-      <item row="4" column="3">
-       <widget class="QLineEdit" name="sodium">
-        <property name="font">
-         <font>
-          <weight>75</weight>
-          <bold>true</bold>
-         </font>
+      <item row="5" column="6">
+       <widget class="QSlider" name="bicarbonateSlide">
+        <property name="enabled">
+         <bool>false</bool>
         </property>
         <property name="toolTip">
-         <string>Sodium enhances flavors, but too much can cause a salty taste.</string>
+         <string>0-50 ppm for pale, base malt-only beers
+50-150 ppm for amber-colored, toasted malt beers
+150-250 ppm for dark, roasted malt beers</string>
         </property>
-        <property name="alignment">
-         <set>Qt::AlignCenter</set>
+        <property name="minimum">
+         <number>0</number>
         </property>
-        <property name="readOnly">
-         <bool>true</bool>
+        <property name="maximum">
+         <number>250</number>
         </property>
-        <property name="placeholderText">
-         <string>0 ppm</string>
+        <property name="value">
+         <number>0</number>
+        </property>
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="tickPosition">
+         <enum>QSlider::TicksBelow</enum>
+        </property>
+        <property name="tickInterval">
+         <number>50</number>
         </property>
        </widget>
       </item>
-      <item row="1" column="6">
-       <widget class="QLineEdit" name="strikeBicarbonate">
-        <property name="toolTip">
-         <string>Equivalent bicarbonate concentration.</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignCenter</set>
-        </property>
-        <property name="readOnly">
-         <bool>true</bool>
-        </property>
-        <property name="placeholderText">
-         <string>0 ppm</string>
-        </property>
-       </widget>
+      <item row="6" column="1">
+       <layout class="QHBoxLayout" name="horizontalLayout_7">
+        <item>
+         <widget class="QLabel" name="lbl_ca_min">
+          <property name="text">
+           <string>50</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="lbl_ca_max">
+          <property name="text">
+           <string>150</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+          </property>
+         </widget>
+        </item>
+       </layout>
       </item>
-      <item row="2" column="4">
-       <widget class="QLineEdit" name="spargeChloride">
-        <property name="toolTip">
-         <string>Chloride enhances malty flavors.</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignCenter</set>
-        </property>
-        <property name="readOnly">
-         <bool>true</bool>
-        </property>
-        <property name="placeholderText">
-         <string>0 ppm</string>
-        </property>
-       </widget>
+      <item row="6" column="2">
+       <layout class="QHBoxLayout" name="horizontalLayout_6">
+        <item>
+         <widget class="QLabel" name="lbl_mg_min">
+          <property name="text">
+           <string>10</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="lbl_mg_max">
+          <property name="text">
+           <string>30</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+          </property>
+         </widget>
+        </item>
+       </layout>
       </item>
-      <item row="0" column="5">
-       <widget class="QLabel" name="lbl_so4">
-        <property name="toolTip">
-         <string>Sulfate enhances the perception of crisp bitterness.</string>
-        </property>
-        <property name="text">
-         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;SO&lt;span style=&quot; vertical-align:sub;&quot;&gt;4&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignCenter</set>
-        </property>
-       </widget>
+      <item row="6" column="3">
+       <layout class="QHBoxLayout" name="horizontalLayout_5">
+        <item>
+         <widget class="QLabel" name="lbl_na_min">
+          <property name="text">
+           <string>0</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="lbl_na_max">
+          <property name="text">
+           <string>150</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item row="6" column="4">
+       <layout class="QHBoxLayout" name="horizontalLayout_4">
+        <item>
+         <widget class="QLabel" name="lbl_cl_min">
+          <property name="text">
+           <string>0</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="lbl_cl_max">
+          <property name="text">
+           <string>250</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item row="6" column="5">
+       <layout class="QHBoxLayout" name="horizontalLayout_3">
+        <item>
+         <widget class="QLabel" name="lbl_so4_min">
+          <property name="text">
+           <string>50</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="lbl_so4_mid">
+          <property name="text">
+           <string>150</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="lbl_so4_max">
+          <property name="text">
+           <string>300</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item row="6" column="6">
+       <layout class="QHBoxLayout" name="horizontalLayout_2">
+        <item>
+         <widget class="QLabel" name="lbl_hco3_min">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+            <horstretch>1</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="text">
+           <string>0</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="lbl_hco3_min_2">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+            <horstretch>2</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="text">
+           <string>50</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="lbl_hco3_min_3">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+            <horstretch>2</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="text">
+           <string>150</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="lbl_hc03_max">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+            <horstretch>1</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="text">
+           <string>250</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+          </property>
+         </widget>
+        </item>
+       </layout>
       </item>
      </layout>
     </widget>
