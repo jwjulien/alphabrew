@@ -35,7 +35,7 @@ from GUI.TabRecipe import TabRecipe
 from GUI.TabFermentables import TabFermentables
 from GUI.TabMiscellaneous import TabMiscellaneous
 from GUI.TabWaters import TabWaters
-from GUI.TabSalts import TabSalts
+from GUI.TabChemistry import TabChemistry
 from GUI.TabMash import TabMash
 from GUI.TabHops import TabHops
 from GUI.TabCultures import TabCultures
@@ -100,8 +100,8 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.tab_waters = TabWaters(self, self.recipe, workbook)
         self.ui.tabs.addTab(self.ui.tab_waters, "Waters")
 
-        self.ui.tab_salts = TabSalts(self, self.recipe)
-        self.ui.tabs.addTab(self.ui.tab_salts, "Salts")
+        self.ui.tab_chemistry = TabChemistry(self, self.recipe)
+        self.ui.tabs.addTab(self.ui.tab_chemistry, "Chemistry")
 
         self.ui.tab_fermentables = TabFermentables(self, self.recipe, workbook)
         self.ui.tabs.addTab(self.ui.tab_fermentables, "Fermentables")
@@ -120,6 +120,8 @@ class MainWindow(QtWidgets.QMainWindow):
 
         self.ui.tab_fermentation = TabFermentation(self, self.recipe)
         self.ui.tabs.addTab(self.ui.tab_fermentation, "Fermentation")
+
+        self.ui.tabs.currentChanged.connect(self.on_tab_change)
 
         workbook.close()
 
@@ -262,6 +264,20 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.calcBoilSize.setText(f'{self.recipe.boilVolume.as_("gal"):.1f} gal')
         self.ui.calcBoilSg.setText(f'{self.recipe.boilGravity:.3f}')
         self.ui.calcCalories.setText(f'{self.recipe.calories:.0f} / 16oz')
+
+
+# ----------------------------------------------------------------------------------------------------------------------
+    def on_tab_change(self, index):
+        """Fires when the active tab changes and calls tries to call the activated method of newly activated tab widget.
+        """
+        tab = self.ui.tabs.widget(index)
+
+        try:
+            tab.activated()
+
+        except AttributeError:
+            # Swallow errors when the refresh method does not exist.  It's implementation is optional.
+            pass
 
 
 

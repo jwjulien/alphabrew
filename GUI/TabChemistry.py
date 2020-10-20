@@ -1,5 +1,5 @@
 # ======================================================================================================================
-#        File:  GUI/TabSalts.py
+#        File:  GUI/TabChemistry.py
 #     Project:  Brewing Recipe Planner
 # Description:  Extensions and functionality for the main GUI window.
 #      Author:  Jared Julien <jaredjulien@gmail.com>
@@ -24,7 +24,7 @@
 # ----------------------------------------------------------------------------------------------------------------------
 from PySide2 import QtWidgets
 
-from GUI.Base.TabSalts import Ui_TabSalts
+from GUI.Base.TabChemistry import Ui_TabChemistry
 from Model.MeasurableUnits import ConcentrationType, MassType
 from Model.Timing import TimingType
 from Model.Miscellaneous import Miscellaneous
@@ -32,21 +32,21 @@ from Model.Miscellaneous import Miscellaneous
 
 
 # ======================================================================================================================
-# Salt Tab Class
+# Chemistry Tab Class
 # ----------------------------------------------------------------------------------------------------------------------
-class TabSalts(QtWidgets.QWidget):
+class TabChemistry(QtWidgets.QWidget):
     """Extends the MainWindow Salt tab widget containing a subset of controls specific to miscellaneous in the
     recipe."""
 
     def __init__(self, parent, recipe):
         super().__init__(parent)
-        self.ui = Ui_TabSalts()
+        self.ui = Ui_TabChemistry()
         self.ui.setupUi(self)
 
         # Store the recipe with which these misc items are associated.
         self.recipe = recipe
         self.recipe.changed.connect(self.recalculate)
-        self.recipe.loaded.connect(self.setup_salt_additions)
+        self.recipe.loaded.connect(self.on_load)
 
         # Connect event handlers for each of the input boxes to trigger recalculation.
         self.ui.cacl2_mash.valueChanged.connect(self.update_recipe_salts)
@@ -69,13 +69,21 @@ class TabSalts(QtWidgets.QWidget):
         self.ui.acidMalt.valueChanged.connect(self.recalculate)
 
         self.setup_recommendations()
-        self.setup_salt_additions()
+        self.on_load()
 
 
 
 
 # ======================================================================================================================
-# Setup Methods
+# Methods
+# ----------------------------------------------------------------------------------------------------------------------
+    def activated(self):
+        """Called by the MainWindow when this tab is selected by the user.  This provides an opportunity for us to
+        update the salts from the recipe.  That way, if changes were made on the misc tab, they will be reflected here
+        without a circular update."""
+        self.on_load()
+
+
 # ----------------------------------------------------------------------------------------------------------------------
     def setup_recommendations(self):
         """Sets up the dropdowns and values in the recommendation box."""
@@ -101,7 +109,7 @@ class TabSalts(QtWidgets.QWidget):
 
 
 # ----------------------------------------------------------------------------------------------------------------------
-    def setup_salt_additions(self):
+    def on_load(self):
         """Populate and run the calculations for the salt addition spin boxes from the recipe."""
         def load_mass(salts, name):
             """Helper to extract the mass amount for a given salt by name and return it's decimal value."""
@@ -162,11 +170,17 @@ class TabSalts(QtWidgets.QWidget):
 
 # ----------------------------------------------------------------------------------------------------------------------
     def recalculate(self):
-        """Connected to the input boxes to recalculate the water chemistry whenever the inputs change."""
+        """Connected to the input boxes to recalculate the water chemistry whenever the inputs change.
+
+        This method only updates te read-only, calculated properties of the tab - it does not update any of the user
+        input boxes.
+
+        It is intended as a response to user input, and does not trigger actions deliberately to prevent circular
+        updates."""
+
         # There is nothing we can calculate here until the strike volume can be calculated.
         if self.recipe.strikeVolume.value == 0:
             return
-
 
         # Start with the base water ion concentrations.
         try:
@@ -303,7 +317,7 @@ class TabSalts(QtWidgets.QWidget):
                 else:
                     # Salt does not yet exist, need to add it as a new misc ingredient.
                     timing = TimingType(use=use)
-                    misc = Miscellaneous(self.recipe, name, 'water agent', timing=timing, amount=mass)
+                    misc = Miscellaneous(self.recipe, name, 'Water Agent', timing=timing, amount=mass)
                     self.recipe.misc.append(misc)
             else:
                 # Value has been made zero.
@@ -328,6 +342,8 @@ class TabSalts(QtWidgets.QWidget):
         updateSalt('Sodium Chloride', self.ui.nacl_kettle.value(), 'Boil', kettleSalts)
         updateSalt('Sodium Bicarbonate', self.ui.nahco3_kettle.value(), 'Boil', kettleSalts)
         updateSalt('Calcium Hydroxide', self.ui.caoh2_kettle.value(), 'Boil', kettleSalts)
+
+        self.recalculate()
 
 
 
