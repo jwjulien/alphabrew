@@ -1,6 +1,6 @@
 # ======================================================================================================================
 #        File:  Model/FermentationStep.py
-#     Project:  Brewing Recipe Planner
+#     Project:  AlphaBrew
 # Description:  A base for fermenting a beer.
 #      Author:  Jared Julien <jaredjulien@gmail.com>
 #   Copyright:  (c) 2020 Jared Julien

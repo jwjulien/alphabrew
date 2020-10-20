@@ -1,6 +1,6 @@
 # ======================================================================================================================
 #        File:  GUI/Delegates/SimpleTypeDelegate.py
-#     Project:  Brewing Recipe Planner
+#     Project:  AlphaBrew
 # Description:  A Delegate implementation specifically for working with Model MeasurableUnit types extending a
 #               SimpleTypebase.
 #      Author:  Jared Julien <jaredjulien@exsystems.net>

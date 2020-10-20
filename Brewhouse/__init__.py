@@ -1,6 +1,6 @@
 # ======================================================================================================================
 #        File:  Brewhouse/__init__.py
-#     Project:  Brewing Recipe Planner
+#     Project:  AlphaBrew
 # Description:  Provides the top level definition for the Brewhouse submodule.
 #      Author:  Jared Julien <jaredjulien@gmail.com>
 #   Copyright:  (c) 2020 Jared Julien

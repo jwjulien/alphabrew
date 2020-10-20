@@ -1,6 +1,6 @@
 # ======================================================================================================================
 #        File:  GUI/Table/Sizing.py
-#     Project:  Brewing Recipe Planner
+#     Project:  AlphaBrew
 # Description:  Provides constants with handy names for Qt column sizing.
 #      Author:  Jared Julien <jaredjulien@exsystems.net>
 #   Copyright:  (c) 2020 Jared Julien, eX Systems

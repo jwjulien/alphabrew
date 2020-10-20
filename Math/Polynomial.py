@@ -1,6 +1,6 @@
 # ======================================================================================================================
 #        File:  Math/Polynomial.py
-#     Project:  Brewing Recipe Planner
+#     Project:  AlphaBrew
 # Description:  Provides a generic implementation of a polynomial function to be used in polynomial regression maths.
 #      Author:  Jared Julien <jaredjulien@exsystems.net>
 #   Copyright:  (c) 2020 Jared Julien, eX Systems

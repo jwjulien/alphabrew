@@ -1,6 +1,6 @@
 # ======================================================================================================================
 #        File:  GUI/TabFermentables.py
-#     Project:  Brewing Recipe Planner
+#     Project:  AlphaBrew
 # Description:  Extensions and functionality for the main GUI window.
 #      Author:  Jared Julien <jaredjulien@gmail.com>
 #   Copyright:  (c) 2020 Jared Julien

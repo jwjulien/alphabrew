@@ -1,6 +1,6 @@
 # ======================================================================================================================
 #        File:  Math/Gravity.py
-#     Project:  Brewing Recipe Planner
+#     Project:  AlphaBrew
 # Description:  Maths for working with specific gravity, Plato, Brix, etc. conversions.
 #      Author:  Jared Julien <jaredjulien@exsystems.net>
 #   Copyright:  (c) 2020 Jared Julien, eX Systems

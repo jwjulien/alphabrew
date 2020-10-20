@@ -1,6 +1,6 @@
 # ======================================================================================================================
 #        File:  Model/MeasureableUnits/DiastaticPowerType.py
-#     Project:  Brewing Recipe Planner
+#     Project:  AlphaBrew
 # Description:  Provides a base class for working with time types in recipes which can have differing units.
 #      Author:  Jared Julien <jaredjulien@gmail.com>
 #   Copyright:  (c) 2020 Jared Julien

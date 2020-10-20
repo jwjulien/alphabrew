@@ -1,6 +1,6 @@
 # ======================================================================================================================
 #        File:  GUI/DialogWater.py
-#     Project:  Brewing Recipe Planner
+#     Project:  AlphaBrew
 # Description:  Implements a dialog for editing the details of a particular water profile.
 #      Author:  Jared Julien <jaredjulien@gmail.com>
 #   Copyright:  (c) 2020 Jared Julien

@@ -1,6 +1,6 @@
 # ======================================================================================================================
 #        File:  GUI/__init__.py
-#     Project:  Brewing Recipe Planner
+#     Project:  AlphaBrew
 # Description:  Top level init file for the GUI submodule.
 #      Author:  Jared Julien <jaredjulien@gmail.com>
 #   Copyright:  (c) 2020 Jared Julien

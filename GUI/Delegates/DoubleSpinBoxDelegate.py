@@ -1,7 +1,7 @@
 # ======================================================================================================================
-#        File:  GUI/Delegates/SpinBoxDelegate.py
-#     Project:  Brewing Recipe Planner
-# Description:  Provides a QDoubleSpinBox
+#        File:  GUI/Delegates/DoubleSpinBoxDelegate.py
+#     Project:  AlphaBrew
+# Description:  Provides a QDoubleSpinBox delegate for use in editing directly in QTableViews.
 #      Author:  Jared Julien <jaredjulien@exsystems.net>
 #   Copyright:  (c) 2020 Jared Julien, eX Systems
 # ---------------------------------------------------------------------------------------------------------------------

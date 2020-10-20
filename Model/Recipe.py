@@ -1,6 +1,6 @@
 # ======================================================================================================================
 #        File:  Model/Recipe.py
-#     Project:  Brewing Recipe Planner
+#     Project:  AlphaBrew
 # Description:  Provides a base for beer Recipes sopporing BeerJSON conversion.
 #      Author:  Jared Julien <jaredjulien@gmail.com>
 #   Copyright:  (c) 2020 Jared Julien

@@ -1,6 +1,6 @@
 # ======================================================================================================================
 #        File:  __main__.py
-#     Project:  Brewing Recipe Planner
+#     Project:  AlphaBrew
 # Description:  Entry point for Qt GUI based application.
 #      Author:  Jared Julien <jaredjulien@gmail.com>
 #   Copyright:  (c) 2020 Jared Julien

@@ -1,6 +1,6 @@
 # ======================================================================================================================
 #        File:  GUI/Widgets/IbuGuRange.py
-#     Project:  Brewing Recipe Planner
+#     Project:  AlphaBrew
 # Description:  Custom widget that extends the RangedSlider widget to provide opinionated background colors for beer
 #               IBU/GU range.
 #      Author:  Jared Julien <jaredjulien@exsystems.net>

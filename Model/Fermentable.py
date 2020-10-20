@@ -1,6 +1,6 @@
 # ======================================================================================================================
 #        File:  Model/Fermentable.py
-#     Project:  Brewing Recipe Planner
+#     Project:  AlphaBrew
 # Description:  Provides the definition for a single fermentable or steepable item in a recipe.
 #      Author:  Jared Julien <jaredjulien@gmail.com>
 #   Copyright:  (c) 2020 Jared Julien

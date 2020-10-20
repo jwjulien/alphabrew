@@ -1,6 +1,6 @@
 # ======================================================================================================================
 #        File:  Math/Color.py
-#     Project:  Brewing Recipe Planner
+#     Project:  AlphaBrew
 # Description:  Maths for working with color conversions.
 #      Author:  Jared Julien <jaredjulien@exsystems.net>
 #   Copyright:  (c) 2020 Jared Julien, eX Systems

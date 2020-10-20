@@ -1,6 +1,6 @@
 # ======================================================================================================================
 #        File:  Model/MeasureableUnits/__init__.py
-#     Project:  Brewing Recipe Planner
+#     Project:  AlphaBrew
 # Description:  Top level include for model units related classes.
 #      Author:  Jared Julien <jaredjulien@gmail.com>
 #   Copyright:  (c) 2020 Jared Julien

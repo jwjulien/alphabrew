@@ -1,6 +1,6 @@
 # ======================================================================================================================
 #        File:  GUI/Table/Column.py
-#     Project:  Brewing Recipe Planner
+#     Project:  AlphaBrew
 # Description:  Provides a base class for working with
 #      Author:  Jared Julien <jaredjulien@exsystems.net>
 #   Copyright:  (c) 2020 Jared Julien, eX Systems

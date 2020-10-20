@@ -1,6 +1,6 @@
 # ======================================================================================================================
 #        File:  Model/Styles.py
-#     Project:  Brewing Recipe Planner
+#     Project:  AlphaBrew
 # Description:  A definition for a beer Style in list form.
 #      Author:  Jared Julien <jaredjulien@gmail.com>
 #   Copyright:  (c) 2020 Jared Julien

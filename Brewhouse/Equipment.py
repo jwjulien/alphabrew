@@ -1,6 +1,6 @@
 # ======================================================================================================================
 #        File:  Brewhouse/Equipment.py
-#     Project:  Brewing Recipe Planner
+#     Project:  AlphaBrew
 # Description:  Provides the definition for a system setup and the associated settings and calibrations.
 #      Author:  Jared Julien <jaredjulien@gmail.com>
 #   Copyright:  (c) 2020 Jared Julien

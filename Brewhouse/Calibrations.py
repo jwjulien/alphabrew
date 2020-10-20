@@ -1,6 +1,6 @@
 # ======================================================================================================================
 #        File:  Brewhouse/Calibrations.py
-#     Project:  Brewing Recipe Planner
+#     Project:  AlphaBrew
 # Description:  Provides the definition for calibrations, configurable items.
 #      Author:  Jared Julien <jaredjulien@gmail.com>
 #   Copyright:  (c) 2020 Jared Julien

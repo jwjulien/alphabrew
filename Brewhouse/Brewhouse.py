@@ -1,6 +1,6 @@
 # ======================================================================================================================
 #        File:  Brewhouse/Brewhouse.py
-#     Project:  Brewing Recipe Planner
+#     Project:  AlphaBrew
 # Description:  Provides the definition for a Brewhouse which holds the settings pertaining to the house and equipment.
 #      Author:  Jared Julien <jaredjulien@gmail.com>
 #   Copyright:  (c) 2020 Jared Julien

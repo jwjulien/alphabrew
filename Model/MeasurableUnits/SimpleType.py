@@ -1,6 +1,6 @@
 # ======================================================================================================================
 #        File:  Model/MeasureableUnits/SimpleType.py
-#     Project:  Brewing Recipe Planner
+#     Project:  AlphaBrew
 # Description:  Provides a base class for simple types, extended by BeerJSON standards.
 #      Author:  Jared Julien <jaredjulien@gmail.com>
 #   Copyright:  (c) 2020 Jared Julien

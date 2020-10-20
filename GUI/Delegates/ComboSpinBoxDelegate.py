@@ -1,6 +1,6 @@
 # ======================================================================================================================
 #        File:  GUI/Delegates/ComboSpinBoxDelegate.py
-#     Project:  Brewing Recipe Planner
+#     Project:  AlphaBrew
 # Description:  Provides a QComboBox for use with editing directly in QTableViews.
 #      Author:  Jared Julien <jaredjulien@exsystems.net>
 #   Copyright:  (c) 2020 Jared Julien, eX Systems

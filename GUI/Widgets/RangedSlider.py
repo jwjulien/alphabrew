@@ -1,7 +1,7 @@
 # ======================================================================================================================
 #        File:  GUI/Widgets/RangedSlider.py
-#     Project:  Brewing Recipe Planner
-# Description:
+#     Project:  AlphaBrew
+# Description:  Provides a costom widget that shows a range wining a bar to visually show a value on a range in a scale.
 #      Author:  Jared Julien <jaredjulien@exsystems.net>
 #   Copyright:  (c) 2020 Jared Julien, eX Systems
 # ---------------------------------------------------------------------------------------------------------------------

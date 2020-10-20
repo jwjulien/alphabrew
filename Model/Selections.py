@@ -1,6 +1,6 @@
 # ======================================================================================================================
 #        File:  Model/Selections.py
-#     Project:  Brewing Recipe Planner
+#     Project:  AlphaBrew
 # Description:  Aids in helping select the proper measureable unit type class to use.
 #      Author:  Jared Julien <jaredjulien@gmail.com>
 #   Copyright:  (c) 2020 Jared Julien

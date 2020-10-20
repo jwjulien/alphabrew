@@ -1,6 +1,6 @@
 # ======================================================================================================================
 #        File:  Model/Water.py
-#     Project:  Brewing Recipe Planner
+#     Project:  AlphaBrew
 # Description:  Provides the definition for a single water addition.
 #      Author:  Jared Julien <jaredjulien@gmail.com>
 #   Copyright:  (c) 2020 Jared Julien

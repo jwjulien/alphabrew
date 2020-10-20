@@ -1,6 +1,6 @@
 # ======================================================================================================================
 #        File:  GUI/Widgets/StyleRange.py
-#     Project:  Brewing Recipe Planner
+#     Project:  AlphaBrew
 # Description:  Custom widget that extends the RangedSlider widget to provide opinionated background colors for beer
 #               style ranges.
 #      Author:  Jared Julien <jaredjulien@exsystems.net>

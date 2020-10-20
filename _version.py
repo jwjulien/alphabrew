@@ -1,6 +1,6 @@
 # ======================================================================================================================
 #        File:  Brewhouse/Brewhouse.py
-#     Project:  Brewing Recipe Planner
+#     Project:  AlphaBrew
 # Description:  Software version number.
 #      Author:  Jared Julien <jaredjulien@gmail.com>
 #   Copyright:  (c) 2020 Jared Julien
@@ -19,6 +19,6 @@
 # OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 # ----------------------------------------------------------------------------------------------------------------------
 
-__version__ = "0.1.1"
+__version__ = "1.0.0"
 
 # End of File

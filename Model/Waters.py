@@ -1,6 +1,6 @@
 # ======================================================================================================================
 #        File:  Model/Waters.py
-#     Project:  Brewing Recipe Planner
+#     Project:  AlphaBrew
 # Description:  A definition for a beer waters in list form.
 #      Author:  Jared Julien <jaredjulien@gmail.com>
 #   Copyright:  (c) 2020 Jared Julien

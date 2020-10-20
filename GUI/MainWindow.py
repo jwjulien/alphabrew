@@ -1,6 +1,6 @@
 # ======================================================================================================================
 #        File:  GUI/MainWindow.py
-#     Project:  Brewing Recipe Planner
+#     Project:  AlphaBrew
 # Description:  Extensions and functionality for the main GUI window.
 #      Author:  Jared Julien <jaredjulien@gmail.com>
 #   Copyright:  (c) 2020 Jared Julien
@@ -242,15 +242,16 @@ class MainWindow(QtWidgets.QMainWindow):
 
 # ----------------------------------------------------------------------------------------------------------------------
     def on_help_about(self):
-        """Fires whent the user selects about from the help menu."""
+        """Fires when the user selects about from the help menu."""
         description = 'A highly opinionated beer recipe editor.  It\'s not fancy or elaborate.  It strives to do one '
         description += 'thing, one thing only, and one thing well - edit beer recipes.'
         description += '\n\n'
-        description += 'It is not a calculator or an adjuster or a compensator, etc. - download BeerSmith for that.'
+        description += 'It is not a calculator or an adjuster or a compensator, etc.'
+        description += ' - download something else for that.'
         description += '\n\n'
         description += f'Version: {self.version}\n'
         description += 'Author: Jared Julien <jaredjulien@gmail.com>'
-        QtWidgets.QMessageBox.about(self, 'Beer Recipe Planner', description)
+        QtWidgets.QMessageBox.about(self, 'AlphaBrew', description)
 
 
 # ----------------------------------------------------------------------------------------------------------------------

@@ -1,6 +1,6 @@
 # ======================================================================================================================
 #        File:  GUI/Table/Alignment.py
-#     Project:  Brewing Recipe Planner
+#     Project:  AlphaBrew
 # Description:  Provides constants with short names for common Qt cell text alignment.
 #      Author:  Jared Julien <jaredjulien@exsystems.net>
 #   Copyright:  (c) 2020 Jared Julien, eX Systems
