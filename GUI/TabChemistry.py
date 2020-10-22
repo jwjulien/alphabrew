@@ -25,7 +25,7 @@
 from PySide2 import QtWidgets
 
 from GUI.Base.TabChemistry import Ui_TabChemistry
-from Model.MeasurableUnits import ConcentrationType, MassType
+from Model.MeasurableUnits import ConcentrationType, MassType, VolumeType
 from Model.Timing import TimingType
 from Model.Miscellaneous import Miscellaneous
 
@@ -64,9 +64,9 @@ class TabChemistry(QtWidgets.QWidget):
         self.ui.nahco3_kettle.valueChanged.connect(self.update_recipe_salts)
         self.ui.caoh2_kettle.valueChanged.connect(self.update_recipe_salts)
 
-        self.ui.phosphoric.valueChanged.connect(self.recalculate)
-        self.ui.lactic.valueChanged.connect(self.recalculate)
-        self.ui.acidMalt.valueChanged.connect(self.recalculate)
+        self.ui.phosphoric.valueChanged.connect(self.update_recipe_acids)
+        self.ui.lactic.valueChanged.connect(self.update_recipe_acids)
+        self.ui.acidMalt.valueChanged.connect(self.update_recipe_acids)
 
         self.setup_recommendations()
         self.activated()
@@ -331,7 +331,7 @@ class TabChemistry(QtWidgets.QWidget):
         else:
             self.ui.chlorideSlide.setStyleSheet(resetStyle)
 
-        if sulfate.as_('ppm') < 50 or sulfate.as_('ppm') > 300:
+        if sulfate.as_('ppm') < 50 or sulfate.as_('ppm') > 350:
             self.ui.sulfateSlide.setStyleSheet(errorStyle)
         else:
             self.ui.sulfateSlide.setStyleSheet(resetStyle)
@@ -421,7 +421,7 @@ class TabChemistry(QtWidgets.QWidget):
         """Update that salts in the actual recipe in response to a change in one of the input boxes."""
 
         def updateSalt(name, value, use, salts):
-            """Local helper function to assist with the sale updates.  Handles both the mash and kettle salts."""
+            """Local helper function to assist with the salt updates.  Handles both the mash and kettle salts."""
             if value > 0:
                 # If there is a value greater than zero, then we want to update this misc ingredient amount.
                 mass = MassType(value, 'g')
@@ -456,6 +456,36 @@ class TabChemistry(QtWidgets.QWidget):
         updateSalt('Sodium Chloride', self.ui.nacl_kettle.value(), 'Boil', kettleSalts)
         updateSalt('Sodium Bicarbonate', self.ui.nahco3_kettle.value(), 'Boil', kettleSalts)
         updateSalt('Calcium Hydroxide', self.ui.caoh2_kettle.value(), 'Boil', kettleSalts)
+
+        self.recalculate()
+
+
+# ----------------------------------------------------------------------------------------------------------------------
+    def update_recipe_acids(self):
+        """Update that acids in the actual recipe in response to a change in one of the input boxes."""
+
+        def updateAcid(name, value, acids):
+            """Local helper function to assist with the acid updates."""
+            if value > 0:
+                # If there is a value greater than zero, then we want to update this misc ingredient amount.
+                volume = VolumeType(value, 'ml')
+                if name in acids:
+                    # Salt already exists, lets just update the value.
+                    acids[name].amount = volume
+                else:
+                    # Salt does not yet exist, need to add it as a new misc ingredient.
+                    timing = TimingType(use='Mash')
+                    misc = Miscellaneous(self.recipe, name, 'Water Agent', timing=timing, amount=volume)
+                    self.recipe.misc.append(misc)
+            else:
+                # Value has been made zero.
+                if name in acids:
+                    # If there was previously an entry, remove it from the ingredient list now.
+                    self.recipe.misc.pop(self.recipe.misc.indexOf(acids[name]))
+
+        acids = self._list_to_dict(self.recipe.misc.acids)
+        updateAcid('Phosphoric Acid', self.ui.phosphoric.value(), acids)
+        updateAcid('Lactic Acid', self.ui.lactic.value(), acids)
 
         self.recalculate()
 

@@ -560,17 +560,29 @@ class Ui_TabChemistry(object):
         self.horizontalLayout_3.setObjectName(u"horizontalLayout_3")
         self.lbl_so4_min = QLabel(self.group_results)
         self.lbl_so4_min.setObjectName(u"lbl_so4_min")
+        sizePolicy = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
+        sizePolicy.setHorizontalStretch(1)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.lbl_so4_min.sizePolicy().hasHeightForWidth())
+        self.lbl_so4_min.setSizePolicy(sizePolicy)
 
         self.horizontalLayout_3.addWidget(self.lbl_so4_min)
 
         self.lbl_so4_mid = QLabel(self.group_results)
         self.lbl_so4_mid.setObjectName(u"lbl_so4_mid")
-        self.lbl_so4_mid.setAlignment(Qt.AlignCenter)
+        sizePolicy.setHeightForWidth(self.lbl_so4_mid.sizePolicy().hasHeightForWidth())
+        self.lbl_so4_mid.setSizePolicy(sizePolicy)
+        self.lbl_so4_mid.setAlignment(Qt.AlignLeading|Qt.AlignLeft|Qt.AlignVCenter)
 
         self.horizontalLayout_3.addWidget(self.lbl_so4_mid)
 
         self.lbl_so4_max = QLabel(self.group_results)
         self.lbl_so4_max.setObjectName(u"lbl_so4_max")
+        sizePolicy1 = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
+        sizePolicy1.setHorizontalStretch(2)
+        sizePolicy1.setVerticalStretch(0)
+        sizePolicy1.setHeightForWidth(self.lbl_so4_max.sizePolicy().hasHeightForWidth())
+        self.lbl_so4_max.setSizePolicy(sizePolicy1)
         self.lbl_so4_max.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
 
         self.horizontalLayout_3.addWidget(self.lbl_so4_max)
@@ -582,9 +594,6 @@ class Ui_TabChemistry(object):
         self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
         self.lbl_hco3_min = QLabel(self.group_results)
         self.lbl_hco3_min.setObjectName(u"lbl_hco3_min")
-        sizePolicy = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
-        sizePolicy.setHorizontalStretch(1)
-        sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.lbl_hco3_min.sizePolicy().hasHeightForWidth())
         self.lbl_hco3_min.setSizePolicy(sizePolicy)
 
@@ -592,9 +601,6 @@ class Ui_TabChemistry(object):
 
         self.lbl_hco3_min_2 = QLabel(self.group_results)
         self.lbl_hco3_min_2.setObjectName(u"lbl_hco3_min_2")
-        sizePolicy1 = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
-        sizePolicy1.setHorizontalStretch(2)
-        sizePolicy1.setVerticalStretch(0)
         sizePolicy1.setHeightForWidth(self.lbl_hco3_min_2.sizePolicy().hasHeightForWidth())
         self.lbl_hco3_min_2.setSizePolicy(sizePolicy1)
 
@@ -1044,7 +1050,7 @@ class Ui_TabChemistry(object):
         self.lbl_cl_max.setText(QCoreApplication.translate("TabChemistry", u"250", None))
         self.lbl_so4_min.setText(QCoreApplication.translate("TabChemistry", u"50", None))
         self.lbl_so4_mid.setText(QCoreApplication.translate("TabChemistry", u"150", None))
-        self.lbl_so4_max.setText(QCoreApplication.translate("TabChemistry", u"300", None))
+        self.lbl_so4_max.setText(QCoreApplication.translate("TabChemistry", u"350", None))
         self.lbl_hco3_min.setText(QCoreApplication.translate("TabChemistry", u"0", None))
         self.lbl_hco3_min_2.setText(QCoreApplication.translate("TabChemistry", u"50", None))
         self.lbl_hco3_min_3.setText(QCoreApplication.translate("TabChemistry", u"150", None))
