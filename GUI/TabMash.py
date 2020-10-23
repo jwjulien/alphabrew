@@ -90,6 +90,7 @@ class TabMash(QtWidgets.QWidget):
         """Fires when the user changes the ambient temperature."""
         self.recipe.mash.ambient.value = value
         self.recipe.mash.ambient.unit = 'F'
+        self.recipe.mash.changed.emit()
 
 
 # ----------------------------------------------------------------------------------------------------------------------
@@ -97,6 +98,7 @@ class TabMash(QtWidgets.QWidget):
         """Fires when the user changes the value of the water/grain ratio spin box."""
         self.recipe.mash.ratio.value = value
         self.recipe.mash.ratio.unit = 'qt/lb'
+        self.recipe.mash.changed.emit()
 
 
 # ----------------------------------------------------------------------------------------------------------------------

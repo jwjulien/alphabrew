@@ -130,6 +130,7 @@ class MashStep():
             """
             return ((target - initial) * ((0.2 * mashWeight) + (existing + tunEquiv))) / (addition - target)
 
+        # First Step
         if previous is None:
             # This is the first step, calculate it based upon some of the other factors instead of previous step.
             # Calculate the strike volume from grain bill and specified ratio.
@@ -144,6 +145,7 @@ class MashStep():
             strike = temperature(ambient, target, quarts, existing=0)
             self.infusionTemperature = TemperatureType(strike, 'F')
 
+        # Middle Steps
         elif not final:
             # Intermediate step (only applies when there are three or more steps in the mash).
             # Determine the volume of boiling water (Fixed temp: 212 F) that needs to be added to achieve this step.
@@ -157,10 +159,11 @@ class MashStep():
             self.infusionVolume = VolumeType(quarts, 'qt')
             self.totalVolume = previous.totalVolume + self.infusionVolume
 
+        # Final Step
         else:
             # Compute the temperature of the final infusion based upon the remaining quantity of water.
 
-            gallons = self.recipe.boilVolume.as_('gal') - previous.totalVolume.as_('gal')
+            gallons = self.recipe.totalWater.as_('gal') - previous.totalVolume.as_('gal')
             self.infusionVolume = VolumeType(gallons, 'gal')
             self.totalVolume = previous.totalVolume + self.infusionVolume
 

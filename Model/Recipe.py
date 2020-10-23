@@ -165,7 +165,17 @@ class Recipe(QtCore.QObject):
     @property
     def spargeVolume(self):
         """Calculates the volume of water used in the sparge."""
-        return self.boilVolume - self.strikeVolume
+        return self.totalWater - self.strikeVolume
+
+
+# ----------------------------------------------------------------------------------------------------------------------
+    @property
+    def totalWater(self):
+        """Calculates the total volume of water used."""
+        # Gallons lost to the grains in the mash tun from absorption.
+        grainAbsorptionLoss = self.fermentables.mashWeight.as_('lb') * self.equipment.grainAbsorptionLoss # gal/lb
+
+        return self.boilVolume + VolumeType(grainAbsorptionLoss, 'gal')
 
 
 # ----------------------------------------------------------------------------------------------------------------------
@@ -179,12 +189,9 @@ class Recipe(QtCore.QObject):
         # Determine how many gallons we expect to boil off over the time of the boil.
         boilOff = self.equipment.boilOffRate * self.boilTime.as_('hr')
 
-        # Gallons lost to the grains in the mash tun from absorption.
-        grainAbsorptionLoss = self.fermentables.mashWeight.as_('lb') * self.equipment.grainAbsorptionLoss
-
         # TODO: Review and add in other water losses between the start and end of the boil.
 
-        return VolumeType(self.totalWort + boilOff + hopWaterLoss + grainAbsorptionLoss, 'gal')
+        return VolumeType(self.totalWort + boilOff + hopWaterLoss, 'gal')
 
 
 # ----------------------------------------------------------------------------------------------------------------------
