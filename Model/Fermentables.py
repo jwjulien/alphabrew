@@ -42,7 +42,7 @@ class Fermentables(ListTableBase):
     display within a QtTableView."""
     Columns = [
         Column('amount', editable=True, hideLimited=True),
-        Column('proportion', 'Percent', template='%.0f', align=QtCore.Qt.AlignHCenter, hideLimited=True),
+        Column('proportion', hideLimited=True),
         Column('name', 'Grain/Fermentable', size=Stretch, align=QtCore.Qt.AlignLeft),
         Column('color'),
         Column('ftype', 'Type'),
@@ -113,7 +113,7 @@ class Fermentables(ListTableBase):
         """A step in calculating the mash pH but also required for calculating the overall water chemistry."""
         total = 0
         for fermentable in self.items:
-            total += fermentable.bi * fermentable.proportion / 100
+            total += fermentable.bi * fermentable.proportion.as_('%') / 100
         return total
 
 
@@ -123,7 +123,7 @@ class Fermentables(ListTableBase):
         """Calculates the distilled water mash pH for each mashed fermentable and returns the result."""
         phiBiFi = 0
         for fermentable in self.items:
-            phiBiFi += fermentable.phi * fermentable.bi * fermentable.proportion / 100
+            phiBiFi += fermentable.phi * fermentable.bi * fermentable.proportion.as_('%') / 100
         return phiBiFi / self.mashBiFi
 
 

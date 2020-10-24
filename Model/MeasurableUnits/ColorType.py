@@ -41,6 +41,15 @@ class ColorType(SimpleType):
     }
 
 
+# ======================================================================================================================
+# Init Method
+# ----------------------------------------------------------------------------------------------------------------------
+    def __init__(self, value=None, unit=None, json=None):
+        if unit is not None and unit not in self.Types:
+            raise ValueError(f'Invalid unit supplied for ColorType: "{unit}"')
+        super().__init__(value, unit, json)
+
+
 
 # ======================================================================================================================
 # Methods

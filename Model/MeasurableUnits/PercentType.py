@@ -31,7 +31,9 @@ from Model.MeasurableUnits.SimpleType import SimpleType
 # ----------------------------------------------------------------------------------------------------------------------
 class PercentType(SimpleType):
     """Extends the SimpleType class to provide a class for working with PercentType as defined in the BeerJson standard
-    2.0 draft."""
+    2.0 draft.
+
+    Values for this type are expected to range from 0 to 100."""
 
     Types = {
         '%': 1,

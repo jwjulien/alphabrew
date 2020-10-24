@@ -78,15 +78,14 @@ class Fermentable():
 # Properties
 # ----------------------------------------------------------------------------------------------------------------------
     @property
-    def proportion(self) -> float:
-        """Returns a float in the range [0.0, 100.0] representing this fermentables proportion within the associated
-        recipe."""
-        if self.recipe is None:
-            return 0
-        total = sum([fermentable.amount.as_('lb') for fermentable in self.recipe.fermentables])
-        if total == 0:
-            return 0
-        return self.amount.as_('lb') / total * 100
+    def proportion(self) -> PercentType:
+        """Returns a PercentType representing this fermentable's proportion within it's associated recipe."""
+        percent = 0
+        if self.recipe is not None:
+            total = sum([fermentable.amount.as_('lb') for fermentable in self.recipe.fermentables])
+            if total != 0:
+                percent = self.amount.as_('lb') / total * 100
+        return PercentType(percent, '%')
 
 
 # ----------------------------------------------------------------------------------------------------------------------
@@ -152,7 +151,7 @@ class Fermentable():
             # Non-mashed ingredients will have no contribution.
             return 0
 
-        srm = self.color.as_('srm')
+        srm = self.color.as_('SRM')
         if srm > 300:
             # Roasted malts take priority.
             return 4.64
@@ -206,7 +205,7 @@ class Fermentable():
             # Non-mashed ingredients will have no contribution.
             return 0
 
-        srm = self.color.as_('srm')
+        srm = self.color.as_('SRM')
         if srm > 300:
             # Roasted malts take priority.
             return 68.7
