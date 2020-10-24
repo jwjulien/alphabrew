@@ -92,7 +92,7 @@ class Fermentable():
     @property
     def isMashed(self) -> bool:
         """Returns a Boolean indicating if this fermentable is mashed and therefor affected by mash efficiency."""
-        return self.ftype == 'Grain'
+        return self.ftype.lower() == 'grain'
 
 
 # ----------------------------------------------------------------------------------------------------------------------
@@ -131,8 +131,8 @@ class Fermentable():
         """Returns the equivalent amount of sucrose in this fermentable."""
         sucrose = self.amount.as_('lb') * (self.fyield.as_('%') / 100) * (1 - (self.moisture.as_('%') / 100))
 
-        # If not mashed, then it must be steeped - reduce the yield by 40%.
-        if not self.mashed:
+        # "Mashed" (i.e. grain type) but not mashed, then it must be steeped - reduce the yield by 40%.
+        if self.isMashed and not self.mashed:
             sucrose *= 0.6
 
         return sucrose
@@ -147,7 +147,7 @@ class Fermentable():
             return self._phi
 
         # If not explicitly specified then try to determine a reasonable default for this grain.
-        if not self.isMashed:
+        if not self.isMashed or (self.mashed is not None and not self.mashed):
             # Non-mashed ingredients will have no contribution.
             return 0
 
