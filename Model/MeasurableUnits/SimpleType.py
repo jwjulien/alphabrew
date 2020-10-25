@@ -31,11 +31,18 @@ class SimpleType:
     Types = {}
 
     def __init__(self, value=None, unit=None, json=None):
-        self.value = value
-        self._unit = unit
+        # Set the units from the inputs when provided.
+        if value is not None and unit is not None:
+            self.value = value
+            self.unit = unit
 
-        if json is not None:
+        # Or use JSON.
+        elif json is not None:
             self.from_dict(json)
+
+        # But if all inputs are invalid, throw an exception.
+        else:
+            raise ValueError('SimpleType must be instantiated with either a value AND unit, or via JSON.')
 
 
 
@@ -52,7 +59,7 @@ class SimpleType:
     @unit.setter
     def unit(self, value):
         if value not in self.Types.keys():
-            raise ValueError(f'{self.__class__.__name__} does not support units of "{value}"')
+            raise ValueError(f'{self.__class__.__name__} does not support unit of "{value}"')
 
         self._unit = value
 

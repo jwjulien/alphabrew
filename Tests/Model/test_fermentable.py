@@ -25,7 +25,7 @@
 import pytest
 
 from Model.Fermentable import Fermentable
-from Model.MeasurableUnits import ColorType, DiastaticPowerType, MassType, PercentType
+from Model.MeasurableUnits import ColorType, DiastaticPowerType, MassType, PercentType, VolumeType
 
 
 
@@ -298,6 +298,317 @@ def test_bi(name, ftype, group, color, bi):
 
     assert fermentable.bi == bi
 
+
+# ----------------------------------------------------------------------------------------------------------------------
+def test_copy():
+    """Ensure that the copy method makes a proper copy of the fermentable."""
+    recipe = RecipeStub()
+
+    original = Fermentable(
+        recipe=recipe,
+        name='Test',
+        amount=MassType(1, 'lb'),
+        ftype='Grain',
+        group='Smoked',
+        producer='Crisp',
+        origin='UK',
+        fyield=PercentType(68, '%'),
+        color=ColorType(45, 'SRM'),
+        moisture=PercentType(3, '%'),
+        diastaticPower=DiastaticPowerType(4, 'Lintner'),
+        addAfterBoil=False,
+        mashed=True,
+        notes='A note',
+        phi=5.6,
+        bi=43.2
+    )
+
+    newRecipe = RecipeStub()
+    copy = original.copy(newRecipe)
+
+    assert isinstance(copy, Fermentable)
+    assert copy.recipe == newRecipe
+    assert copy.name == 'Test'
+    assert isinstance(copy.amount, MassType)
+    assert copy.amount is not original.amount # Should be a new instance of MassType.
+    assert copy.amount.as_('lb') == 1
+    assert copy.ftype == 'Grain'
+    assert copy.group == 'Smoked'
+    assert copy.producer == 'Crisp'
+    assert copy.origin == 'UK'
+    assert copy.fyield is not original.fyield
+    assert copy.fyield.as_('%') == 68
+    assert copy.color is not original.color
+    assert copy.color.as_('SRM') == 45
+    assert copy.moisture is not original.moisture
+    assert copy.moisture.as_('%') == 3
+    assert copy.diastaticPower is not original.diastaticPower
+    assert copy.diastaticPower.as_('Lintner') == 4
+    assert copy.addAfterBoil is not None
+    assert not copy.addAfterBoil
+    assert copy.mashed is not None
+    assert copy.mashed
+    assert copy.notes == 'A note'
+    assert copy.phi == 5.6
+    assert copy.bi == 43.2
+
+
+# ----------------------------------------------------------------------------------------------------------------------
+def test_to_dict():
+    """Ensure that the to_dict method produces a dict with the expected values."""
+    recipe = RecipeStub()
+    fermentable = Fermentable(
+        recipe=recipe,
+        name='Test',
+        amount=MassType(1, 'lb'),
+        ftype='Grain',
+        group='Smoked',
+        producer='Crisp',
+        origin='UK',
+        fyield=PercentType(68, '%'),
+        color=ColorType(45, 'SRM'),
+        moisture=PercentType(3, '%'),
+        diastaticPower=DiastaticPowerType(4, 'Lintner'),
+        addAfterBoil=False,
+        mashed=True,
+        notes='A note\nSecond line',
+        phi=5.6,
+        bi=43.2
+    )
+
+    output = fermentable.to_dict()
+
+    assert output['name'] == 'Test'
+    assert output['type'] == 'grain'
+    assert output['origin'] == 'UK'
+    assert output['producer'] == 'Crisp'
+    assert output['yield']['fine_grind']['value'] == 68
+    assert output['yield']['fine_grind']['unit'] == '%'
+    assert output['color']['value'] == 45
+    assert output['color']['unit'] == 'SRM'
+    assert output['amount']['value'] == 1
+    assert output['amount']['unit'] == 'lb'
+    assert output['notes'] == 'A note\\nSecond line'
+    assert output['moisture']['value'] == 3
+    assert output['moisture']['unit'] == '%'
+    assert output['diastatic_power']['value'] == 4
+    assert output['diastatic_power']['unit'] == 'Lintner'
+    assert output['recommend_mash'] == True
+    assert output['grain_group'] == 'smoked'
+    assert output['phi'] == 5.6
+    assert output['bi'] == 43.2
+
+
+# ----------------------------------------------------------------------------------------------------------------------
+def test_to_dict_optional():
+    """Verify that the optional items are not set when a fermentable without explicit values is stored."""
+    recipe = RecipeStub()
+    fermentable = Fermentable(
+        recipe=recipe,
+        name='Test',
+        amount=MassType(1, 'lb'),
+        ftype='Extract',
+        producer='Crisp',
+        origin='UK',
+        fyield=PercentType(68, '%'),
+        color=ColorType(45, 'SRM'),
+        moisture=PercentType(3, '%'),
+        diastaticPower=DiastaticPowerType(4, 'Lintner'),
+    )
+
+    output = fermentable.to_dict()
+
+    assert 'grain_group' not in output
+    assert 'phi' not in output
+    assert 'bi' not in output
+
+
+# ----------------------------------------------------------------------------------------------------------------------
+def test_from_dict_mass():
+    """Verify that a fermentable is properly parsed from a dictionary using a mass amount."""
+    data = {
+        'name': 'Test',
+        'amount': {
+            'value': 1,
+            'unit': 'lb'
+        },
+        'type': 'grain',
+        'grain_group': 'base',
+        'producer': 'Briess',
+        'origin': 'US',
+        'color': {
+            'value': 2,
+            'unit': 'SRM'
+        },
+        'moisture': {
+            'value': 7,
+            'unit': '%'
+        },
+        'diastatic_power': {
+            'value': 4,
+            'unit': 'Lintner'
+        },
+        'yield': {
+            'fine_grind': {
+                'value': 78,
+                'unit': '%'
+            }
+        },
+        'recommend_mash': True,
+        'notes': 'Details',
+        'phi': 5.23,
+        'bi': 49.6
+    }
+
+    fermentable = Fermentable()
+    fermentable.from_dict(data)
+
+    assert fermentable.name == 'Test'
+    assert isinstance(fermentable.amount, MassType)
+    assert fermentable.amount.as_('lb') == 1
+    assert fermentable.ftype == 'Grain'
+    assert fermentable.group == 'Base'
+    assert fermentable.producer == 'Briess'
+    assert fermentable.origin == 'US'
+    assert isinstance(fermentable.color, ColorType)
+    assert fermentable.color.as_('SRM') == 2
+    assert isinstance(fermentable.moisture, PercentType)
+    assert fermentable.moisture.as_('%') == 7
+    assert isinstance(fermentable.diastaticPower, DiastaticPowerType)
+    assert fermentable.diastaticPower.as_('Lintner') == 4
+    assert isinstance(fermentable.fyield, PercentType)
+    assert fermentable.fyield.as_('%') == 78
+    assert isinstance(fermentable.mashed, bool)
+    assert fermentable.mashed
+    assert fermentable.notes == 'Details'
+    assert fermentable.phi == 5.23
+    assert fermentable.bi == 49.6
+
+
+# ----------------------------------------------------------------------------------------------------------------------
+def test_from_dict_volume():
+    """Verify that a fermentable is properly parsed from a dictionary using a volume amount."""
+    data = {
+        'name': 'Test',
+        'amount': {
+            'value': 1,
+            'unit': 'qt'
+        },
+        'type': 'extract',
+        'producer': 'Briess',
+        'origin': 'US',
+        'color': {
+            'value': 1.5,
+            'unit': 'SRM'
+        },
+        'moisture': {
+            'value': 0,
+            'unit': '%'
+        },
+        'diastatic_power': {
+            'value': 0,
+            'unit': 'Lintner'
+        },
+        'yield': {
+            'fine_grind': {
+                'value': 0,
+                'unit': '%'
+            }
+        },
+        'recommend_mash': False,
+        'notes': 'Liquid',
+    }
+
+    fermentable = Fermentable()
+    fermentable.from_dict(data)
+
+    assert isinstance(fermentable.amount, VolumeType)
+    assert fermentable.amount.as_('qt') == 1
+    assert fermentable._phi is None
+    assert fermentable._bi is None
+
+
+# ----------------------------------------------------------------------------------------------------------------------
+def test_from_dict_unsupported():
+    """Verify an error is thrown when attempting to parse an invalid amount type."""
+    data = {
+        'name': 'Test',
+        'amount': {
+            'value': 1,
+            'unit': '%'
+        },
+        'type': 'extract',
+        'producer': 'Briess',
+        'origin': 'US',
+        'color': {
+            'value': 1.5,
+            'unit': 'SRM'
+        },
+        'moisture': {
+            'value': 0,
+            'unit': '%'
+        },
+        'diastatic_power': {
+            'value': 0,
+            'unit': 'Lintner'
+        },
+        'yield': {
+            'fine_grind': {
+                'value': 0,
+                'unit': '%'
+            }
+        },
+        'recommend_mash': False,
+        'notes': 'Liquid',
+    }
+
+    fermentable = Fermentable()
+
+    with pytest.raises(TypeError):
+        fermentable.from_dict(data)
+
+
+
+# ----------------------------------------------------------------------------------------------------------------------
+def test_from_dict_no_optional_values():
+    """Verify a fermentable is properly parsed from a dictionary even when none of the optional properties are
+    given."""
+    data = {
+        'name': 'Test',
+        'amount': {
+            'value': 1,
+            'unit': 'qt'
+        },
+        'type': 'extract',
+        'producer': 'Briess',
+        'origin': 'US',
+        'color': {
+            'value': 1.5,
+            'unit': 'SRM'
+        },
+        'moisture': {
+            'value': 0,
+            'unit': '%'
+        },
+        'diastatic_power': {
+            'value': 0,
+            'unit': 'Lintner'
+        },
+        'yield': {
+            'fine_grind': {
+                'value': 0,
+                'unit': '%'
+            }
+        },
+        'recommend_mash': False,
+        'notes': 'Liquid',
+    }
+    fermentable = Fermentable()
+    fermentable.from_dict(data)
+
+    assert fermentable.group is None
+    assert fermentable._phi is None
+    assert fermentable._bi is None
 
 
 

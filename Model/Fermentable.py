@@ -45,7 +45,7 @@ class Fermentable():
                  color=None,
                  moisture=None,
                  diastaticPower=None,
-                 addAfterBoil=None,
+                 addAfterBoil=None, # TODO: This seems to be an artifact from another source but isn't stored in JSON.
                  mashed=None,
                  notes=None,
                  phi=None,
