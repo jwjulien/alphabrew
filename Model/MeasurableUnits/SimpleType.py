@@ -61,7 +61,7 @@ class SimpleType:
 
         # But if all inputs are invalid, throw an exception.
         else:
-            raise ValueError('SimpleType must be instantiated with either a value AND unit, or via JSON.')
+            raise TypeError('SimpleType must be instantiated with either a value AND unit, or via JSON.')
 
 
 
@@ -91,12 +91,18 @@ class SimpleType:
 
 # ----------------------------------------------------------------------------------------------------------------------
     @property
+    def base(self):
+        """Returns the base units for this type as the zeroth entry in the Types attribute."""
+        return list(self.Types.keys())[0]
+
+
+# ----------------------------------------------------------------------------------------------------------------------
+    @property
     def root(self):
         """This helper property is used by the comparison methods below to always fetch the zeroth unit from
         the Types attribute for the class.  The intent is to level the playing field on the value by eliminating units
         before performing mathematical comparisons.  i.e. 1 gallon is larger than 2 quarts."""
-        base = list(self.Types.keys())[0]
-        return self.as_(base)
+        return self.as_(self.base)
 
 
 # ----------------------------------------------------------------------------------------------------------------------
@@ -130,10 +136,15 @@ class SimpleType:
 
 
 # ----------------------------------------------------------------------------------------------------------------------
-    def from_dict(self, data):
+    def from_dict(self, data: dict):
         """Parses data from the BeerJSON format dictionary and loads them into this instance."""
-        self.value = data['value']
-        self.unit = data['unit']
+        keys = data.keys()
+        if len(keys) == 2 and 'value' in keys and 'unit' in keys:
+            self.value = data['value']
+            self.unit = data['unit']
+
+        else:
+            raise TypeError("JSON input expects exactly two keys: 'value' and 'unit'")
 
 
 # ----------------------------------------------------------------------------------------------------------------------
@@ -180,9 +191,9 @@ class SimpleType:
         # Units are not case sensitive, so switch to lower case before lookups.
         unit = unit.lower()
 
-        # Make singular.
+        # Make singular - this is very crude and may need to be updated at some point.
         if unit.endswith('ies'):
-            unit = unit[:-3]
+            unit = unit[:-3] + 'y'
         elif unit.endswith('s'):
             unit = unit[:-1]
 
@@ -296,7 +307,13 @@ class SimpleType:
             except KeyError:
                 # If not scaler or percentage, then the type must be identical - throw an exception when not.
                 self._ensure_same_type(other)
-                denominator = other.as_(self.unit)
+
+                # Division is backwards from a unit perspective.  The result units will be that of the denominator, but
+                # that isn't the behavior we desire.  So, do the division as the rot units and convert to the desired
+                # units post math.
+                result = self.__class__(self.root / other.root, self.base)
+                result.convert(self.unit)
+                return result
 
         return self.__class__(self.value / denominator, self.unit)
 
