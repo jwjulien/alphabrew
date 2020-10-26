@@ -49,7 +49,7 @@ from Model.MeasurableUnits import UnitError, VolumeType
     'ml',
     'l',
 ])
-def test_creation_discrete(unit):
+def test_creation(unit):
     """Verify that a Volume Type instantiates with the properproperty values from inputs."""
     value = random.randint(0, 1000) / 10
     instance = VolumeType(value, unit)
@@ -57,36 +57,6 @@ def test_creation_discrete(unit):
     assert instance.value == value
     assert instance.as_(unit) == pytest.approx(value)
 
-
-
-# ----------------------------------------------------------------------------------------------------------------------
-@pytest.mark.parametrize("unit", [
-    'tsp',
-    'tbsp',
-    'floz',
-    'cup',
-    'pt',
-    'qt',
-    'gal',
-    'bbl',
-    'ifloz',
-    'ipt',
-    'iqt',
-    'igal',
-    'ml',
-    'l',
-])
-def test_creation_json(unit):
-    """Verify that a Volume Type instantiates with the properproperty values from JSON dict input."""
-    value = random.randint(0, 1000) / 10
-    json = {
-        'value': value,
-        'unit': unit
-    }
-    instance = VolumeType(json=json)
-    assert isinstance(instance, VolumeType)
-    assert instance.value == value
-    assert instance.as_(unit) == pytest.approx(value)
 
 
 # ----------------------------------------------------------------------------------------------------------------------
@@ -109,40 +79,6 @@ def test_creation_synonyms(unit):
     assert isinstance(instance, VolumeType)
     assert instance.value == value
     assert instance.as_(unit) == pytest.approx(value)
-
-
-
-# ----------------------------------------------------------------------------------------------------------------------
-@pytest.mark.parametrize("unit", [
-    'lb',
-    '%',
-    'SRM',
-    'Lintner',
-    'obscure',
-])
-def test_creation_invalid_discrete(unit):
-    """Verify that an exception is thrown when instantiating with an invalid unit."""
-    with pytest.raises(UnitError):
-        VolumeType(0, unit)
-
-
-
-# ----------------------------------------------------------------------------------------------------------------------
-@pytest.mark.parametrize("unit", [
-    'lb',
-    '%',
-    'SRM',
-    'Lintner',
-    'obscure',
-])
-def test_creation_invalid_json(unit):
-    """Verify that an exception is thrown when instantiating with an invalid unit from JSON inputs."""
-    json = {
-        'value': 10,
-        'unit': unit
-    }
-    with pytest.raises(UnitError):
-        VolumeType(json=json)
 
 
 
