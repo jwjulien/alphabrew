@@ -1,7 +1,7 @@
 # ======================================================================================================================
-#        File:  Model/MeasureableUnits/ColorType.py
+#        File:  Tests/Model/MeasureableUnits/test_ColorType.py
 #     Project:  AlphaBrew
-# Description:  Provides a base class for working with acidity in recipes which can have differing units.
+# Description:  Test cases for the ColorType measureable unit
 #      Author:  Jared Julien <jaredjulien@gmail.com>
 #   Copyright:  (c) 2020 Jared Julien
 # ----------------------------------------------------------------------------------------------------------------------
@@ -22,55 +22,56 @@
 # ======================================================================================================================
 # Imports
 # ----------------------------------------------------------------------------------------------------------------------
-from Model.MeasurableUnits.SimpleType import SimpleType
+import random
+
+import pytest
+
+from Model.MeasurableUnits import UnitError, ColorType
 
 
 
 # ======================================================================================================================
-# ColorType Class
+# Color Type Tests
 # ----------------------------------------------------------------------------------------------------------------------
-class ColorType(SimpleType):
-    """Extends the SimpleType class to provide a class for working with ColorType as defined in the BeerJson standard
-    2.0 draft."""
-
-    # The scaling between colors is linear but has an offset so the "as_" method is overloaded below.
-    Types = {
-        'srm': None,
-        'lovi': None,
-        'ebc': None
-    }
-
-    Synonyms = {
-        'lovibond': 'lovi',
-    }
-
-    JsonOutput = {
-        'srm': 'SRM',
-        'lovi': 'Lovi',
-        'ebc': 'EBC',
-    }
+@pytest.mark.parametrize("unit", [
+    'srm',
+    'SRM',
+    'Lovi',
+    'lovi',
+    'Lovibond',
+    'lovibond',
+    'EBC',
+    'ebc',
+])
+def test_creation(unit):
+    """Verify that a Color Type instantiates with the properproperty values from inputs."""
+    value = random.randint(0, 1000) / 10
+    instance = ColorType(value, unit)
+    assert isinstance(instance, ColorType)
+    assert instance.value == value
+    assert instance.as_(unit) == pytest.approx(value)
 
 
 
-# ======================================================================================================================
-# Methods
 # ----------------------------------------------------------------------------------------------------------------------
-    def as_(self, desired):
-        """Convert this color to a color of another, specified base."""
-        desired = self._coerce_unit(desired)
-
-        if self.unit == 'srm':
-            srm = self.value
-        elif self.unit == 'lovi':
-            srm = (1.3546 * self.value) - 0.76
-        else: # EBC
-            srm = self.value * 0.507614
-
-        if desired == 'lovi':
-            return (srm + 0.76) / 1.3546
-        if desired == 'ebc':
-            return srm * 1.97
-        return srm
+@pytest.mark.parametrize("inVal,inUnit,outVal,outUnit", [
+    (20, 'SRM', 20, 'SRM'),
+    (20, 'SRM', 15.33, 'Lovibond'),
+    (20, 'SRM', 39.4, 'EBC'),
+    (25, 'Lovibond', 33.11, 'SRM'),
+    (25, 'Lovibond', 25, 'Lovibond'),
+    (25, 'Lovibond', 65.22, 'EBC'),
+    (60, 'EBC', 30.48, 'SRM'),
+    (60, 'EBC', 23.06, 'Lovibond'),
+    (60, 'EBC', 60, 'EBC'),
+])
+def test_conversion(inVal, inUnit, outVal, outUnit):
+    """Verify appropriate conversions between types."""
+    instance = ColorType(inVal, inUnit)
+    result = instance.as_(outUnit)
+    # These maths are kinda rough, but color is just an approximation anyways - so we an safely open up these
+    # tolerances.
+    assert result == pytest.approx(outVal, 1e-3)
 
 
 
