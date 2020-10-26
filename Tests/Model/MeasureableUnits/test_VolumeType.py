@@ -48,19 +48,6 @@ from Model.MeasurableUnits import UnitError, VolumeType
     'igal',
     'ml',
     'l',
-])
-def test_creation(unit):
-    """Verify that a Volume Type instantiates with the properproperty values from inputs."""
-    value = random.randint(0, 1000) / 10
-    instance = VolumeType(value, unit)
-    assert isinstance(instance, VolumeType)
-    assert instance.value == value
-    assert instance.as_(unit) == pytest.approx(value)
-
-
-
-# ----------------------------------------------------------------------------------------------------------------------
-@pytest.mark.parametrize("unit", [
     'teaspoon',
     'tablespoon',
     'fluidounce',
@@ -72,8 +59,8 @@ def test_creation(unit):
     'milliliter',
     'liter',
 ])
-def test_creation_synonyms(unit):
-    """Verify that creation using synonyms works appropriately."""
+def test_creation(unit):
+    """Verify that a Volume Type instantiates with the properproperty values from inputs."""
     value = random.randint(0, 1000) / 10
     instance = VolumeType(value, unit)
     assert isinstance(instance, VolumeType)

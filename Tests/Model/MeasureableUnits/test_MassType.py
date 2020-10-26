@@ -39,27 +39,14 @@ from Model.MeasurableUnits import UnitError, MassType
     'mg',
     'g',
     'kg',
-])
-def test_creation(unit):
-    """Verify that a Mass Type instantiates with the properproperty values from inputs."""
-    value = random.randint(0, 1000) / 10
-    instance = MassType(value, unit)
-    assert isinstance(instance, MassType)
-    assert instance.value == value
-    assert instance.as_(unit) == pytest.approx(value)
-
-
-
-# ----------------------------------------------------------------------------------------------------------------------
-@pytest.mark.parametrize("unit", [
     'ounce',
     'pound',
     'milligram',
     'gram',
     'kilogram',
 ])
-def test_creation_synonyms(unit):
-    """Verify that creation using synonyms works appropriately."""
+def test_creation(unit):
+    """Verify that a Mass Type instantiates with the properproperty values from inputs."""
     value = random.randint(0, 1000) / 10
     instance = MassType(value, unit)
     assert isinstance(instance, MassType)
