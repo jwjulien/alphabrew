@@ -269,28 +269,28 @@ class MainWindow(QtWidgets.QMainWindow):
         if self.recipe.style:
             if self.recipe.style.og is not None:
                 self.ui.og.setPreferredRange(
-                    self.recipe.style.og.minimum.as_('sg'),
-                    self.recipe.style.og.maximum.as_('sg')
+                    self.recipe.style.og.minimum.sg,
+                    self.recipe.style.og.maximum.sg
                 )
             if self.recipe.style.fg is not None:
                 self.ui.fg.setPreferredRange(
-                    self.recipe.style.fg.minimum.as_('sg'),
-                    self.recipe.style.fg.maximum.as_('sg')
+                    self.recipe.style.fg.minimum.sg,
+                    self.recipe.style.fg.maximum.sg
                 )
             if self.recipe.style.abv is not None:
                 self.ui.abv.setPreferredRange(
-                    self.recipe.style.abv.minimum.as_('%'),
-                    self.recipe.style.abv.maximum.as_('%')
+                    self.recipe.style.abv.minimum.percent,
+                    self.recipe.style.abv.maximum.percent
                 )
             if self.recipe.style.bitterness is not None:
                 self.ui.ibu.setPreferredRange(
-                    self.recipe.style.bitterness.minimum.as_('IBUs'),
-                    self.recipe.style.bitterness.maximum.as_('IBUs')
+                    self.recipe.style.bitterness.minimum.IBUs,
+                    self.recipe.style.bitterness.maximum.IBUs
                 )
             if self.recipe.style.color is not None:
                 self.ui.srm.setPreferredRange(
-                    self.recipe.style.color.minimum.as_('SRM'),
-                    self.recipe.style.color.maximum.as_('SRM')
+                    self.recipe.style.color.minimum.SRM,
+                    self.recipe.style.color.maximum.SRM
                 )
 
         # Set the bar for the actual, calclulated value from the recipe.
@@ -302,7 +302,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.ibu_gu.setValue(self.recipe.ibuGu)
 
         # Output numbers for the calculated values.
-        self.ui.calcBoilSize.setText(f'{self.recipe.boilVolume.as_("gal"):.1f} gal')
+        self.ui.calcBoilSize.setText(f'{self.recipe.boilVolume.gal:.1f} gal')
         self.ui.calcBoilSg.setText(f'{self.recipe.boilGravity:.3f}')
         self.ui.calcCalories.setText(f'{self.recipe.calories:.0f} / 16oz')
 

@@ -66,7 +66,7 @@ class Water():
     def percentage(self):
         """Calculates the percentage of this water based upon the total amount of water needed."""
         try:
-            percent = self.amount.as_('gal') / self.recipe.mash.totalWater.as_('gal')
+            percent = self.amount.gal / self.recipe.mash.totalWater.gal
 
         except ZeroDivisionError:
             # We get a divide by zero error when the mash has not been calculated yet.  Default to zero percent
@@ -81,7 +81,7 @@ class Water():
     def carbonate(self):
         """Calculates and returns the carbonate level for this water source.  Carbonate is a representation of the
         water hardness and is a factor of the water's pH and alkalinity."""
-        alkalinityAsCaCO3 = self.bicarbonate.as_('ppm') / 1.22
+        alkalinityAsCaCO3 = self.bicarbonate.ppm / 1.22
         k2 = 10.3309621991148
         carbonate = alkalinityAsCaCO3 * (10 ** (self.ph - k2)) / (1 + (2 * (10 ** (self.ph - k2)))) * 60.008 / 50.043
         return ConcentrationType(carbonate, 'ppm')
@@ -91,7 +91,7 @@ class Water():
     @property
     def alkalinity(self):
         """Computes the waters alkalinity based upon the bicarbonate and carbonate contributions."""
-        return (self.bicarbonate.as_('ppm') / 61.016) + (2 * self.carbonate.as_('ppm') / 60.008)
+        return (self.bicarbonate.ppm / 61.016) + (2 * self.carbonate.ppm / 60.008)
 
 
 # ----------------------------------------------------------------------------------------------------------------------
@@ -101,7 +101,7 @@ class Water():
         totalC = 1
         totalC += 4.435e-7 * (10 ** self.ph)
         totalC += 4.435e-7 * 4.667e-11 * (10 ** (2 * self.ph))
-        totalC *= (self.bicarbonate.as_('ppm') / 61.016)
+        totalC *= (self.bicarbonate.ppm / 61.016)
         totalC /= 4.435e-7 * (10 ** self.ph)
         return totalC
 

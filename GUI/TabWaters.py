@@ -138,15 +138,15 @@ class TabWaters(QtWidgets.QWidget):
 
         source: Water = self.recipe.waters[0]
         self.ui.sourceName.setText(source.name)
-        self.ui.sourceCalcium.setValue(source.calcium.as_('ppm'))
-        self.ui.sourceMagnesium.setValue(source.magnesium.as_('ppm'))
-        self.ui.sourceSodium.setValue(source.sodium.as_('ppm'))
-        self.ui.sourceChloride.setValue(source.chloride.as_('ppm'))
-        self.ui.sourceSulfate.setValue(source.sulfate.as_('ppm'))
-        self.ui.sourceBicarbonate.setValue(source.bicarbonate.as_('ppm'))
+        self.ui.sourceCalcium.setValue(source.calcium.ppm)
+        self.ui.sourceMagnesium.setValue(source.magnesium.ppm)
+        self.ui.sourceSodium.setValue(source.sodium.ppm)
+        self.ui.sourceChloride.setValue(source.chloride.ppm)
+        self.ui.sourceSulfate.setValue(source.sulfate.ppm)
+        self.ui.sourceBicarbonate.setValue(source.bicarbonate.ppm)
         self.ui.sourcePh.setValue(source.ph)
 
-        self.ui.ratio.setValue(source.percentage.as_('%'))
+        self.ui.ratio.setValue(source.percentage.percent)
 
         self.on_change()
 
@@ -247,7 +247,7 @@ class TabWaters(QtWidgets.QWidget):
 
         self.recipe.waters[0].amount = self.sourceAmount
 
-        if self.distilledPercentage.as_('%') > 0:
+        if self.distilledPercentage.percent > 0:
             # There is some portion of distilled water in this recipe.
             if len(self.recipe.waters) == 1:
                 # Distiled water has not yet been added to the recipe - do that now.

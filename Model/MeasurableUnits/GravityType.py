@@ -50,6 +50,8 @@ class GravityType(SimpleType):
 # ----------------------------------------------------------------------------------------------------------------------
     def as_(self, desired):
         """Specifically override the as_ class to make use of the conversions in the Math module for these types."""
+        desired = self._coerce_unit(desired)
+
         if desired not in self.Types.keys():
             return KeyError(f'The specified unit "{desired}" does not exist on class "GravityType"')
 

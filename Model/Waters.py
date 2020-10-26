@@ -113,14 +113,14 @@ class Waters(ListTableBase):
     @property
     def hardness(self):
         """Calculate and return the total harness in the water based upon the percentage of each water component."""
-        return sum([water.hardness * water.percentage.as_('%') / 100 for water in self])
+        return sum([water.hardness * water.percentage.percent / 100 for water in self])
 
 
 # ----------------------------------------------------------------------------------------------------------------------
     @property
     def ph(self):
         """Calculate and return the total bicarbonate in the water based upon the percentage of each water component."""
-        return sum([water.ph * water.percentage.as_('%') / 100 for water in self])
+        return sum([water.ph * water.percentage.percent / 100 for water in self])
 
 
 

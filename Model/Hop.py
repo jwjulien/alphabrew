@@ -151,7 +151,7 @@ class Hop():
         Gravity is the original gravity (expected at tend of boil) in specific gravity.
         Minutes is the amount of time that the hop will be boiled.
         """
-        concentration = self.alpha.as_('%') / 100 * self.amount.as_('oz') * 7490 / volume
+        concentration = self.alpha.percent / 100 * self.amount.oz * 7490 / volume
         utilization = ((1.0 - math.exp(-0.04 * minutes)) / 4.15) * (1.65 * (0.000125 ** (gravity - 1)))
 
         if 'plug' in self.form.lower():

@@ -34,7 +34,11 @@ class CarbonationType(SimpleType):
     2.0 draft."""
 
     Types = {
-        'vols': 1,
+        'vol': 1,
+    }
+
+    JsonOutput = {
+        'vol': 'vols',
     }
 
 

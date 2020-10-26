@@ -34,7 +34,11 @@ class AcidityType(SimpleType):
     2.0 draft."""
 
     Types = {
-        'pH': 1
+        'ph': 1
+    }
+
+    JsonOutput = {
+        'ph': 'pH',
     }
 
 

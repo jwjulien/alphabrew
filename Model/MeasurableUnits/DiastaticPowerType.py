@@ -34,8 +34,13 @@ class DiastaticPowerType(SimpleType):
     standard 2.0 draft."""
 
     Types = {
-        'Lintner': None,
-        'WK': None
+        'lintner': None,
+        'wk': None
+    }
+
+    JsonOutput = {
+        'lintner': 'Lintner',
+        'wk': 'WK',
     }
 
 
@@ -45,13 +50,15 @@ class DiastaticPowerType(SimpleType):
 # ----------------------------------------------------------------------------------------------------------------------
     def as_(self, desired):
         """Override the conversion method to provide conversion specific to DiastaticPower."""
+        desired = self._coerce_unit(desired)
+
         if desired not in self.Types.keys():
             return KeyError(f'The specified unit "{desired}" does not exist on class "DiastaticPowerType"')
 
         if self.unit == desired:
             return self.value
 
-        if self.unit == 'Lintner':
+        if self.unit == 'lintner':
             return (3.5 * self.value) - 16
 
         # WK -> Lintner

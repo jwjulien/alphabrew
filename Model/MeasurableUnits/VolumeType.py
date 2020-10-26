@@ -50,6 +50,19 @@ class VolumeType(SimpleType):
         'l': 202.884
     }
 
+    Synonyms = {
+        'teaspoon': 'tsp',
+        'tablespoon': 'tbsp',
+        'fluidounce': 'floz',
+        'ounce': 'floz',
+        'pint': 'pt',
+        'quart': 'qt',
+        'gallon': 'gal',
+        'barrel': 'bbl',
+        'milliliter': 'ml',
+        'liter': 'l',
+    }
+
 
 
 # End of File

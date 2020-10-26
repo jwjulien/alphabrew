@@ -82,9 +82,9 @@ class Fermentable():
         """Returns a PercentType representing this fermentable's proportion within it's associated recipe."""
         percent = 0
         if self.recipe is not None:
-            total = sum([fermentable.amount.as_('lb') for fermentable in self.recipe.fermentables])
+            total = sum([fermentable.amount.lb for fermentable in self.recipe.fermentables])
             if total != 0:
-                percent = self.amount.as_('lb') / total * 100
+                percent = self.amount.lb / total * 100
         return PercentType(percent, '%')
 
 
@@ -129,7 +129,7 @@ class Fermentable():
     @property
     def sucrose(self) -> float:
         """Returns the equivalent amount of sucrose in this fermentable."""
-        sucrose = self.amount.as_('lb') * (self.fyield.as_('%') / 100) * (1 - (self.moisture.as_('%') / 100))
+        sucrose = self.amount.lb * (self.fyield.percent / 100) * (1 - (self.moisture.percent / 100))
 
         # "Mashed" (i.e. grain type) but not mashed, then it must be steeped - reduce the yield by 40%.
         if self.isMashed and not self.mashed:
@@ -151,7 +151,7 @@ class Fermentable():
             # Non-mashed ingredients will have no contribution.
             return 0
 
-        srm = self.color.as_('SRM')
+        srm = self.color.SRM
         if srm > 300:
             # Roasted malts take priority.
             return 4.64
@@ -205,7 +205,7 @@ class Fermentable():
             # Non-mashed ingredients will have no contribution.
             return 0
 
-        srm = self.color.as_('SRM')
+        srm = self.color.SRM
         if srm > 300:
             # Roasted malts take priority.
             return 68.7

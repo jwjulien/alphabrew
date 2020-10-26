@@ -49,7 +49,7 @@ class MashStep():
 # ----------------------------------------------------------------------------------------------------------------------
     @property
     def postTemperature(self):
-        hours = self.time.as_('hr')
+        hours = self.time.hr
         degrees = self.recipe.equipment.mashTunHeatLoss * hours
         tempLoss = TemperatureType(degrees, 'F')
         return self.temperature - tempLoss
@@ -96,7 +96,7 @@ class MashStep():
 # ----------------------------------------------------------------------------------------------------------------------
     def calculate(self, previous, final=False):
         """Run the calculations for infusion temperature and volume given the previous step as a stepping stone."""
-        mashWeight = self.recipe.fermentables.mashWeight.as_('lb')
+        mashWeight = self.recipe.fermentables.mashWeight.lb
         tunEquiv = self.recipe.equipment.mashTunEquivVol
 
         # If the user has not setup a mash, provided a temperature for this step or the previous step then we can't do
@@ -134,14 +134,14 @@ class MashStep():
         if previous is None:
             # This is the first step, calculate it based upon some of the other factors instead of previous step.
             # Calculate the strike volume from grain bill and specified ratio.
-            quarts = self.recipe.strikeVolume.as_('qt')
+            quarts = self.recipe.strikeVolume.qt
             self.infusionVolume = VolumeType(quarts, 'qt')
             self.infusionVolume.convert('gal')
             self.totalVolume = self.infusionVolume.copy()
 
             # Calculate the infusion temperature based upon the themal mass of the grains and mash tun.
-            ambient = self.recipe.mash.ambient.as_('F')
-            target = self.temperature.as_('F')
+            ambient = self.recipe.mash.ambient.F
+            target = self.temperature.F
             strike = temperature(ambient, target, quarts, existing=0)
             self.infusionTemperature = TemperatureType(strike, 'F')
 
@@ -152,9 +152,9 @@ class MashStep():
             self.infusionTemperature = TemperatureType(212, 'F')
 
             # Calculate the volume rather than the temperature here.
-            target = self.temperature.as_('F')
-            initial = previous.temperature.as_('F')
-            existing = previous.totalVolume.as_('qt')
+            target = self.temperature.F
+            initial = previous.temperature.F
+            existing = previous.totalVolume.qt
             quarts = volume(initial, target, 212, existing)
             self.infusionVolume = VolumeType(quarts, 'qt')
             self.totalVolume = previous.totalVolume + self.infusionVolume
@@ -163,18 +163,18 @@ class MashStep():
         else:
             # Compute the temperature of the final infusion based upon the remaining quantity of water.
 
-            gallons = self.recipe.totalWater.as_('gal') - previous.totalVolume.as_('gal')
+            gallons = self.recipe.totalWater.gal - previous.totalVolume.gal
             self.infusionVolume = VolumeType(gallons, 'gal')
             self.totalVolume = previous.totalVolume + self.infusionVolume
 
-            target = self.temperature.as_('F')
-            initial = previous.postTemperature.as_('F')
-            existing = previous.totalVolume.as_('qt')
+            target = self.temperature.F
+            initial = previous.postTemperature.F
+            existing = previous.totalVolume.qt
             mashout = temperature(initial, target, gallons * 4, existing)
             self.infusionTemperature = TemperatureType(mashout, 'F')
 
         # Calculate the ratio of this step.
-        self.ratio = SpecificVolumeType(self.totalVolume.as_('qt') / mashWeight, 'qt/lb')
+        self.ratio = SpecificVolumeType(self.totalVolume.qt / mashWeight, 'qt/lb')
 
         return self
 

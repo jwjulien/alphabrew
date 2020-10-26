@@ -41,6 +41,15 @@ class MassType(SimpleType):
         'kg': 35.274,
     }
 
+    # Allow long-form names for units of mass.
+    Synonyms = {
+        'ounce': 'oz',
+        'pound': 'lb',
+        'milligram': 'mg',
+        'gram': 'g',
+        'kilogram': 'kg'
+    }
+
 
 
 # End of File

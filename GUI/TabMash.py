@@ -81,8 +81,8 @@ class TabMash(QtWidgets.QWidget):
         """Fires when the recipe loads to update the discrete controls with values."""
         self.ui.steps.setModel(self.recipe.mash)
         self.ui.steps.selectionModel().selectionChanged.connect(self.on_selection_change)
-        self.ui.ambient.setValue(self.recipe.mash.ambient.as_('F'))
-        self.ui.ratio.setValue(self.recipe.mash.ratio.as_('qt/lb'))
+        self.ui.ambient.setValue(self.recipe.mash.ambient.F)
+        self.ui.ratio.setValue(self.recipe.mash.ratio.quartsPerPound)
 
 
 # ----------------------------------------------------------------------------------------------------------------------

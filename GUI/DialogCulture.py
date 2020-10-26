@@ -89,8 +89,8 @@ class DialogCulture(QtWidgets.QDialog):
         self.ui.form.setCurrentText(self.culture.form)
         self.ui.producer.setText(self.culture.producer)
         self.ui.productId.setText(self.culture.productId)
-        self.ui.minAttenuation.setValue(self.culture.attenuationRange.minimum.as_('%'))
-        self.ui.maxAttenuation.setValue(self.culture.attenuationRange.maximum.as_('%'))
+        self.ui.minAttenuation.setValue(self.culture.attenuationRange.minimum.percent)
+        self.ui.maxAttenuation.setValue(self.culture.attenuationRange.maximum.percent)
         self.ui.notes.setPlainText(self.culture.notes)
 
 

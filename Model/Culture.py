@@ -60,7 +60,7 @@ class Culture():
 # ----------------------------------------------------------------------------------------------------------------------
     @property
     def averageAttenuation(self):
-        return (self.attenuationRange.minimum.as_('%') + self.attenuationRange.maximum.as_('%')) / 2
+        return (self.attenuationRange.minimum.percent + self.attenuationRange.maximum.percent) / 2
 
 
 

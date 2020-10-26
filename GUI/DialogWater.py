@@ -51,12 +51,12 @@ class DialogWater(QtWidgets.QDialog):
         cancel.setIcon(qtawesome.icon('fa5s.times'))
 
         self.ui.name.setText(self.water.name)
-        self.ui.calcium.setValue(self.water.calcium.as_('ppm'))
-        self.ui.magnesium.setValue(self.water.magnesium.as_('ppm'))
-        self.ui.sodium.setValue(self.water.sodium.as_('ppm'))
-        self.ui.chloride.setValue(self.water.chloride.as_('ppm'))
-        self.ui.sulfate.setValue(self.water.sulfate.as_('ppm'))
-        self.ui.bicarbonate.setValue(self.water.bicarbonate.as_('ppm'))
+        self.ui.calcium.setValue(self.water.calcium.ppm)
+        self.ui.magnesium.setValue(self.water.magnesium.ppm)
+        self.ui.sodium.setValue(self.water.sodium.ppm)
+        self.ui.chloride.setValue(self.water.chloride.ppm)
+        self.ui.sulfate.setValue(self.water.sulfate.ppm)
+        self.ui.bicarbonate.setValue(self.water.bicarbonate.ppm)
         self.ui.ph.setValue(self.water.ph)
         self.ui.notes.setPlainText(self.water.notes)
 

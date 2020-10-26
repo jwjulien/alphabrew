@@ -20,6 +20,15 @@
 # ----------------------------------------------------------------------------------------------------------------------
 
 # ======================================================================================================================
+# Exceptions
+# ----------------------------------------------------------------------------------------------------------------------
+class UnitError(Exception):
+    """Raised when the specified units don't exist for a given type."""
+
+
+
+
+# ======================================================================================================================
 # SimpleType Class
 # ----------------------------------------------------------------------------------------------------------------------
 class SimpleType:
@@ -29,6 +38,16 @@ class SimpleType:
     # Keys in the dict represent the available unit types for this class while values are scale values relative to the
     # smallest listed unit.
     Types = {}
+
+    # This parameter may be overridden by child classes to remap alternative names for units.  For example, a typical
+    # unit of 'lb' bay be used for pounds, but 'pound' and events 'pounds' may be added to the Synonyms table to
+    # allow those units to be used for the exact same conversion.
+    Synonyms = {}
+
+    # This dictionary can be overridden by child classes to map the outgoing units (upon conversion to_dict) to a
+    # specific value.  This is specifically useful for units where upper case is actually important to meet the BeerJSON
+    # standard.
+    JsonOutput = {}
 
     def __init__(self, value=None, unit=None, json=None):
         # Set the units from the inputs when provided.
@@ -57,9 +76,15 @@ class SimpleType:
 
 # ----------------------------------------------------------------------------------------------------------------------
     @unit.setter
-    def unit(self, value):
+    def unit(self, value: str):
+        """Sets the units for this type.  Runs the supplied value through the Synonyms table to possibly map it to a
+        standardized unit and then verifies that unit is appropriate for this type.  Raises UnitError if the unit is
+        not supported by this type."""
+        value = self._coerce_unit(value)
+
+        # Raise a UnitError if the units are not supported.
         if value not in self.Types.keys():
-            raise ValueError(f'{self.__class__.__name__} does not support unit of "{value}"')
+            raise UnitError(f'{self.__class__.__name__} does not support unit of "{value}"')
 
         self._unit = value
 
@@ -74,15 +99,33 @@ class SimpleType:
         return self.as_(base)
 
 
+# ----------------------------------------------------------------------------------------------------------------------
+    def __getattr__(self, key: str):
+        """Generate dynamic properties for conversion.  These property names are automatically generated from the unit
+        names provided in the Types dictionary for the child class."""
+        key = self._coerce_unit(key)
+
+        # If this provided key is a unit of this type, return it's value in those units.
+        if key in self.Types:
+            return self.as_(key)
+
+        # Raise a standard AttributeError when the key doesn't fit the expected format.
+        raise AttributeError(f"'{__class__.__name__}' object has no attribute '{key}'")
+
+
 
 # ======================================================================================================================
 # Methods
 # ----------------------------------------------------------------------------------------------------------------------
     def to_dict(self):
         """Convert this instance into a dictionary suitable for entry into a BeerJSON document."""
+        # Convert the units to the specified output format, if specified.  If not specified, just fall back on the
+        # actual value of unit.
+        unit = self.JsonOutput.get(self.unit, self.unit)
+
         return {
             'value': self.value,
-            'unit': self.unit
+            'unit': unit
         }
 
 
@@ -101,8 +144,9 @@ class SimpleType:
 
 
 # ----------------------------------------------------------------------------------------------------------------------
-    def as_(self, desired):
+    def as_(self, desired: str) -> float:
         """Return the current value as the specified unit type."""
+        desired = self._coerce_unit(desired)
         if desired not in self.Types.keys():
             raise KeyError(f'The specified unit "{desired}" does not exist on class "{self.__class__.__name__}"')
         numerator = self.Types[self.unit]
@@ -111,7 +155,7 @@ class SimpleType:
 
 
 # ----------------------------------------------------------------------------------------------------------------------
-    def convert(self, desired):
+    def convert(self, desired: str) -> float:
         """Same functionality as the "as_" method above, except that this will change the value stored into the
         specified units.  Useful when looking to change the displayed value."""
         self.value = self.as_(desired)
@@ -127,6 +171,25 @@ class SimpleType:
         """Used by the comparison methods below to ensure that apples are being compared to apples."""
         if self.__class__ != other.__class__:
             raise TypeError(f'Cannot compare {self.__class__.__name__} to {other.__class__.__name__}')
+
+
+# ----------------------------------------------------------------------------------------------------------------------
+    def _coerce_unit(self, unit: str) -> str:
+        """Takes in units as a string and performs standard conversion on those units to get them to a standard for this
+        type.  This includes conversion to lower case, removal of plurals, and synonym lookup."""
+        # Units are not case sensitive, so switch to lower case before lookups.
+        unit = unit.lower()
+
+        # Make singular.
+        if unit.endswith('ies'):
+            unit = unit[:-3]
+        elif unit.endswith('s'):
+            unit = unit[:-1]
+
+        # Attempt to map this to another unit or just fall back on the provided name without a match.
+        unit = self.Synonyms.get(unit, unit)
+
+        return unit
 
 
 

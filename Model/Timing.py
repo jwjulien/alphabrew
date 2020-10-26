@@ -98,23 +98,19 @@ class TimingType:
     def from_dict(self, data):
         """Load the provided data from a BeerJSON dictionary into this instance."""
         if 'time' in data:
-            self.time = TimeType()
-            self.time.from_dict(data['time'])
+            self.time = TimeType(json=data['time'])
 
         if 'duration' in data:
-            self.duration = TimeType()
-            self.duration.from_dict(data['duration'])
+            self.duration = TimeType(json=data['duration'])
 
         if 'continuous' in data:
             self.continuous = bool(data['continuous'])
 
         if 'specific_gravity' in data:
-            self.continuous = GravityType()
-            self.continuous.from_dict(data['specific_gravity'])
+            self.continuous = GravityType(json=data['specific_gravity'])
 
         if 'pH' in data:
-            self.pH = AcidityType()
-            self.pH.from_dict(data['pH'])
+            self.pH = AcidityType(json=data['pH'])
 
         if 'step' in data:
             self.step = int(data['step'])

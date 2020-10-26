@@ -34,7 +34,11 @@ class BitternessType(SimpleType):
     2.0 draft."""
 
     Types = {
-        'IBUs': 1,
+        'ibu': 1,
+    }
+
+    JsonOutput = {
+        'ibu': 'IBUs',
     }
 
 

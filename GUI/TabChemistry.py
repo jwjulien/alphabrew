@@ -204,32 +204,32 @@ class TabChemistry(QtWidgets.QWidget):
         calciumMash = ConcentrationType(0.273 * self.ui.cacl2_mash.value() * 1000, 'ppm')
         calciumMash += ConcentrationType(0.233 * self.ui.caso4_mash.value() * 1000, 'ppm')
         calciumMash += ConcentrationType(0.541 * self.ui.caoh2_mash.value() * 1000, 'ppm')
-        calciumMash /= self.recipe.strikeVolume.as_('l')
+        calciumMash /= self.recipe.strikeVolume.liters
         calciumMash += calciumWater
 
         magnesiumMash = ConcentrationType(0.12 * self.ui.mgcl2_mash.value() * 1000, 'ppm')
         magnesiumMash += ConcentrationType(0.099 * self.ui.mgso4_mash.value() * 1000, 'ppm')
-        magnesiumMash /= self.recipe.strikeVolume.as_('l')
+        magnesiumMash /= self.recipe.strikeVolume.liters
         magnesiumMash += magnesiumWater
 
         sodiumMash = ConcentrationType(0.393 * self.ui.nacl_mash.value() * 1000, 'ppm')
         sodiumMash += ConcentrationType(0.274 * self.ui.nahco3_mash.value() * 1000, 'ppm')
-        sodiumMash /= self.recipe.strikeVolume.as_('l')
+        sodiumMash /= self.recipe.strikeVolume.liters
         sodiumMash += sodiumWater
 
         chlorideMash = ConcentrationType(0.482 * self.ui.cacl2_mash.value() * 1000, 'ppm')
         chlorideMash += ConcentrationType(0.349 * self.ui.mgcl2_mash.value() * 1000, 'ppm')
         chlorideMash += ConcentrationType(0.607 * self.ui.nacl_mash.value() * 1000, 'ppm')
-        chlorideMash /= self.recipe.strikeVolume.as_('l')
+        chlorideMash /= self.recipe.strikeVolume.liters
         chlorideMash += chlorideWater
 
         sulfateMash = ConcentrationType(0.558 * self.ui.caso4_mash.value() * 1000, 'ppm')
         sulfateMash += ConcentrationType(0.39 * self.ui.mgso4_mash.value() * 1000, 'ppm')
-        sulfateMash /= self.recipe.strikeVolume.as_('l')
+        sulfateMash /= self.recipe.strikeVolume.liters
         sulfateMash += sulfateWater
 
         bicarbonateMash = ConcentrationType(0.726 * self.ui.nahco3_mash.value() * 1000, 'ppm')
-        bicarbonateMash /= self.recipe.strikeVolume.as_('l')
+        bicarbonateMash /= self.recipe.strikeVolume.liters
         bicarbonateMash += bicarbonateWater
 
         # Update the UI totals for the mash contributions.
@@ -244,32 +244,32 @@ class TabChemistry(QtWidgets.QWidget):
         calciumKettle = ConcentrationType(0.273 * self.ui.cacl2_kettle.value() * 1000, 'ppm')
         calciumKettle += ConcentrationType(0.233 * self.ui.caso4_kettle.value() * 1000, 'ppm')
         calciumKettle += ConcentrationType(0.541 * self.ui.caoh2_kettle.value() * 1000, 'ppm')
-        calciumKettle /= self.recipe.spargeVolume.as_('l')
+        calciumKettle /= self.recipe.spargeVolume.liters
         calciumKettle += calciumWater
 
         magnesiumKettle = ConcentrationType(0.12 * self.ui.mgcl2_kettle.value() * 1000, 'ppm')
         magnesiumKettle += ConcentrationType(0.099 * self.ui.mgso4_kettle.value() * 1000, 'ppm')
-        magnesiumKettle /= self.recipe.spargeVolume.as_('l')
+        magnesiumKettle /= self.recipe.spargeVolume.liters
         magnesiumKettle += magnesiumWater
 
         sodiumKettle = ConcentrationType(0.393 * self.ui.nacl_kettle.value() * 1000, 'ppm')
         sodiumKettle += ConcentrationType(0.274 * self.ui.nahco3_kettle.value() * 1000, 'ppm')
-        sodiumKettle /= self.recipe.spargeVolume.as_('l')
+        sodiumKettle /= self.recipe.spargeVolume.liters
         sodiumKettle += sodiumWater
 
         chlorideKettle = ConcentrationType(0.482 * self.ui.cacl2_kettle.value() * 1000, 'ppm')
         chlorideKettle += ConcentrationType(0.349 * self.ui.mgcl2_kettle.value() * 1000, 'ppm')
         chlorideKettle += ConcentrationType(0.607 * self.ui.nacl_kettle.value() * 1000, 'ppm')
-        chlorideKettle /= self.recipe.spargeVolume.as_('l')
+        chlorideKettle /= self.recipe.spargeVolume.liters
         chlorideKettle += chlorideWater
 
         sulfateKettle = ConcentrationType(0.558 * self.ui.caso4_kettle.value() * 1000, 'ppm')
         sulfateKettle += ConcentrationType(0.39 * self.ui.mgso4_kettle.value() * 1000, 'ppm')
-        sulfateKettle /= self.recipe.spargeVolume.as_('l')
+        sulfateKettle /= self.recipe.spargeVolume.liters
         sulfateKettle += sulfateWater
 
         bicarbonateKettle = ConcentrationType(0.726 * self.ui.nahco3_kettle.value() * 1000, 'ppm')
-        bicarbonateKettle /= self.recipe.spargeVolume.as_('l')
+        bicarbonateKettle /= self.recipe.spargeVolume.liters
         bicarbonateKettle += bicarbonateWater
 
         # Update the UI totals for the kettle contributions.
@@ -281,9 +281,9 @@ class TabChemistry(QtWidgets.QWidget):
         self.ui.spargeBicarbonate.setText(str(bicarbonateKettle))
 
         def average(mash, kettle):
-            mash *= self.recipe.strikeVolume.as_('gal')
-            kettle *= self.recipe.spargeVolume.as_('gal')
-            return (mash + kettle) / self.recipe.boilVolume.as_('gal')
+            mash *= self.recipe.strikeVolume.gallons
+            kettle *= self.recipe.spargeVolume.gallons
+            return (mash + kettle) / self.recipe.boilVolume.gallons
 
         # Total up everything
         calcium = average(calciumMash, calciumKettle)
@@ -295,55 +295,55 @@ class TabChemistry(QtWidgets.QWidget):
 
         # Update the output UI boxes and sliders.
         self.ui.calcium.setText(str(calcium))
-        self.ui.calciumSlide.setValue(calcium.as_('ppm'))
+        self.ui.calciumSlide.setValue(calcium.ppm)
         self.ui.magnesium.setText(str(magnesium))
-        self.ui.magnesiumSlide.setValue(magnesium.as_('ppm'))
+        self.ui.magnesiumSlide.setValue(magnesium.ppm)
         self.ui.sodium.setText(str(sodium))
-        self.ui.sodiumSlide.setValue(sodium.as_('ppm'))
+        self.ui.sodiumSlide.setValue(sodium.ppm)
         self.ui.chloride.setText(str(chloride))
-        self.ui.chlorideSlide.setValue(chloride.as_('ppm'))
+        self.ui.chlorideSlide.setValue(chloride.ppm)
         self.ui.sulfate.setText(str(sulfate))
-        self.ui.sulfateSlide.setValue(sulfate.as_('ppm'))
+        self.ui.sulfateSlide.setValue(sulfate.ppm)
         self.ui.bicarbonate.setText(str(bicarbonate))
-        self.ui.bicarbonateSlide.setValue(bicarbonate.as_('ppm'))
+        self.ui.bicarbonateSlide.setValue(bicarbonate.ppm)
 
         # Change the slider color if any of the values go out of range.
         errorStyle = "QSlider::handle:horizontal {background-color: red;}"
         resetStyle = "QSlider::handle:horizontal {}"
 
-        if calcium.as_('ppm') < 50 or calcium.as_('ppm') > 150:
+        if calcium.ppm < 50 or calcium.ppm > 150:
             self.ui.calciumSlide.setStyleSheet(errorStyle)
         else:
             self.ui.calciumSlide.setStyleSheet(resetStyle)
 
-        if magnesium.as_('ppm') < 10 or magnesium.as_('ppm') > 30:
+        if magnesium.ppm < 10 or magnesium.ppm > 30:
             self.ui.magnesiumSlide.setStyleSheet(errorStyle)
         else:
             self.ui.magnesiumSlide.setStyleSheet(resetStyle)
 
-        if sodium.as_('ppm') > 150:
+        if sodium.ppm > 150:
             self.ui.sodiumSlide.setStyleSheet(errorStyle)
         else:
             self.ui.sodiumSlide.setStyleSheet(resetStyle)
 
-        if chloride.as_('ppm') > 250:
+        if chloride.ppm > 250:
             self.ui.chlorideSlide.setStyleSheet(errorStyle)
         else:
             self.ui.chlorideSlide.setStyleSheet(resetStyle)
 
-        if sulfate.as_('ppm') < 50 or sulfate.as_('ppm') > 350:
+        if sulfate.ppm < 50 or sulfate.ppm > 350:
             self.ui.sulfateSlide.setStyleSheet(errorStyle)
         else:
             self.ui.sulfateSlide.setStyleSheet(resetStyle)
 
-        if bicarbonate.as_('ppm') > 250:
+        if bicarbonate.ppm > 250:
             self.ui.bicarbonateSlide.setStyleSheet(errorStyle)
         else:
             self.ui.bicarbonateSlide.setStyleSheet(resetStyle)
 
 
 
-        strikeL = self.recipe.strikeVolume.as_('l')
+        strikeL = self.recipe.strikeVolume.liters
 
         # Strength is fixed in this tool as 10% phosphoric seems pretty typical.
         phosphoricStrength = 0.1
@@ -361,18 +361,18 @@ class TabChemistry(QtWidgets.QWidget):
         actiMaltMass = self.ui.acidMalt.value() # oz
         acidMaltAlkalinity = -acidMaltStrength * actiMaltMass * 28.35 / 90.09 / strikeL * 1000
 
-        bicarbonateNorm = bicarbonateMash.as_('ppm') / 61.016
-        carbonateNorm = 2 * self.recipe.waters.carbonate.as_('ppm') / 60.008
+        bicarbonateNorm = bicarbonateMash.ppm / 61.016
+        carbonateNorm = 2 * self.recipe.waters.carbonate.ppm / 60.008
         cAlkalinity = bicarbonateNorm + carbonateNorm
 
         mashHardness = self.recipe.waters.hardness + (self.ui.nahco3_mash.value() / 61.016 / strikeL * 1000)
-        calciumNorm = 2 * calciumMash.as_('ppm') / 40.078
-        magnesiumNorm = 2 * magnesiumMash.as_('ppm') / 24.305
+        calciumNorm = 2 * calciumMash.ppm / 40.078
+        magnesiumNorm = 2 * magnesiumMash.ppm / 24.305
 
         hydroxide = 0.459 * self.ui.caoh2_mash.value() * 1000 / strikeL
         hydroxideNorm = hydroxide / 17.007
 
-        phRaSlope = self.recipe.mash.ratio.as_('l/kg') / self.recipe.fermentables.mashBiFi
+        phRaSlope = self.recipe.mash.ratio.litersPerKilogram / self.recipe.fermentables.mashBiFi
         phRaSlopeCorrected = phRaSlope / self.recipe.calibrations.maltBufferingCorrectionFactor
 
         def calculate_ph(ph, salts=True, acids=True):
@@ -409,7 +409,7 @@ class TabChemistry(QtWidgets.QWidget):
 
         # Calculate the chloride to sulfate ratio.
         try:
-            ratio = chloride.as_('ppm') / sulfate.as_('ppm')
+            ratio = chloride.ppm / sulfate.ppm
         except ZeroDivisionError:
             ratio = 0
         self.ui.ratio.setText(f'{ratio:.2f}')

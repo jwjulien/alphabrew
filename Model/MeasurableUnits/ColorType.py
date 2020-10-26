@@ -35,19 +35,20 @@ class ColorType(SimpleType):
 
     # The scaling between colors is linear but has an offset so the "as_" method is overloaded below.
     Types = {
-        'SRM': None,
-        'Lovi': None,
-        'EBC': None
+        'srm': None,
+        'lovi': None,
+        'ebc': None
     }
 
+    Synonyms = {
+        'lovibond': 'lovi',
+    }
 
-# ======================================================================================================================
-# Init Method
-# ----------------------------------------------------------------------------------------------------------------------
-    def __init__(self, value=None, unit=None, json=None):
-        if unit is not None and unit not in self.Types:
-            raise ValueError(f'Invalid unit supplied for ColorType: "{unit}"')
-        super().__init__(value, unit, json)
+    JsonOutput = {
+        'srm': 'SRM',
+        'lovi': 'Lovi',
+        'ebc': 'EBC',
+    }
 
 
 
@@ -56,16 +57,18 @@ class ColorType(SimpleType):
 # ----------------------------------------------------------------------------------------------------------------------
     def as_(self, desired):
         """Convert this color to a color of another, specified base."""
-        if self.unit == 'SRM':
+        desired = self._coerce_unit(desired)
+
+        if self.unit == 'srm':
             srm = self.value
-        elif self.unit == 'Lovi':
+        elif self.unit == 'lovi':
             srm = (1.3546 * self.value) - 0.76
         else: # EBC
             srm = self.value * 0.508
 
-        if desired == 'Lovi':
+        if desired == 'lovi':
             return (srm + 0.76) / 1.3546
-        if desired == 'EBC':
+        if desired == 'ebc':
             return srm * 1.97
         return srm
 

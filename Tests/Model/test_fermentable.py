@@ -113,19 +113,19 @@ def test_proper_creation():
 
     assert fermentable.name == 'Test Grain'
     assert isinstance(fermentable.amount, MassType)
-    assert fermentable.amount.as_('lb') == 1
+    assert fermentable.amount.lb == 1
     assert fermentable.ftype == 'Grain'
     assert fermentable.group == 'Base'
     assert fermentable.group == 'Base'
     assert fermentable.origin == 'US'
     assert isinstance(fermentable.fyield, PercentType)
-    assert fermentable.fyield.as_('%') == 70
+    assert fermentable.fyield.percent == 70
     assert isinstance(fermentable.color, ColorType)
-    assert fermentable.color.as_('SRM') == 2
+    assert fermentable.color.SRM == 2
     assert isinstance(fermentable.moisture, PercentType)
-    assert fermentable.moisture.as_('%') == 6
+    assert fermentable.moisture.percent == 6
     assert isinstance(fermentable.diastaticPower, DiastaticPowerType)
-    assert fermentable.diastaticPower.as_('Lintner') == 10
+    assert fermentable.diastaticPower.Lintner == 10
     assert not fermentable.addAfterBoil
     assert fermentable.mashed
     assert fermentable.notes == 'Not a real grain type'
@@ -142,10 +142,10 @@ def test_proportions():
     recipe.fermentables = [base, caramel]
 
     assert isinstance(base.proportion, PercentType)
-    assert base.proportion.as_('%') == 75
+    assert base.proportion.percent == 75
 
     assert isinstance(caramel.proportion, PercentType)
-    assert caramel.proportion.as_('%') == 25
+    assert caramel.proportion.percent == 25
 
 
 # ----------------------------------------------------------------------------------------------------------------------
@@ -156,7 +156,7 @@ def test_proportions_no_weight():
     recipe.fermentables = [base]
 
     assert isinstance(base.proportion, PercentType)
-    assert base.proportion.as_('%') == 0
+    assert base.proportion.percent == 0
 
 
 # ----------------------------------------------------------------------------------------------------------------------
@@ -331,19 +331,19 @@ def test_copy():
     assert copy.name == 'Test'
     assert isinstance(copy.amount, MassType)
     assert copy.amount is not original.amount # Should be a new instance of MassType.
-    assert copy.amount.as_('lb') == 1
+    assert copy.amount.lb == 1
     assert copy.ftype == 'Grain'
     assert copy.group == 'Smoked'
     assert copy.producer == 'Crisp'
     assert copy.origin == 'UK'
     assert copy.fyield is not original.fyield
-    assert copy.fyield.as_('%') == 68
+    assert copy.fyield.percent == 68
     assert copy.color is not original.color
-    assert copy.color.as_('SRM') == 45
+    assert copy.color.SRM == 45
     assert copy.moisture is not original.moisture
-    assert copy.moisture.as_('%') == 3
+    assert copy.moisture.percent == 3
     assert copy.diastaticPower is not original.diastaticPower
-    assert copy.diastaticPower.as_('Lintner') == 4
+    assert copy.diastaticPower.Lintner == 4
     assert copy.addAfterBoil is not None
     assert not copy.addAfterBoil
     assert copy.mashed is not None
@@ -465,19 +465,19 @@ def test_from_dict_mass():
 
     assert fermentable.name == 'Test'
     assert isinstance(fermentable.amount, MassType)
-    assert fermentable.amount.as_('lb') == 1
+    assert fermentable.amount.lb == 1
     assert fermentable.ftype == 'Grain'
     assert fermentable.group == 'Base'
     assert fermentable.producer == 'Briess'
     assert fermentable.origin == 'US'
     assert isinstance(fermentable.color, ColorType)
-    assert fermentable.color.as_('SRM') == 2
+    assert fermentable.color.SRM == 2
     assert isinstance(fermentable.moisture, PercentType)
-    assert fermentable.moisture.as_('%') == 7
+    assert fermentable.moisture.percent == 7
     assert isinstance(fermentable.diastaticPower, DiastaticPowerType)
-    assert fermentable.diastaticPower.as_('Lintner') == 4
+    assert fermentable.diastaticPower.Lintner == 4
     assert isinstance(fermentable.fyield, PercentType)
-    assert fermentable.fyield.as_('%') == 78
+    assert fermentable.fyield.percent == 78
     assert isinstance(fermentable.mashed, bool)
     assert fermentable.mashed
     assert fermentable.notes == 'Details'
@@ -523,7 +523,7 @@ def test_from_dict_volume():
     fermentable.from_dict(data)
 
     assert isinstance(fermentable.amount, VolumeType)
-    assert fermentable.amount.as_('qt') == 1
+    assert fermentable.amount.qt == 1
     assert fermentable._phi is None
     assert fermentable._bi is None
 

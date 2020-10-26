@@ -43,6 +43,13 @@ class TimeType(SimpleType):
         'year': (60 * 60 * 24 * 365)  # Approximate
     }
 
+    Synonyms = {
+        'second': 'sec',
+        'minute': 'min',
+        'hour': 'hr',
+        'date': 'day',
+    }
+
 
 
 # End of File

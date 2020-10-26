@@ -81,8 +81,8 @@ class TabRecipe(QtWidgets.QWidget):
             self.ui.style.setCurrentText(self.recipe.style.name)
         self.ui.rtype.setCurrentText(self.recipe.rtype)
         self.ui.equipment.setCurrentText(self.recipe.equipment.name)
-        self.ui.size.setValue(self.recipe.size.as_('gal'))
-        self.ui.time_boil.setValue(self.recipe.boilTime.as_('min'))
+        self.ui.size.setValue(self.recipe.size.gal)
+        self.ui.time_boil.setValue(self.recipe.boilTime.min)
         self.ui.notes.setPlainText(self.recipe.notes)
 
 

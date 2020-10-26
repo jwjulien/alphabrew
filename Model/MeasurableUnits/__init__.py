@@ -22,6 +22,8 @@
 # ======================================================================================================================
 # Imports
 # ----------------------------------------------------------------------------------------------------------------------
+from .SimpleType import UnitError
+
 from .AcidityType import AcidityType
 from .BitternessType import BitternessType
 from .CarbonationType import CarbonationType

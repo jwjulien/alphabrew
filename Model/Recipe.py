@@ -155,8 +155,8 @@ class Recipe(QtCore.QObject):
     def strikeVolume(self):
         """Calculates the volume of water used in the mash at the configured mash ratio with the amount of fermentables
         in the recipe."""
-        weight = self.fermentables.mashWeight.as_('lb')
-        ratio = self.mash.ratio.as_('qt/lb')
+        weight = self.fermentables.mashWeight.lb
+        ratio = self.mash.ratio.quartPerPound
         quarts = weight * ratio
         return VolumeType(quarts, 'qt')
 
@@ -173,7 +173,7 @@ class Recipe(QtCore.QObject):
     def totalWater(self):
         """Calculates the total volume of water used."""
         # Gallons lost to the grains in the mash tun from absorption.
-        grainAbsorptionLoss = self.fermentables.mashWeight.as_('lb') * self.equipment.grainAbsorptionLoss # gal/lb
+        grainAbsorptionLoss = self.fermentables.mashWeight.lb * self.equipment.grainAbsorptionLoss # gal/lb
 
         return self.boilVolume + VolumeType(grainAbsorptionLoss, 'gal')
 
@@ -187,7 +187,7 @@ class Recipe(QtCore.QObject):
         hopWaterLoss = self.hops.trubLoss
 
         # Determine how many gallons we expect to boil off over the time of the boil.
-        boilOff = self.equipment.boilOffRate * self.boilTime.as_('hr')
+        boilOff = self.equipment.boilOffRate * self.boilTime.hr
 
         # TODO: Review and add in other water losses between the start and end of the boil.
 
@@ -200,7 +200,7 @@ class Recipe(QtCore.QObject):
         """Calculates and returns to total wort volume to be placed into the fermentor, taking into account the various
         losses to the boil kettle, MLT, and siphoning processes - as defined in the Brewhouse configuration."""
         # TODO: Review the losses to cover for places in the system where sugar could get lost.
-        return self.size.as_('gal') + self.equipment.spargeHltDeadspace + self.equipment.siphonLoss
+        return self.size.gal + self.equipment.spargeHltDeadspace + self.equipment.siphonLoss
 
 
 # ----------------------------------------------------------------------------------------------------------------------
@@ -261,7 +261,7 @@ class Recipe(QtCore.QObject):
 
         sugar -= self.fermentables.lateAdditionSugar
 
-        return self.get_gravity(sugar, self.boilVolume.as_('gal'))
+        return self.get_gravity(sugar, self.boilVolume.gal)
 
 
 # ----------------------------------------------------------------------------------------------------------------------
@@ -277,7 +277,7 @@ class Recipe(QtCore.QObject):
         """Calculate the IBUs or international bittering units for this recipe."""
         ibus = 0
 
-        volume = self.size.as_('gal') + self.hops.trubLoss
+        volume = self.size.gal + self.hops.trubLoss
 
         gravity = self.originalGravity
 
@@ -286,7 +286,7 @@ class Recipe(QtCore.QObject):
                 # Dry hopping doesn't contribute to bitterness so ignore those hop additions.
                 continue
 
-            minutes = 60 if hop.timing.use == 'Mash' else hop.timing.duration.as_('min')
+            minutes = 60 if hop.timing.use == 'Mash' else hop.timing.duration.min
             ibus += hop.ibus(volume, gravity, minutes)
 
         return ibus
@@ -297,7 +297,7 @@ class Recipe(QtCore.QObject):
     @property
     def color(self):
         """Estimate the color of this beer based upon the color contributions of each of the fermentable ingredients."""
-        total = sum([fermentable.color.as_('SRM') * fermentable.amount.as_('lb') for fermentable in self.fermentables])
+        total = sum([fermentable.color.SRM * fermentable.amount.lb for fermentable in self.fermentables])
         mcu = total / self.totalWort
         return Color.mcu_to_srm(mcu)
 
@@ -387,11 +387,11 @@ class Recipe(QtCore.QObject):
             'fermentation': self.fermentation.to_dict(),
             'boil': {
                 'pre_boil_size': {
-                    'value': self.boilVolume.as_('gal'),
+                    'value': self.boilVolume.gal,
                     'unit': 'gal'
                 },
                 'boil_time': {
-                    'value': self.boilTime.as_('min'),
+                    'value': self.boilTime.min,
                     'unit': 'min'
                 },
                 'boil_steps': [

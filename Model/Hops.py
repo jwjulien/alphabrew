@@ -64,10 +64,10 @@ class Hops(ListTableBase):
                 continue
 
             if 'Leaf' in hop.form:
-                loss += hop.amount.as_('oz') * 0.0625
+                loss += hop.amount.oz * 0.0625
 
             elif 'Pellet' in hop.form:
-                loss += hop.amount.as_('oz') * 0.025
+                loss += hop.amount.oz * 0.025
 
         return loss
 
@@ -105,7 +105,7 @@ class Hops(ListTableBase):
     def sort(self):
         """A void sort function that consistently sorts the hop in decreasing order of amount in the recipe."""
         uses = ['Mash', 'Boil', 'Fermentation']
-        self.items.sort(key=lambda hop: (uses.index(hop.timing.use), -hop.timing.duration.as_('sec'), hop.name))
+        self.items.sort(key=lambda hop: (uses.index(hop.timing.use), -hop.timing.duration.sec, hop.name))
 
 
 # ----------------------------------------------------------------------------------------------------------------------

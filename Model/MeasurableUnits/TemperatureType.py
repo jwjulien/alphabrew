@@ -34,8 +34,8 @@ class TemperatureType(SimpleType):
     standard 2.0 draft."""
 
     Types = {
-        'F': None,
-        'C': None
+        'f': None,
+        'c': None
     }
 
 
@@ -45,13 +45,15 @@ class TemperatureType(SimpleType):
 # ----------------------------------------------------------------------------------------------------------------------
     def as_(self, desired):
         """Override the simple conversion to provide a conversion with offset."""
+        desired = self._coerce_unit(desired)
+
         if desired not in self.Types.keys():
             return KeyError(f'The specified unit "{desired}" does not exist on class "TemperatureType"')
 
         if self.unit == desired:
             return self.value
 
-        if self.unit == 'F' and desired == 'C':
+        if self.unit == 'f' and desired == 'f':
             return (self.value - 32) / 1.8
 
         # With only two options for units, this means that we are in C but want F.

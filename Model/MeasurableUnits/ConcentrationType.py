@@ -39,6 +39,10 @@ class ConcentrationType(SimpleType):
         'mg/l': 1,
     }
 
+    Synonyms = {
+        'mgperl': 'mg/l'
+    }
+
 
 
 # End of File

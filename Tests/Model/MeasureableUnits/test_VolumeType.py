@@ -26,7 +26,7 @@ import random
 
 import pytest
 
-from Model.MeasurableUnits import VolumeType
+from Model.MeasurableUnits import UnitError, VolumeType
 
 
 
@@ -89,6 +89,28 @@ def test_creation_json(unit):
     assert instance.as_(unit) == pytest.approx(value)
 
 
+# ----------------------------------------------------------------------------------------------------------------------
+@pytest.mark.parametrize("unit", [
+    'teaspoon',
+    'tablespoon',
+    'fluidounce',
+    'ounce',
+    'pint',
+    'quart',
+    'gallon',
+    'barrel',
+    'milliliter',
+    'liter',
+])
+def test_creation_synonyms(unit):
+    """Verify that creation using synonyms works appropriately."""
+    value = random.randint(0, 1000) / 10
+    instance = VolumeType(value, unit)
+    assert isinstance(instance, VolumeType)
+    assert instance.value == value
+    assert instance.as_(unit) == pytest.approx(value)
+
+
 
 # ----------------------------------------------------------------------------------------------------------------------
 @pytest.mark.parametrize("unit", [
@@ -100,7 +122,7 @@ def test_creation_json(unit):
 ])
 def test_creation_invalid_discrete(unit):
     """Verify that an exception is thrown when instantiating with an invalid unit."""
-    with pytest.raises(ValueError):
+    with pytest.raises(UnitError):
         VolumeType(0, unit)
 
 
@@ -119,7 +141,7 @@ def test_creation_invalid_json(unit):
         'value': 10,
         'unit': unit
     }
-    with pytest.raises(ValueError):
+    with pytest.raises(UnitError):
         VolumeType(json=json)
 
 

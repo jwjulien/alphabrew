@@ -34,9 +34,9 @@ class UnitType(SimpleType):
     2.0 draft."""
 
     Types = {
+        'each': 1,
         '1': 1,
         'unit': 1,
-        'each': 1,
         'dimensionless': 1,
         'pkg': 1
     }

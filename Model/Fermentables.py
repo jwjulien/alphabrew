@@ -113,7 +113,7 @@ class Fermentables(ListTableBase):
         """A step in calculating the mash pH but also required for calculating the overall water chemistry."""
         total = 0
         for fermentable in self.items:
-            total += fermentable.bi * fermentable.proportion.as_('%') / 100
+            total += fermentable.bi * fermentable.proportion.percent / 100
         return total
 
 
@@ -123,7 +123,7 @@ class Fermentables(ListTableBase):
         """Calculates the distilled water mash pH for each mashed fermentable and returns the result."""
         phiBiFi = 0
         for fermentable in self.items:
-            phiBiFi += fermentable.phi * fermentable.bi * fermentable.proportion.as_('%') / 100
+            phiBiFi += fermentable.phi * fermentable.bi * fermentable.proportion.percent / 100
         return phiBiFi / self.mashBiFi
 
 
@@ -167,7 +167,7 @@ class Fermentables(ListTableBase):
 # ----------------------------------------------------------------------------------------------------------------------
     def sort(self):
         """A void sort function that consistently sorts the fermentable in decreasing order of amount in the recipe."""
-        self.items.sort(key=lambda fermentable: (-fermentable.amount.as_('lb'), fermentable.name))
+        self.items.sort(key=lambda fermentable: (-fermentable.amount.lb, fermentable.name))
 
 
 # ----------------------------------------------------------------------------------------------------------------------

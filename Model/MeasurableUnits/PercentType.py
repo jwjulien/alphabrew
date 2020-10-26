@@ -39,6 +39,10 @@ class PercentType(SimpleType):
         '%': 1,
     }
 
+    Synonyms = {
+        'percent': '%',
+    }
+
 
 
 # End of File

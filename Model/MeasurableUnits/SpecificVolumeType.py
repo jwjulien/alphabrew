@@ -44,6 +44,16 @@ class SpecificVolumeType(SimpleType):
         'ft^3/lb': 0.0334201
     }
 
+    Synonyms = {
+        'quartperpound': 'qt/lb',
+        'quartsperpound': 'qt/lb',
+        'qtperlb': 'qt/lb',
+        'gallonperpound': 'gal/lb',
+        'gallonsperpound': 'gal/lb',
+        'galperlb': 'gal/lb',
+        'litersperkilogram': 'l/kg',
+    }
+
 
 
 # End of File
