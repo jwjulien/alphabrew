@@ -74,6 +74,23 @@ def test_conversion(inVal, inUnit, outVal, outUnit):
     assert result == pytest.approx(outVal, 1e-3)
 
 
+# ----------------------------------------------------------------------------------------------------------------------
+@pytest.mark.parametrize('unit', [
+   'SRM',
+   'Lovi',
+   'EBC',
+])
+def test_beerjson_output(unit):
+    """Verify the proper formatting for the BeerJSON color units."""
+    color = ColorType(30, unit)
+    json = color.to_dict()
+    assert len(json.keys()) == 2
+    assert 'value' in json
+    assert json['value'] == 30
+    assert 'unit' in json
+    assert json['unit'] == unit
+
+
 
 
 # End of File

@@ -63,6 +63,22 @@ def test_conversion(inVal, inUnit, outVal, outUnit):
     assert result == pytest.approx(outVal)
 
 
+# ----------------------------------------------------------------------------------------------------------------------
+@pytest.mark.parametrize('unit', [
+   'Lintner',
+   'WK',
+])
+def test_beerjson_output(unit):
+    """Verify the proper formatting for the BeerJSON color units."""
+    power = DiastaticPowerType(10, unit)
+    json = power.to_dict()
+    assert len(json.keys()) == 2
+    assert 'value' in json
+    assert json['value'] == 10
+    assert 'unit' in json
+    assert json['unit'] == unit
+
+
 
 
 # End of File
