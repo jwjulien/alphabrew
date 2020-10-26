@@ -47,5 +47,17 @@ def test_creation(unit):
     assert instance.as_(unit) == pytest.approx(value)
 
 
+# ----------------------------------------------------------------------------------------------------------------------
+def test_beerjson_output():
+    """Verify the proper formatting for the BeerJSON pH unit."""
+    acidity = AcidityType(7, 'pH')
+    json = acidity.to_dict()
+    assert len(json.keys()) == 2
+    assert 'value' in json
+    assert json['value'] == 7
+    assert 'unit' in json
+    assert json['unit'] == 'pH'
+
+
 
 # End of File
