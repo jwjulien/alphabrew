@@ -1,5 +1,5 @@
 # ======================================================================================================================
-#        File:  Tests/Model/Fermentable.py
+#        File:  Tests/Model/test_Fermentable.py
 #     Project:  AlphaBrew
 # Description:  Test cases for the Fermentable Model class.
 #      Author:  Jared Julien <jaredjulien@gmail.com>

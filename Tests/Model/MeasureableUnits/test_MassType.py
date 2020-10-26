@@ -1,7 +1,7 @@
 # ======================================================================================================================
-#        File:  Tests/Model/MeasureableUnits/test_volumeType.py
+#        File:  Tests/Model/MeasureableUnits/test_MassType.py
 #     Project:  AlphaBrew
-# Description:  Test cases for the VolumeType measureable unit.
+# Description:  Test cases for the MassType measureable unit
 #      Author:  Jared Julien <jaredjulien@gmail.com>
 #   Copyright:  (c) 2020 Jared Julien
 # ----------------------------------------------------------------------------------------------------------------------
@@ -26,34 +26,25 @@ import random
 
 import pytest
 
-from Model.MeasurableUnits import VolumeType
+from Model.MeasurableUnits import MassType
 
 
 
 # ======================================================================================================================
-# Volume Type Tests
+# Mass Type Tests
 # ----------------------------------------------------------------------------------------------------------------------
 @pytest.mark.parametrize("unit", [
-    'tsp',
-    'tbsp',
-    'floz',
-    'cup',
-    'pt',
-    'qt',
-    'gal',
-    'bbl',
-    'ifloz',
-    'ipt',
-    'iqt',
-    'igal',
-    'ml',
-    'l',
+    'oz',
+    'lb',
+    'mg',
+    'g',
+    'kg',
 ])
 def test_creation_discrete(unit):
-    """Verify that a Volume Type instantiates with the properproperty values from inputs."""
+    """Verify that a Mass Type instantiates with the properproperty values from inputs."""
     value = random.randint(0, 1000) / 10
-    instance = VolumeType(value, unit)
-    assert isinstance(instance, VolumeType)
+    instance = MassType(value, unit)
+    assert isinstance(instance, MassType)
     assert instance.value == value
     assert instance.as_(unit) == pytest.approx(value)
 
@@ -61,30 +52,21 @@ def test_creation_discrete(unit):
 
 # ----------------------------------------------------------------------------------------------------------------------
 @pytest.mark.parametrize("unit", [
-    'tsp',
-    'tbsp',
-    'floz',
-    'cup',
-    'pt',
-    'qt',
-    'gal',
-    'bbl',
-    'ifloz',
-    'ipt',
-    'iqt',
-    'igal',
-    'ml',
-    'l',
+    'oz',
+    'lb',
+    'mg',
+    'g',
+    'kg',
 ])
 def test_creation_json(unit):
-    """Verify that a Volume Type instantiates with the properproperty values from JSON dict input."""
+    """Verify that a Mass Type instantiates with the properproperty values from JSON dict input."""
     value = random.randint(0, 1000) / 10
     json = {
         'value': value,
         'unit': unit
     }
-    instance = VolumeType(json=json)
-    assert isinstance(instance, VolumeType)
+    instance = MassType(json=json)
+    assert isinstance(instance, MassType)
     assert instance.value == value
     assert instance.as_(unit) == pytest.approx(value)
 
@@ -92,7 +74,7 @@ def test_creation_json(unit):
 
 # ----------------------------------------------------------------------------------------------------------------------
 @pytest.mark.parametrize("unit", [
-    'lb',
+    'gal',
     '%',
     'SRM',
     'Lintner',
@@ -101,13 +83,13 @@ def test_creation_json(unit):
 def test_creation_invalid_discrete(unit):
     """Verify that an exception is thrown when instantiating with an invalid unit."""
     with pytest.raises(ValueError):
-        VolumeType(0, unit)
+        MassType(0, unit)
 
 
 
 # ----------------------------------------------------------------------------------------------------------------------
 @pytest.mark.parametrize("unit", [
-    'lb',
+    'gal',
     '%',
     'SRM',
     'Lintner',
@@ -120,30 +102,22 @@ def test_creation_invalid_json(unit):
         'unit': unit
     }
     with pytest.raises(ValueError):
-        VolumeType(json=json)
+        MassType(json=json)
 
 
 
 # ----------------------------------------------------------------------------------------------------------------------
 @pytest.mark.parametrize("inVal,inUnit,outVal,outUnit", [
-    (1, 'tbsp', 3, 'tsp'),
-    (1, 'floz', 2, 'tbsp'),
-    (1, 'cup', 16, 'tbsp'),
-    (1, 'cup', 8, 'floz'),
-    (2, 'cup', 1, 'pt'),
-    (2, 'pt', 1, 'qt'),
-    (4, 'qt', 1, 'gal'),
-    (1, 'bbl', 42, 'gal'),
-    (1, 'gal', 133.2279, 'ifloz'),
-    (1, 'gal', 6.661406, 'ipt'),
-    (1, 'gal', 3.3307, 'iqt'),
-    (1, 'gal', 0.832674, 'igal'),
-    (1, 'pt', 473.17679, 'ml'),
-    (1, 'gal', 3.7854143, 'l'),
+    (16, 'oz', 1, 'lb'),
+    (453592, 'mg', 1, 'lb'),
+    (453.592, 'g', 1, 'lb'),
+    (0.453592, 'kg', 1, 'lb'),
+    (1, 'kg', 1000, 'g'),
+    (1, 'g', 1000, 'mg'),
 ])
 def test_conversion(inVal, inUnit, outVal, outUnit):
     """Verify appropriate conversions between types."""
-    instance = VolumeType(inVal, inUnit)
+    instance = MassType(inVal, inUnit)
     result = instance.as_(outUnit)
     assert result == pytest.approx(outVal)
 
