@@ -1,7 +1,7 @@
 # ======================================================================================================================
-#        File:  Model/MeasureableUnits/TemperatureType.py
+#        File:  Tests/Model/MeasureableUnits/test_TemperatureType.py
 #     Project:  AlphaBrew
-# Description:  Provides a base class for working with time types in recipes which can have differing units.
+# Description:  Test cases for the TemperatureType measureable unit
 #      Author:  Jared Julien <jaredjulien@gmail.com>
 #   Copyright:  (c) 2020 Jared Julien
 # ----------------------------------------------------------------------------------------------------------------------
@@ -22,42 +22,43 @@
 # ======================================================================================================================
 # Imports
 # ----------------------------------------------------------------------------------------------------------------------
-from Model.MeasurableUnits.SimpleType import SimpleType
+import random
+
+import pytest
+
+from Model.MeasurableUnits import UnitError, TemperatureType
 
 
 
 # ======================================================================================================================
-# TemperatureType Class
+# Temperature Type Tests
 # ----------------------------------------------------------------------------------------------------------------------
-class TemperatureType(SimpleType):
-    """Extends the SimpleType class to provide a class for working with TemperatureType as defined in the BeerJson
-    standard 2.0 draft."""
+@pytest.mark.parametrize("unit", [
+    'F',
+    'C',
+])
+def test_creation(unit):
+    """Verify that a Temperature Type instantiates with the properproperty values from inputs."""
+    value = random.randint(0, 1000) / 10
+    instance = TemperatureType(value, unit)
+    assert isinstance(instance, TemperatureType)
+    assert instance.value == value
+    assert instance.as_(unit) == pytest.approx(value)
 
-    Types = {
-        'f': None,
-        'c': None
-    }
 
 
-
-# ======================================================================================================================
-# Methods
 # ----------------------------------------------------------------------------------------------------------------------
-    def as_(self, desired):
-        """Override the simple conversion to provide a conversion with offset."""
-        desired = self._coerce_unit(desired)
-
-        if desired not in self.Types.keys():
-            return KeyError(f'The specified unit "{desired}" does not exist on class "TemperatureType"')
-
-        if self.unit == desired:
-            return self.value
-
-        if self.unit == 'f' and desired == 'c':
-            return (self.value - 32) / 1.8
-
-        # With only two options for units, this means that we are in C but want F.
-        return (1.8 * self.value) + 32
+@pytest.mark.parametrize("inVal,inUnit,outVal,outUnit", [
+    (-40, 'f', -40, 'c'),
+    (32, 'f', 0, 'c'),
+    (100, 'c', 212, 'f'),
+    (23, 'c', 73.4, 'f'),
+])
+def test_conversion(inVal, inUnit, outVal, outUnit):
+    """Verify appropriate conversions between types."""
+    instance = TemperatureType(inVal, inUnit)
+    result = instance.as_(outUnit)
+    assert result == pytest.approx(outVal)
 
 
 
