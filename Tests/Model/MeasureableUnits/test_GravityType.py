@@ -40,7 +40,7 @@ from Model.MeasurableUnits import UnitError, GravityType
 ])
 def test_creation(unit):
     """Verify that a Gravity Type instantiates with the properproperty values from inputs."""
-    value = random.randint(0, 100) / 10
+    value = random.randint(1, 100) / 10
     instance = GravityType(value, unit)
     assert isinstance(instance, GravityType)
     assert instance.value == value
