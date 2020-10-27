@@ -33,21 +33,21 @@ from Model.MeasurableUnits import UnitError, GravityType
 # ======================================================================================================================
 # Gravity Type Tests
 # ----------------------------------------------------------------------------------------------------------------------
-@pytest.mark.parametrize("unit", [
-    'sg',
-    'plato',
-    'brix',
+@pytest.mark.parametrize("unit, tolerance", [
+    ('sg',    1e-6),
+    ('plato', 1e-6),
+    ('brix',  5e-2),
 ])
-def test_creation(unit):
+def test_creation(unit, tolerance):
     """Verify that a Gravity Type instantiates with the properproperty values from inputs."""
     value = random.randint(1, 100) / 10
     instance = GravityType(value, unit)
     assert isinstance(instance, GravityType)
     assert instance.value == value
     # The tolerance has been lowered because the math is a little lossy.  For the current usage of this tool that is
-    # totally acceptable.  If the tolerance of +/-0.001 brix is not acceptable the maths in Math/Gravity.py needs to be
+    # totally acceptable.  If the tolerance of +/-0.05 brix is not acceptable the maths in Math/Gravity.py needs to be
     # adjusted to be more accurate.
-    assert instance.as_(unit) == pytest.approx(value, 1e-3)
+    assert instance.as_(unit) == pytest.approx(value, tolerance)
 
 
 
