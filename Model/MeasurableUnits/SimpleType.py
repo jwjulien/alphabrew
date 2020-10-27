@@ -216,10 +216,12 @@ class SimpleType:
         unit = unit.lower()
 
         # Make singular - this is very crude and may need to be updated at some point.
-        if unit.endswith('ies'):
-            unit = unit[:-3] + 'y'
-        elif unit.endswith('s'):
-            unit = unit[:-1]
+        if unit not in self.Types and unit not in self.Synonyms:
+            # Don't attempt to de-pluralize when there is already a match for this type.
+            if unit.endswith('ies'):
+                unit = unit[:-3] + 'y'
+            elif unit.endswith('s'):
+                unit = unit[:-1]
 
         # Attempt to map this to another unit or just fall back on the provided name without a match.
         unit = self.Synonyms.get(unit, unit)
