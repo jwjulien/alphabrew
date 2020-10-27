@@ -37,19 +37,27 @@ class SimpleType:
     # This parameter must be overridden by classes extending SimpleType to include a list of items and scale factors.
     # Keys in the dict represent the available unit types for this class while values are scale values relative to the
     # smallest listed unit.
-    Types = {}
+    Types: dict = {}
 
     # This parameter may be overridden by child classes to remap alternative names for units.  For example, a typical
     # unit of 'lb' bay be used for pounds, but 'pound' and events 'pounds' may be added to the Synonyms table to
     # allow those units to be used for the exact same conversion.
-    Synonyms = {}
+    Synonyms: dict = {}
 
     # This dictionary can be overridden by child classes to map the outgoing units (upon conversion to_dict) to a
     # specific value.  This is specifically useful for units where upper case is actually important to meet the BeerJSON
     # standard.
-    JsonOutput = {}
+    JsonOutput: dict = {}
 
-    def __init__(self, value=None, unit=None, json=None):
+    # The following minimum and maximum values can be set by child classes to constrain the range of the type.  If a
+    # value is assiged that is outside of this range (when set) a ValueError will be thrown.
+    Minimum: float = None
+    Maximum: float = None
+
+    def __init__(self, value:float=None, unit:str=None, json:dict=None):
+        self._value = None
+        self._unit = None
+
         # Set the units from the inputs when provided.
         if value is not None and unit is not None:
             self.value = value
@@ -68,6 +76,22 @@ class SimpleType:
 
 # ======================================================================================================================
 # Properties
+# ----------------------------------------------------------------------------------------------------------------------
+    @property
+    def value(self):
+        return self._value
+
+
+# ----------------------------------------------------------------------------------------------------------------------
+    @value.setter
+    def value(self, value):
+        if self.Minimum is not None and value < self.Minimum:
+            raise ValueError(f"Value '{value}' exceeds the minimum '{self.Minimum}' for '{__class__.__name__}'")
+        if self.Maximum is not None and value > self.Maximum:
+            raise ValueError(f"Value '{value}' exceeds the maximum '{self.Maximum}' for '{__class__.__name__}'")
+        self._value = value
+
+
 # ----------------------------------------------------------------------------------------------------------------------
     @property
     def unit(self):

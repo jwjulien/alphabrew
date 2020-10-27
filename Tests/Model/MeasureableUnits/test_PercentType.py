@@ -1,7 +1,7 @@
 # ======================================================================================================================
-#        File:  Model/MeasureableUnits/PercentType.py
+#        File:  Tests/Model/MeasureableUnits/test_PercentType.py
 #     Project:  AlphaBrew
-# Description:  Provides a base class for working with acidity in recipes which can have differing units.
+# Description:  Test cases for the PercentType measureable unit
 #      Author:  Jared Julien <jaredjulien@gmail.com>
 #   Copyright:  (c) 2020 Jared Julien
 # ----------------------------------------------------------------------------------------------------------------------
@@ -22,29 +22,44 @@
 # ======================================================================================================================
 # Imports
 # ----------------------------------------------------------------------------------------------------------------------
-from Model.MeasurableUnits.SimpleType import SimpleType
+import random
+
+import pytest
+
+from Model.MeasurableUnits import UnitError, PercentType
 
 
 
 # ======================================================================================================================
-# PercentType Class
+# Percent Type Tests
 # ----------------------------------------------------------------------------------------------------------------------
-class PercentType(SimpleType):
-    """Extends the SimpleType class to provide a class for working with PercentType as defined in the BeerJson standard
-    2.0 draft.
+@pytest.mark.parametrize("unit", [
+    '%',
+    'percent',
+])
+def test_creation(unit):
+    """Verify that a Percent Type instantiates with the properproperty values from inputs."""
+    value = random.randint(0, 1000) / 10
+    instance = PercentType(value, unit)
+    assert isinstance(instance, PercentType)
+    assert instance.value == value
+    assert instance.as_(unit) == pytest.approx(value)
 
-    Values for this type are expected to range from 0 to 100."""
 
-    Types = {
-        '%': 1,
-    }
 
-    Synonyms = {
-        'percent': '%',
-    }
+# ----------------------------------------------------------------------------------------------------------------------
+@pytest.mark.parametrize("value", [
+    -100,
+    -1,
+    101,
+    1000,
+    1e6,
+])
+def test_out_of_range(value):
+    """Verify appropriate conversions between types."""
+    with pytest.raises(ValueError):
+        PercentType(value, '%')
 
-    Minimum = 0.0
-    Maximum = 100.0
 
 
 
