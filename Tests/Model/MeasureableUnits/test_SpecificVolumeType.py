@@ -1,7 +1,7 @@
 # ======================================================================================================================
-#        File:  Tests/Model/MeasureableUnits/test_GravityType.py
+#        File:  Tests/Model/MeasureableUnits/test_SpecificVolumeType.py
 #     Project:  AlphaBrew
-# Description:  Test cases for the GravityType measureable unit
+# Description:  Test cases for the SpecificVolumeType measureable unit
 #      Author:  Jared Julien <jaredjulien@gmail.com>
 #   Copyright:  (c) 2020 Jared Julien
 # ----------------------------------------------------------------------------------------------------------------------
@@ -26,48 +26,56 @@ import random
 
 import pytest
 
-from Model.MeasurableUnits import UnitError, GravityType
+from Model.MeasurableUnits import UnitError, SpecificVolumeType
 
 
 
 # ======================================================================================================================
-# Gravity Type Tests
+# Specific Volume Type Tests
 # ----------------------------------------------------------------------------------------------------------------------
 @pytest.mark.parametrize("unit", [
-    'sg',
-    'plato',
-    'brix',
+    'qt/lb',
+    'gal/lb',
+    'gal/oz',
+    'l/g',
+    'l/kg',
+    'floz/oz',
+    'm^3/kg',
+    'ft^3/lb',
+    'quartperpound',
+    'quartsperpound',
+    'qtperlb',
+    'gallonperpound',
+    'gallonsperpound',
+    'galperlb',
+    'litersperkilogram',
 ])
 def test_creation(unit):
-    """Verify that a Gravity Type instantiates with the properproperty values from inputs."""
-    value = random.randint(0, 100) / 10
-    instance = GravityType(value, unit)
-    assert isinstance(instance, GravityType)
+    """Verify that a SpecificVolume Type instantiates with the properproperty values from inputs."""
+    value = random.randint(0, 1000) / 10
+    instance = SpecificVolumeType(value, unit)
+    assert isinstance(instance, SpecificVolumeType)
     assert instance.value == value
-    # The tolerance has been lowered because the math is a little lossy.  For the current usage of this tool that is
-    # totally acceptable.  If the tolerance of +/-0.001 brix is not acceptable the maths in Math/Gravity.py needs to be
-    # adjusted to be more accurate.
-    assert instance.as_(unit) == pytest.approx(value, 1e-3)
+    assert instance.as_(unit) == pytest.approx(value)
 
 
 
 # ----------------------------------------------------------------------------------------------------------------------
 @pytest.mark.parametrize("inVal,inUnit,outVal,outUnit", [
-    (1.014, 'sg',    1.014,  'sg'   ),
-    (1.014, 'sg',    3.574,  'plato'),
-    (1.014, 'sg',    3.5741, 'brix' ),
-    (5,     'plato', 1.0197, 'sg'   ),
-    (5,     'plato', 5,      'plato'),
-    (5,     'plato', 4.9986, 'brix' ),
-    (9,     'brix',  1.0359, 'sg'   ),
-    (9,     'brix',  9.0005, 'plato'),
-    (9,     'brix',  9,      'brix' ),
+    (2, 'qt/lb', 1, 'floz/oz'),
+    (1, 'qt/lb', 4, 'gal/lb'),
+    (1, 'gal/lb', 16, 'gal/oz'),
+    (1, 'gal/lb', 7.48053, 'ft^3/lb'),
+    (2, 'gal/lb', 1.043175, 'l/kg'),
+    (1, 'l/g', 1, 'm^3/kg'),
+    (1, 'l/kg', 229.734, 'l/g'),
+    (1, 'l/kg', 229.734, 'm^3/kg'),
 ])
 def test_conversion(inVal, inUnit, outVal, outUnit):
     """Verify appropriate conversions between types."""
-    instance = GravityType(inVal, inUnit)
+    instance = SpecificVolumeType(inVal, inUnit)
     result = instance.as_(outUnit)
-    assert result == pytest.approx(outVal, 1e-3)
+    assert result == pytest.approx(outVal)
 
 
 
