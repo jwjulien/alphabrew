@@ -92,7 +92,8 @@ class Hop():
             humulene=self.humulene.copy(),
             caryophyllene=self.caryophyllene.copy(),
             cohumulone=self.cohumulone.copy(),
-            myrcene=self.myrcene.copy()
+            myrcene=self.myrcene.copy(),
+            notes=self.notes
         )
 
 

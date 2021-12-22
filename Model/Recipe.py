@@ -358,8 +358,18 @@ class Recipe(QtCore.QObject):
         self.fermentation.changed.connect(self.changed.emit)
         self.mash.changed.connect(self.changed.emit)
 
+        self.changed.connect(self.recalculate)
+
         self.loaded.emit()
         self.changed.emit()
+
+
+# ----------------------------------------------------------------------------------------------------------------------
+    def recalculate(self):
+        """Called whenever the recipe changes to recalculate properties and values that are dependent upon other inputs.
+        """
+        # Rerun the IBU calculation to cache the IBU value for the hops.
+        bitterness = self.bitterness
 
 
 # ----------------------------------------------------------------------------------------------------------------------

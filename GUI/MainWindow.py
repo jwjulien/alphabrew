@@ -90,6 +90,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
         self.brewhouse = Brewhouse()
         self.recipe = Recipe(self.brewhouse.calibrations)
+        self.recipe.loaded.connect(self.update)
         self.recipe.changed.connect(self.update)
 
         # Load database items into memory.
