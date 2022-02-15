@@ -234,8 +234,12 @@ class SimpleType:
 # Overridden Methods
 # ----------------------------------------------------------------------------------------------------------------------
     def __str__(self):
-        """When represented as a string, convert this duration into a value with units."""
-        return f'{self.value:.1f} {self.unit}'
+        """When represented as a string, convert this duration into a value with units.
+
+        Will use as many decimal places as needed to represent the number but will strip off any trailing zeros up to,
+        and including, the decimal point.
+        """
+        return f'{self.value:.10f}'.rstrip('0').rstrip('.') + f' {self.unit}'
 
 
 # ----------------------------------------------------------------------------------------------------------------------

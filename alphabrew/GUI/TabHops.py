@@ -61,7 +61,7 @@ class TabHops(QtWidgets.QWidget):
         self.recipe.hops.set_control(self.ui.ingredients)
 
         # Setup a "delegate" to allow editing of the amount in a spinbox right inside of the table.
-        delegate = SimpleTypeDelegate(self, [MassType], minimum=0, maximum=100, decimals=1, singleStep=0.5)
+        delegate = SimpleTypeDelegate(self, [MassType], minimum=0, maximum=100, decimals=2, singleStep=0.25)
         self.ui.ingredients.setItemDelegateForColumn(0, delegate)
 
         # Setup a "delegate" to allow editing of the use in a combo box right inside of the table.

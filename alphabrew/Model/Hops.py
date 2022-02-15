@@ -22,7 +22,7 @@
 # ======================================================================================================================
 # Imports
 # ----------------------------------------------------------------------------------------------------------------------
-from PySide2 import QtCore, QtWidgets
+from PySide2 import QtCore
 from typing import List
 
 from Model.ListTableBase import ListTableBase

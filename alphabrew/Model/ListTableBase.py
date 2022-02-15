@@ -22,7 +22,9 @@
 # ======================================================================================================================
 # Imports
 # ----------------------------------------------------------------------------------------------------------------------
+from typing import List
 from PySide2 import QtCore, QtWidgets
+from alphabrew.GUI.Table.Column import Column
 
 
 
@@ -38,7 +40,7 @@ class ListTableBase(QtCore.QAbstractTableModel):
 
     # This property must be populated by child class definitions to provide a set of Column object instances that
     # correspond to the columns in the table and tell this class how to display the data.
-    Columns = []
+    Columns: List[Column] = []
 
 
 # ----------------------------------------------------------------------------------------------------------------------
@@ -192,7 +194,7 @@ class ListTableBase(QtCore.QAbstractTableModel):
     def data(self, index, role):
         """Fetch data for a cell, either for display of for editing."""
         item = self[index.row()]
-        column = self.columns[index.column()]
+        column: Column = self.columns[index.column()]
 
         # Display role is read-only textual display for data in the table.
         if role == QtCore.Qt.DisplayRole:
@@ -222,7 +224,7 @@ class ListTableBase(QtCore.QAbstractTableModel):
         if role == QtCore.Qt.EditRole:
             # Resize the column back to the configured width.
             if self.control is not None:
-                self.control.horizontalHeader().setSectionResizeMode(index.column(), self.columns[index.column()].size)
+                self.control.horizontalHeader().setSectionResizeMode(index.column(), QtWidgets.QHeaderView.Interactive)
 
             column.set_value(item, value)
             self.sort()
