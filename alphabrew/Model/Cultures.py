@@ -28,7 +28,6 @@ from PySide2 import QtCore, QtWidgets
 
 from Model.ListTableBase import ListTableBase
 from GUI.Table.Column import Column
-from GUI.Table.Sizing import Stretch
 from Model.Culture import Culture
 from Model.MeasurableUnits import PercentType, PercentRangeType
 
@@ -42,7 +41,7 @@ class Cultures(ListTableBase):
     display within a QtTableView."""
     Columns = [
         Column('amount', editable=True, hideLimited=True),
-        Column('name', size=Stretch, align=QtCore.Qt.AlignLeft),
+        Column('name', align=QtCore.Qt.AlignLeft),
         Column('ctype', 'Type'),
         Column('form'),
         Column('producer'),
@@ -105,6 +104,7 @@ class Cultures(ListTableBase):
             culture = Culture(recipe)
             culture.from_dict(item)
             self.append(culture)
+        self.resize()
 
 
 

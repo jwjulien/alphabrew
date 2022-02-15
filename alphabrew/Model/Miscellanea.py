@@ -26,7 +26,6 @@ from PySide2 import QtCore
 
 from Model.ListTableBase import ListTableBase
 from GUI.Table.Column import Column
-from GUI.Table.Sizing import Stretch
 from Model.Miscellaneous import Miscellaneous
 
 
@@ -38,7 +37,7 @@ class Miscellanea(ListTableBase):
     """Provides for a list of misc objects, specifically created to aid in parsing Excel database files and
     display within a QtTableView."""
     Columns = [
-        Column('name', size=Stretch, align=QtCore.Qt.AlignLeft, editable=True),
+        Column('name', align=QtCore.Qt.AlignLeft, editable=True),
         Column('mtype', 'Type', align=QtCore.Qt.AlignCenter, editable=True),
         Column('useFor', editable=True),
         Column('amount', editable=True),
@@ -108,6 +107,7 @@ class Miscellanea(ListTableBase):
             misc = Miscellaneous(recipe)
             misc.from_dict(item)
             self.append(misc)
+        self.resize()
 
 
 

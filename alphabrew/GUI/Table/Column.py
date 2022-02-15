@@ -26,8 +26,6 @@ import re
 
 from PySide2 import QtCore
 
-from GUI.Table.Sizing import Fit
-
 
 
 # ======================================================================================================================
@@ -43,7 +41,6 @@ class Column:
             heading=None,
             template=None,
             default='--',
-            size=Fit,
             align=QtCore.Qt.AlignRight,
             editable=False,
             hideLimited=False
@@ -53,7 +50,6 @@ class Column:
         self.heading = heading if heading is not None else self._heading_from_attribute(attribute)
         self.default = default
         self.template = template
-        self.size = size
         self.align = align
         self.editable = editable
         self.hideLimited = hideLimited

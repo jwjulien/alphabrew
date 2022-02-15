@@ -27,7 +27,6 @@ from typing import List
 
 from Model.ListTableBase import ListTableBase
 from GUI.Table.Column import Column
-from GUI.Table.Sizing import Stretch
 from Model.Hop import Hop
 from Model.MeasurableUnits import PercentType
 
@@ -44,7 +43,7 @@ class Hops(ListTableBase):
         Column('timing.use', 'Use In', align=QtCore.Qt.AlignLeft, editable=True, hideLimited=True),
         Column('timing.duration', align=QtCore.Qt.AlignHCenter, editable=True, hideLimited=True),
         Column('_ibus', 'IBUs', template='%.1f IBUs', hideLimited=True),
-        Column('name', size=Stretch, align=QtCore.Qt.AlignLeft),
+        Column('name', align=QtCore.Qt.AlignLeft),
         Column('htype', 'Type', align=QtCore.Qt.AlignLeft),
         Column('form'),
         Column('origin', align=QtCore.Qt.AlignHCenter),
@@ -121,6 +120,7 @@ class Hops(ListTableBase):
             hop = Hop(recipe)
             hop.from_dict(item)
             self.append(hop)
+        self.resize()
 
 
 

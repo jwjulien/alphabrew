@@ -26,7 +26,6 @@ from PySide2 import QtCore
 
 from Model.ListTableBase import ListTableBase
 from GUI.Table.Column import Column
-from GUI.Table.Sizing import Stretch
 from Model.Water import Water
 from Model.MeasurableUnits import ConcentrationType
 
@@ -39,7 +38,7 @@ class Waters(ListTableBase):
     """Provides for a list of Water objects, specifically created to aid in parsing Excel database files and
     display within a QtTableView."""
     Columns = [
-        Column('name', size=Stretch, align=QtCore.Qt.AlignLeft),
+        Column('name', align=QtCore.Qt.AlignLeft),
         Column('calcium'),
         Column('magnesium'),
         Column('sodium'),

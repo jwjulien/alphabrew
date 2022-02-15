@@ -24,11 +24,10 @@
 # ----------------------------------------------------------------------------------------------------------------------
 from typing import List
 
-from PySide2 import QtCore, QtWidgets
+from PySide2 import QtCore
 
 from Model.ListTableBase import ListTableBase
 from GUI.Table.Column import Column
-from GUI.Table.Sizing import Stretch
 from Model.Fermentable import Fermentable
 from Model.MeasurableUnits import ColorType, DiastaticPowerType, MassType, PercentType
 
@@ -43,7 +42,7 @@ class Fermentables(ListTableBase):
     Columns = [
         Column('amount', editable=True, hideLimited=True),
         Column('proportion', hideLimited=True),
-        Column('name', 'Grain/Fermentable', size=Stretch, align=QtCore.Qt.AlignLeft),
+        Column('name', 'Grain/Fermentable', align=QtCore.Qt.AlignLeft),
         Column('color'),
         Column('ftype', 'Type'),
         Column('group'),
@@ -183,6 +182,7 @@ class Fermentables(ListTableBase):
             fermentable = Fermentable(recipe)
             fermentable.from_dict(item)
             self.append(fermentable)
+        self.resize()
 
 
 

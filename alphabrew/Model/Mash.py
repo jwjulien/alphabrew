@@ -28,7 +28,6 @@ from Model.ListTableBase import ListTableBase
 from Model.MashStep import MashStep
 from Model.MeasurableUnits import SpecificVolumeType, TemperatureType, VolumeType
 from GUI.Table.Column import Column
-from GUI.Table.Sizing import Stretch
 
 
 
@@ -38,7 +37,7 @@ from GUI.Table.Sizing import Stretch
 class Mash(ListTableBase):
     """Tabular definition for fermentation steps outlining the fermentation process."""
     Columns = [
-        Column('name', size=Stretch, align=QtCore.Qt.AlignLeft, editable=True),
+        Column('name', align=QtCore.Qt.AlignLeft, editable=True),
         Column('mtype', 'Type', align=QtCore.Qt.AlignLeft, editable=True),
         Column('temperature', editable=True),
         Column('time', editable=True),
@@ -147,6 +146,8 @@ class Mash(ListTableBase):
         if len(self) > 1:
             # Run the final calculation as a special case because we need to get up to our target volume.
             self.items[-1].calculate(previous, final=True)
+
+        self.resize()
 
 
 

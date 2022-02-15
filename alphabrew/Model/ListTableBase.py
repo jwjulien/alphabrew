@@ -47,8 +47,8 @@ class ListTableBase(QtCore.QAbstractTableModel):
         self.limited = limited
 
         self.control = None
-        self.items = []
         self.columns = []
+        self.clear()
 
         # Walk through the list of all columns and produce a list of columns that apply based upon the state of the
         # limited flag.
@@ -56,6 +56,14 @@ class ListTableBase(QtCore.QAbstractTableModel):
             if not limited or not column.hideLimited:
                 self.columns.append(column)
 
+
+# ----------------------------------------------------------------------------------------------------------------------
+    def clear(self):
+        """Clear the saved contents of this list of fermentable ingredients.
+
+        Clears data while retaining properties such at the associated controls.
+        """
+        self.items = []
 
 
 # ======================================================================================================================
@@ -136,8 +144,18 @@ class ListTableBase(QtCore.QAbstractTableModel):
         """Called by the GUI to associate a TableView control with this instance.  Sets up column widths and stores a
         reference for adjusting the widths later."""
         self.control = control
-        for index, column in enumerate(self.columns):
-            control.horizontalHeader().setSectionResizeMode(index, column.size)
+
+        header = self.control.horizontalHeader()
+        header.setStretchLastSection(True)
+        for index in range(len(self.columns)):
+            header.setSectionResizeMode(index, QtWidgets.QHeaderView.Interactive)
+        self.resize()
+
+
+# ----------------------------------------------------------------------------------------------------------------------
+    def resize(self):
+        """Automatically resize the columns to remain interactive but best match the current contents."""
+        self.control.horizontalHeader().resizeSections(QtWidgets.QHeaderView.ResizeToContents)
 
 
 # ----------------------------------------------------------------------------------------------------------------------

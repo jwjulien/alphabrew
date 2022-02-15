@@ -27,7 +27,6 @@ from PySide2 import QtCore
 from Model.ListTableBase import ListTableBase
 from Model.FermentationStep import FermentationStep
 from GUI.Table.Column import Column
-from GUI.Table.Sizing import Stretch
 
 
 
@@ -37,7 +36,7 @@ from GUI.Table.Sizing import Stretch
 class Fermentation(ListTableBase):
     """Tabular definition for fermentation steps outlining the fermentation process."""
     Columns = [
-        Column('name', size=Stretch, align=QtCore.Qt.AlignLeft, editable=True),
+        Column('name', align=QtCore.Qt.AlignLeft, editable=True),
         Column('startTemperature', 'Start Temp', editable=True),
         Column('endTemperature', 'End Temp', editable=True),
         Column('time', editable=True),
@@ -75,6 +74,7 @@ class Fermentation(ListTableBase):
             step = FermentationStep(recipe)
             step.from_dict(child)
             self.append(step)
+        self.resize()
 
 
 
