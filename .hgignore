@@ -1,8 +1,4 @@
 .venv/
 __pycache__/
 .pytest_cache/
-
 Brewhouse.toml
-
-credentials.json
-token.pickle

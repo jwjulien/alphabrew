@@ -103,7 +103,7 @@ Binaries may come later depending upon need and effort.
 1. Download a copy of the source or perform a checkout using git.
 2. Launch a command prompt and `cd` into the directory where the source files are located.
 3. Run `poetry install` to set up a virtual environment.
-4. Launch the tool using `poetry run py .`.
+4. Launch the tool using `poetry run py alphabrew`.
 
 For the uninformed, steps 1 and 3 need only be performed the first time the tool is used.
 

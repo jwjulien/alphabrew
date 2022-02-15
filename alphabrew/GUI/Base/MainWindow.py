@@ -27,7 +27,7 @@ class Ui_MainWindow(object):
         MainWindow.resize(1135, 600)
         MainWindow.setMinimumSize(QSize(1000, 600))
         icon = QIcon()
-        icon.addFile(u"beer.ico", QSize(), QIcon.Normal, QIcon.Off)
+        icon.addFile(u"alphabrew/beer.ico", QSize(), QIcon.Normal, QIcon.Off)
         MainWindow.setWindowIcon(icon)
         self.actionNew = QAction(MainWindow)
         self.actionNew.setObjectName(u"actionNew")

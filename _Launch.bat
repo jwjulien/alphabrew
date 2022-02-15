@@ -1,2 +1,2 @@
 poetry install
-poetry run py .
+poetry run py alphabrew

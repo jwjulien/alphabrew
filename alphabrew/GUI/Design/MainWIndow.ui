@@ -21,7 +21,7 @@
   </property>
   <property name="windowIcon">
    <iconset>
-    <normaloff>beer.ico</normaloff>beer.ico</iconset>
+    <normaloff>alphabrew/beer.ico</normaloff>alphabrew/beer.ico</iconset>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout">
