@@ -58,13 +58,21 @@ class Miscellaneous():
 
         Returns a BeerJSON MiscellaneousType compatible dictionary."""
         json = {
-            'name': self.name,
-            'type': self.mtype.lower(),
-            'amount': self.amount.to_dict(),
-            'timing': self.timing.to_dict()
+            'name': self.name
         }
+
+        if self.mtype is not None:
+            json['type'] = self.mtype.lower()
+
+        if self.amount is not None:
+            json['amount'] = self.amount.to_dict()
+
+        if self.timing is not None:
+            json['timing'] = self.timing.to_dict()
+
         if self.useFor is not None:
             json['use_for'] = self.useFor
+
         return json
 
 
