@@ -1,9 +1,9 @@
 # ======================================================================================================================
-#        File:  Brewhouse/Brewhouse.py
+#        File:  _version.py
 #     Project:  AlphaBrew
 # Description:  Software version number.
 #      Author:  Jared Julien <jaredjulien@gmail.com>
-#   Copyright:  (c) 2020 Jared Julien
+#   Copyright:  (c) 2020-2022 Jared Julien
 # ----------------------------------------------------------------------------------------------------------------------
 # Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
 # documentation files (the "Software"), to deal in the Software without restriction, including without limitation the

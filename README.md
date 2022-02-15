@@ -96,14 +96,14 @@ Binaries may come later depending upon need and effort.
 
 ### Prerequisites ######################################################################################################
 - Python 3.x (tested on Python 3.7, though any modern Python should be acceptable)
-- [pipenv](https://pypi.org/project/pipenv/)
+- [poetry](https://python-poetry.org/)
 
 
 ### Procedure ##########################################################################################################
 1. Download a copy of the source or perform a checkout using git.
 2. Launch a command prompt and `cd` into the directory where the source files are located.
-3. Run `pipenv install` to set up a virtual environment.
-4. Launch the tool using `pipenv run py .`.
+3. Run `poetry install` to set up a virtual environment.
+4. Launch the tool using `poetry run py .`.
 
 For the uninformed, steps 1 and 3 need only be performed the first time the tool is used.
 
@@ -137,11 +137,11 @@ Credits
 ------------------------------------------------------------------------------------------------------------------------
 Most of the sciencey maths in AlphaBrew were taken from other sources and are not the credit of the AlphaBrew team.
 
-- John Palmer's book *How to Brew* (For you kids out there, books are these paper things with words in them - this one is great if you're seriously interested in the science behind brewing).
+- John Palmer's book *How to Brew* (For you kids out there, books are these paper things with words in them - this one is seriously great if you're interested in the science behind brewing).
 - The open source BrewTarget software.
 - VikeMan's *BrewCipher* tool (Great tool! Not exactly open source but a great free tool for planning your beers if you're looking for alternative options).
     - Separate nod to utahbeerdude for his contributions to the mash pH calculations used in *BrewCipher*.
 
-Special thanks to BeerSmith for being so confusingly difficult to use that we were motivated to create a new, free, and open source tool instead.
+Special thanks to BeerSmith for being so convoluted and confusingly difficult to use that we were motivated to create a new, free, and open source tool instead.
 
 And I'm sure others.  If you feel like we've stolen some of your work, please contact the team and we will get your name added here.
