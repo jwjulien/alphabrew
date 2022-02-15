@@ -22,6 +22,7 @@
 # ======================================================================================================================
 # Imports
 # ----------------------------------------------------------------------------------------------------------------------
+from inspect import Attribute
 import re
 
 from PySide2 import QtCore
@@ -41,6 +42,7 @@ class Column:
             heading=None,
             template=None,
             default='--',
+            decimals=1,
             align=QtCore.Qt.AlignRight,
             editable=False,
             hideLimited=False
@@ -49,6 +51,7 @@ class Column:
         self.attribute = attribute
         self.heading = heading if heading is not None else self._heading_from_attribute(attribute)
         self.default = default
+        self.decimals = decimals
         self.template = template
         self.align = align
         self.editable = editable
@@ -122,7 +125,13 @@ class Column:
 
         # If no template was provided for this column then just convert the value into a string.
         if self.template is None:
-            return str(value)
+            try:
+                # First, attempt to invoke the to_str method with the desired number of decimal places.
+                return value.to_str(self.decimals)
+
+            except AttributeError:
+                # Failing to use `to_str` fall back on the `str` builtin.
+                return str(value)
 
         # With a template, pass the value through to get it into the proper str format.
         return self.template % value

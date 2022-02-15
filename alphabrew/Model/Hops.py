@@ -39,7 +39,7 @@ class Hops(ListTableBase):
     """Provides for a list of Hop objects, specifically created to aid in parsing Excel database files and
     display within a QtTableView."""
     Columns = [
-        Column('amount', editable=True, hideLimited=True),
+        Column('amount', editable=True, decimals=2, hideLimited=True),
         Column('timing.use', 'Use In', align=QtCore.Qt.AlignLeft, editable=True, hideLimited=True),
         Column('timing.duration', align=QtCore.Qt.AlignHCenter, editable=True, hideLimited=True),
         Column('_ibus', 'IBUs', template='%.1f IBUs', hideLimited=True),

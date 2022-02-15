@@ -198,6 +198,20 @@ class SimpleType:
         return self.value
 
 
+# ----------------------------------------------------------------------------------------------------------------------
+    def to_str(self, places: int = 1) -> str:
+        """Convert this value to a string rounding to the specified number of decimal places.
+
+        Will use as many decimal places, up to the provided maximum `places`, as needed to represent the number, but
+        will strip off any trailing zeros up to, and including, the decimal point for well-rounded numbers.
+        """
+        template = f'%.{places}f'
+        value = template % self.value
+        value = value.rstrip('0').rstrip('.')
+        value += f' {self.unit}'
+        return value
+
+
 
 # ======================================================================================================================
 # Private Methods
@@ -231,15 +245,11 @@ class SimpleType:
 
 
 # ======================================================================================================================
-# Overridden Methods
+# Dunder Overrides
 # ----------------------------------------------------------------------------------------------------------------------
     def __str__(self):
-        """When represented as a string, convert this duration into a value with units.
-
-        Will use as many decimal places as needed to represent the number but will strip off any trailing zeros up to,
-        and including, the decimal point.
-        """
-        return f'{self.value:.10f}'.rstrip('0').rstrip('.') + f' {self.unit}'
+        """Default string representation - including units."""
+        return self.to_str()
 
 
 # ----------------------------------------------------------------------------------------------------------------------
