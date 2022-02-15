@@ -1,0 +1,4 @@
+Convert the Excel database into multiple files (maybe ini or TOML) | id:041ac8d10dce72b1f519eb5f8fe9efa4f5678965, open:True, owner:jared <jared.julien@nexteer.com>, time:1644942976.3760633
+Update the recipe loading to make more robust against bad input files | id:950ebb5eda4e84ca05c660a481e89c863ac6ccd2, open:True, owner:jared <jared.julien@nexteer.com>, time:1644942931.3587282
+Add support (make functional) the mash pH calculations       | id:e9eccc9a48fb8b09db54fa11aa77e3b67a9b8e58, open:True, owner:jared <jared.julien@nexteer.com>, time:1644942911.4538622
+Add support (make functional) the brewing acid additions     | id:ff79e278f751c4f597c415803b2b554b1de8b33d, open:True, owner:jared <jared.julien@nexteer.com>, time:1644942921.085195
