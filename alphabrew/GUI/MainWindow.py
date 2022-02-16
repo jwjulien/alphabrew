@@ -22,13 +22,11 @@
 # ======================================================================================================================
 # Import Statements
 # ----------------------------------------------------------------------------------------------------------------------
-import traceback
 import os
+import importlib_metadata
 
 import openpyxl
-from PySide2 import QtCore, QtGui, QtWidgets
-
-import _version
+from PySide2 import QtWidgets
 
 from GUI.Base.MainWindow import Ui_MainWindow
 
@@ -60,7 +58,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
         self._touched = None
 
-        self.version = _version.__version__
+        self.version = importlib_metadata.version('alphabrew')
         self.filename = None
 
         # Setup the range displays for OG, FG, ABV, and IBU.
@@ -182,7 +180,7 @@ class MainWindow(QtWidgets.QMainWindow):
     def touched(self, state):
         """Sets the "touched" flag and updates the GUI window to show an asterisk when it is dirty."""
         self._touched = state
-        title = 'AlphaBrew - '
+        title = f'AlphaBrew {self.version} - '
         if self.filename is not None:
             title += os.path.basename(self.filename)
         else:
@@ -349,6 +347,7 @@ class MainWindow(QtWidgets.QMainWindow):
                 self.on_file_save()
 
         return True
+
 
 
 # End of File
