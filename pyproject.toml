@@ -6,7 +6,7 @@ authors = ["Jared Julien <jaredjulien@exsystems.net>"]
 license = "MIT"
 
 [tool.poetry.dependencies]
-python = ">=3.7,<3.11"
+python = ">=3.10,<3.11"
 PySide2 = "^5.15.2"
 toml = "^0.10.2"
 openpyxl = "^3.0.9"

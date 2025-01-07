@@ -23,7 +23,7 @@
 # Import Statements
 # ----------------------------------------------------------------------------------------------------------------------
 import os
-import importlib_metadata
+from importlib import metadata
 
 import openpyxl
 from PySide2 import QtWidgets
@@ -58,7 +58,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
         self._touched = None
 
-        self.version = importlib_metadata.version('alphabrew')
+        self.version = metadata.version('alphabrew')
         self.filename = None
 
         # Setup the range displays for OG, FG, ABV, and IBU.
