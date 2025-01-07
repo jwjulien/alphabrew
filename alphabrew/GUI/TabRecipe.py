@@ -126,8 +126,8 @@ class TabRecipe(QtWidgets.QWidget):
 # ----------------------------------------------------------------------------------------------------------------------
     def on_boilTime_changed(self, value):
         """Fires when the user changes the boil time."""
-        self.recipe.time_boil.value = value
-        self.recipe.time_boil.unit = 'min'  # The GUI only works with minutes. #opinionated
+        self.recipe.boilTime.value = value
+        self.recipe.boilTime.unit = 'min'  # The GUI only works with minutes. #opinionated
 
 
 # ----------------------------------------------------------------------------------------------------------------------
